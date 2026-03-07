@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import api from "../api/axios";
 import { toast } from "../components/Toast";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { fadeUp, scaleIn, staggerContainer } from "../hooks/useAnimatedMount";
+import { fadeUp, staggerContainer } from "../hooks/useAnimatedMount";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,9 +32,9 @@ export default function Login() {
     <div className="min-h-screen flex flex-col md:flex-row bg-primary text-textPrimary">
       {/* Left side brand/hero — slides in from left */}
       <motion.div
-        initial={{ opacity: 0, x: -60 }}
+        initial={{ opacity: 0, x: -80 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
         className="hidden md:flex flex-1 flex-col justify-center px-12 lg:px-24 bg-surface border-r border-border relative overflow-hidden"
       >
         {/* Abstract background art */}
@@ -60,7 +60,7 @@ export default function Login() {
             className="text-4xl lg:text-5xl font-display font-bold leading-tight mb-6"
           >
             Every job you chase.<br />
-            <span className="text-accent cursor-blink">Perfectly tracked.</span>
+            <span className="text-accent">Perfectly tracked.</span>
           </motion.h2>
           
           <motion.p
@@ -107,7 +107,7 @@ export default function Login() {
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={scaleIn}
+            variants={{ hidden: { opacity: 0, scale: 0.85 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "backOut" } } }}
             className="bg-surface/60 backdrop-blur-xl border border-border p-8 rounded-2xl shadow-2xl relative z-10"
           >
             <div className="mb-8">

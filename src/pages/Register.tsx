@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import api from "../api/axios";
 import { toast } from "../components/Toast";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { fadeUp, scaleIn, staggerContainer } from "../hooks/useAnimatedMount";
+import { fadeUp, staggerContainer } from "../hooks/useAnimatedMount";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -39,9 +39,9 @@ export default function Register() {
     <div className="min-h-screen flex flex-col md:flex-row bg-primary text-textPrimary">
       {/* Left side brand/hero */}
       <motion.div
-        initial={{ opacity: 0, x: -60 }}
+        initial={{ opacity: 0, x: -80 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
         className="hidden md:flex flex-1 flex-col justify-center px-12 lg:px-24 bg-surface border-r border-border relative overflow-hidden"
       >
         <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent-teal/20 via-primary to-primary opacity-50 z-0 mix-blend-screen pointer-events-none"></div>
@@ -65,7 +65,7 @@ export default function Register() {
             transition={{ delay: 0.25, duration: 0.55 }}
             className="text-4xl lg:text-5xl font-display font-bold leading-tight mb-6"
           >
-            Join the <span className="text-accent-teal cursor-blink">top 1%</span><br />
+            Join the <span className="text-accent-teal">top 1%</span><br />
             of candidates.
           </motion.h2>
           
@@ -113,7 +113,7 @@ export default function Register() {
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={scaleIn}
+            variants={{ hidden: { opacity: 0, scale: 0.85 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "backOut" } } }}
             className="bg-surface/60 backdrop-blur-xl border border-border p-8 rounded-2xl shadow-2xl relative z-10"
           >
             <div className="mb-8">

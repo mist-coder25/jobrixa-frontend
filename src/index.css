@@ -41,17 +41,6 @@
    ANIMATION UTILITIES
    ============================================= */
 
-/* Blinking cursor for taglines on auth pages */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-.cursor-blink::after {
-  content: "|";
-  animation: blink 1s step-start infinite;
-  margin-left: 2px;
-  color: #6C63FF;
-}
 
 /* Shimmer effect for loading skeletons */
 @keyframes shimmer {

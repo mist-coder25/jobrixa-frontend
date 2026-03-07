@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ApplicationCard from "./ApplicationCard";
 import type { JobApplication } from "./ApplicationCard";
 import { Briefcase } from "lucide-react";
-import { columnStagger, columnItem } from "../hooks/useAnimatedMount";
+
 
 const STATUS_COLUMNS = [
   { id: "SAVED", title: "Saved" },
@@ -35,14 +35,14 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
           className="flex gap-4 h-full min-w-max items-start"
           initial="hidden"
           animate="visible"
-          variants={columnStagger}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.3 } } }}
         >
           {STATUS_COLUMNS.map((col) => {
             const columnApps = getAppsForStatus(col.id);
             return (
               <motion.div
                 key={col.id}
-                variants={columnItem}
+                variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
                 className="w-[320px] flex flex-col bg-primary/20 rounded-xl border border-border/50 max-h-full"
               >
                 {/* Column Header */}
@@ -105,12 +105,12 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                               {(provided, snapshot) => (
                                 <motion.div
                                   layout
-                                  initial={{ opacity: 0, scale: 0.85, y: -10 }}
+                                  initial={{ opacity: 0, scale: 0.75, y: -16 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
-                                  exit={{ opacity: 0, scale: 0.85, y: -10 }}
-                                  transition={{ duration: 0.25, ease: "backOut" }}
-                                  whileHover={!snapshot.isDragging ? { y: -3, boxShadow: "0 8px 30px rgba(108, 99, 255, 0.22)" } : {}}
-                                  whileTap={{ scale: 0.97 }}
+                                  exit={{ opacity: 0, scale: 0.75, y: -16 }}
+                                  transition={{ type: "spring", stiffness: 280, damping: 20 }}
+                                  whileHover={!snapshot.isDragging ? { y: -5, boxShadow: "0 12px 36px rgba(108, 99, 255, 0.3)" } : {}}
+                                  whileTap={{ scale: 0.96 }}
                                 >
                                   <ApplicationCard
                                     app={app}

@@ -125,10 +125,10 @@ export default function Dashboard() {
           {statCards.map((card, i) => (
             <motion.div
               key={card.label}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              transition={{ delay: i * 0.15, duration: 0.5, ease: "easeOut" }}
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
               className="bg-surface border border-border rounded-xl p-6 relative overflow-hidden group cursor-default"
             >
               <div className={`absolute -right-4 -top-4 w-24 h-24 ${card.ring} rounded-full group-hover:scale-125 transition-transform duration-500`}></div>

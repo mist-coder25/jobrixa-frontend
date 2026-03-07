@@ -90,9 +90,9 @@ export default function Sidebar() {
           {navItems.map((item, i) => (
             <motion.div
               key={item.path}
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 + i * 0.06, duration: 0.3, ease: "easeOut" }}
+              transition={{ delay: 0.1 + i * 0.06, duration: 0.35, ease: "easeOut" }}
             >
               <NavLink
                 to={item.path}
@@ -111,10 +111,10 @@ export default function Sidebar() {
                     {/* Animated active highlight using layoutId */}
                     {isActive && (
                       <motion.div
-                        layoutId="nav-indicator"
-                        className="absolute inset-0 rounded-lg border border-accent/20 shadow-[0_0_10px_rgba(108,99,255,0.1)]"
-                        style={{ background: "rgba(108, 99, 255, 0.12)" }}
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                        layoutId="activeNav"
+                        className="absolute inset-0 rounded-lg border border-accent/20 shadow-[0_0_12px_rgba(108,99,255,0.15)]"
+                        style={{ background: "rgba(108, 99, 255, 0.14)" }}
+                        transition={{ type: "spring", bounce: 0.3, duration: 0.45 }}
                       />
                     )}
                     <span className="relative z-10">{item.icon}</span>
