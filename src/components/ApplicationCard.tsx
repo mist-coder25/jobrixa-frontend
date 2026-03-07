@@ -1,5 +1,5 @@
 import { formatDistanceToNow, parseISO } from "date-fns";
-import { useState } from "react";
+import CompanyLogo from "./CompanyLogo";
 
 export interface JobApplication {
   id: string;
@@ -45,12 +45,6 @@ const SOURCE_COLORS: Record<string, string> = {
 };
 
 export default function ApplicationCard({ app, onClick, innerRef, draggableProps, dragHandleProps, isDragging }: ApplicationCardProps) {
-  const [logoError, setLogoError] = useState(false);
-  
-  // Clearbit URL
-  const domain = app.companyName.split(" ")[0].toLowerCase();
-  const logoUrl = `https://logo.clearbit.com/${domain}.com`;
-
   const priorityColor = PRIORITY_COLORS[app.priority?.toUpperCase() || "MEDIUM"] || PRIORITY_COLORS.MEDIUM;
   
   // Safe badge color
@@ -79,21 +73,7 @@ export default function ApplicationCard({ app, onClick, innerRef, draggableProps
 
       <div className="flex items-start gap-4">
         {/* Logo */}
-        {!logoError ? (
-          <img 
-            src={logoUrl} 
-            alt={app.companyName}
-            onError={() => setLogoError(true)}
-            className="w-12 h-12 rounded-lg bg-surface border border-border object-contain p-1 shrink-0"
-          />
-        ) : (
-          <div 
-            className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg shrink-0 border border-border/50"
-            style={{background: `hsl(${app.companyName.charCodeAt(0) * 7 % 360}, 60%, 40%)`}}
-          >
-            {app.companyName.charAt(0).toUpperCase()}
-          </div>
-        )}
+        <CompanyLogo companyName={app.companyName} size={48} className="border border-border/50" />
 
         {/* Content */}
         <div className="flex-1 pr-4">

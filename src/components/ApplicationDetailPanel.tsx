@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import CompanyLogo from "./CompanyLogo";
 import { X, ExternalLink, Calendar, MapPin, Target, Globe, FileText, CheckCircle2 } from "lucide-react";
 import type { JobApplication } from "./ApplicationCard";
 import api from "../api/axios";
@@ -16,7 +17,6 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
   const [activeTab, setActiveTab] = useState("overview");
   const [events, setEvents] = useState<any[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(false);
-  const [logoError, setLogoError] = useState(false);
   
   // Editable states for overview
   const [status, setStatus] = useState("");
@@ -32,7 +32,6 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
       setLocation(app.location || "");
       setPriority(app.priority || "MEDIUM");
       setIsRemote(app.isRemote || false);
-      setLogoError(false);
       if (activeTab === "timeline") {
         fetchEvents(app.id);
       }
@@ -75,8 +74,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
     );
   }
 
-  const domainGuess = app.companyName.split(" ")[0].toLowerCase();
-  const logoUrl = `https://logo.clearbit.com/${domainGuess}.com`;
+
 
   const tagList = typeof app.tags === 'string' 
     ? app.tags.split(',').filter(Boolean) 
@@ -100,23 +98,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
           </button>
 
           <div className="flex gap-4 mt-2">
-            {!logoError ? (
-              <div className="w-16 h-16 rounded-xl bg-white border border-border flex items-center justify-center overflow-hidden shrink-0">
-                <img 
-                  src={logoUrl} 
-                  alt={app.companyName}
-                  onError={() => setLogoError(true)}
-                  className="w-full h-full object-contain p-2"
-                />
-              </div>
-            ) : (
-              <div 
-                className="w-16 h-16 rounded-xl flex items-center justify-center text-white font-bold text-2xl shrink-0 border border-border/50 shadow-sm"
-                style={{background: `hsl(${app.companyName.charCodeAt(0) * 7 % 360}, 60%, 40%)`}}
-              >
-                {app.companyName.charAt(0).toUpperCase()}
-              </div>
-            )}
+            <CompanyLogo companyName={app.companyName} size={64} className="border border-border/50 shadow-sm" containerPadding="p-2" />
             <div className="flex-1 pr-6">
               <h2 className="text-xl font-display font-bold text-textPrimary leading-tight mb-1">{app.companyName}</h2>
               <p className="text-textSecondary line-clamp-2">{app.jobTitle}</p>

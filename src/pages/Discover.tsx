@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
+import CompanyLogo from "../components/CompanyLogo";
 import { Search, MapPin, Briefcase, Clock, ExternalLink, Plus, SlidersHorizontal, Wifi, X } from "lucide-react";
 import TopBar from "../components/TopBar";
 import AddApplicationModal from "../components/AddApplicationModal";
@@ -33,21 +34,9 @@ function trustBorderColor(score: number): string {
   return "border-l-red-500";
 }
 
-function LogoFallback({ company }: { company: string }) {
-  const bg = `hsl(${company.charCodeAt(0) * 7 % 360}, 55%, 38%)`;
-  return (
-    <div
-      className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-xl shrink-0 border border-border/50"
-      style={{ background: bg }}
-    >
-      {company.charAt(0).toUpperCase()}
-    </div>
-  );
-}
+
 
 function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: (job: NormalizedJob) => void }) {
-  const [logoErr, setLogoErr] = useState(false);
-  const logoUrl = job.logoUrl ?? `https://logo.clearbit.com/${job.company.split(" ")[0].toLowerCase()}.com`;
   const srcColor = SOURCE_COLORS[job.source] ?? SOURCE_COLORS.default;
 
   const borderAccent = trustBorderColor(job.trustScore);
@@ -56,18 +45,7 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
     <div className={`group bg-surface border border-border border-l-2 ${borderAccent} rounded-xl p-5 flex flex-col gap-4 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-200 hover:-translate-y-0.5`}>
       {/* Header */}
       <div className="flex items-start gap-3">
-        {!logoErr ? (
-          <div className="w-12 h-12 rounded-xl bg-white border border-border/50 flex items-center justify-center overflow-hidden shrink-0">
-            <img
-              src={logoUrl}
-              alt={job.company}
-              onError={() => setLogoErr(true)}
-              className="w-full h-full object-contain p-1.5"
-            />
-          </div>
-        ) : (
-          <LogoFallback company={job.company} />
-        )}
+        <CompanyLogo companyName={job.company} size={48} className="border border-border/50" containerPadding="p-1.5" />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import CompanyLogo from "./CompanyLogo";
 import { X, Building2, Briefcase, Link, MapPin, DollarSign, Calendar, Tags, CheckCircle2, Loader2, Globe } from "lucide-react";
 import api from "../api/axios";
 import { toast } from "./Toast";
@@ -81,9 +82,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
     }
   };
 
-  // Live preview clearbit URL
-  const domainGuess = formData.companyName ? formData.companyName.split(" ")[0].toLowerCase() : "google";
-  const logoUrl = `https://logo.clearbit.com/${domainGuess}.com`;
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -94,20 +93,10 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center border border-accent/30 text-accent relative overflow-hidden">
                  {formData.companyName ? (
-                     <img 
-                        src={logoUrl} 
-                        className="w-full h-full object-contain p-1"
-                        onError={(e) => {
-                           (e.target as HTMLImageElement).style.display = 'none';
-                           (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-                        }} 
-                     />
+                   <CompanyLogo companyName={formData.companyName} size={40} containerPadding="p-0" />
                  ) : (
-                     <Building2 className="w-5 h-5 absolute" />
+                     <Building2 className="w-5 h-5" />
                  )}
-                 <span className="hidden w-full h-full flex items-center justify-center font-display font-bold uppercase text-white bg-primary">
-                     {formData.companyName.substring(0, 2)}
-                 </span>
             </div>
             <div>
               <h2 className="text-xl font-display font-semibold text-textPrimary leading-tight">Add Application</h2>

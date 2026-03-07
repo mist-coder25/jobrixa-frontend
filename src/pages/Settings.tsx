@@ -2,13 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import {
   User, Bell, Shield, Camera, Linkedin, GraduationCap,
-  IndianRupee, X, Plus, Eye, EyeOff, AlertTriangle, Loader2, Save, Check, Trash2
+  IndianRupee, X, Plus, Eye, EyeOff, AlertTriangle, Loader2, Save, Check, Trash2, Zap, CreditCard
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import api from "../api/axios";
 import { toast } from "../components/Toast";
 
-type Tab = "profile" | "notifications" | "account";
+type Tab = "profile" | "notifications" | "account" | "billing";
 
 interface UserProfile {
   id: string;
@@ -40,6 +41,12 @@ export default function Settings() {
   const [skills, setSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
   const skillInputRef = useRef<HTMLInputElement>(null);
+
+  // --- Billing State ---
+  const [billingStatus, setBillingStatus] = useState<{
+    plan: string; isActive: boolean; planExpiresAt: string | null;
+    payments: { id: string; plan: string; amount: number; status: string; createdAt: string }[];
+  } | null>(null);
 
   // --- Notification State ---
   const [notifs, setNotifs] = useState({
@@ -79,6 +86,10 @@ export default function Settings() {
       }
     };
     fetchProfile();
+    // Billing status
+    api.get("/payments/status")
+      .then(r => setBillingStatus(r.data as typeof billingStatus))
+      .catch(() => {});
   }, []);
 
   const handleSaveProfile = async () => {
@@ -129,6 +140,7 @@ export default function Settings() {
   const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "profile", label: "Profile", icon: <User size={16} /> },
     { id: "notifications", label: "Notifications", icon: <Bell size={16} /> },
+    { id: "billing", label: "Billing", icon: <CreditCard size={16} /> },
     { id: "account", label: "Account", icon: <Shield size={16} /> },
   ];
 
@@ -379,6 +391,89 @@ export default function Settings() {
             >
               <Check size={16} /> Save Preferences
             </button>
+          </div>
+        )}
+
+        {/* ── BILLING TAB ── */}
+        {activeTab === "billing" && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+
+            {/* Current Plan Card */}
+            <div className={`rounded-2xl p-6 border ${
+              billingStatus?.plan === "PRO" && billingStatus.isActive
+                ? "bg-accent/10 border-accent/30 shadow-[0_0_20px_rgba(108,99,255,0.1)]"
+                : billingStatus?.plan === "CAMPUS" && billingStatus.isActive
+                  ? "bg-teal-500/10 border-teal-500/30"
+                  : "bg-surface border-border"
+            }`}>
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-wider font-medium text-textSecondary mb-1">Current Plan</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-display font-bold text-textPrimary">
+                      {billingStatus?.plan ?? "FREE"}
+                    </span>
+                    {billingStatus?.plan !== "FREE" && billingStatus?.isActive && (
+                      <span className="text-accent text-lg">✦</span>
+                    )}
+                  </div>
+                  {billingStatus?.planExpiresAt && billingStatus.isActive && (
+                    <p className="text-xs text-textSecondary mt-1">
+                      Expires: {new Date(billingStatus.planExpiresAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+                    </p>
+                  )}
+                  {billingStatus?.plan === "FREE" && (
+                    <p className="text-xs text-textSecondary mt-1">30 application limit</p>
+                  )}
+                </div>
+                {(billingStatus?.plan === "FREE" || !billingStatus?.isActive) && (
+                  <Link
+                    to="/pricing"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-sm font-semibold transition-all shadow-[0_0_16px_rgba(108,99,255,0.3)]"
+                  >
+                    <Zap size={14} /> Upgrade Plan
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            {/* Payment History */}
+            <div className="bg-surface border border-border rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-border">
+                <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider">Payment History</h3>
+              </div>
+              {!billingStatus?.payments?.length ? (
+                <div className="px-6 py-8 text-center">
+                  <CreditCard size={28} className="text-textSecondary/30 mx-auto mb-2" />
+                  <p className="text-textSecondary text-sm">No payments yet</p>
+                  <Link to="/pricing" className="text-accent text-sm hover:underline mt-1 inline-block">View pricing plans →</Link>
+                </div>
+              ) : (
+                <div className="divide-y divide-border">
+                  {billingStatus.payments.map(p => (
+                    <div key={p.id} className="px-6 py-4 flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-textPrimary">{p.plan} Plan</p>
+                        <p className="text-xs text-textSecondary">{new Date(p.createdAt).toLocaleDateString("en-IN")}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-semibold text-textPrimary">₹{(p.amount / 100).toFixed(0)}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          p.status === "SUCCESS" ? "bg-emerald-500/15 text-emerald-400" :
+                          p.status === "PENDING" ? "bg-yellow-500/15 text-yellow-400" :
+                          "bg-red-500/15 text-red-400"
+                        }`}>{p.status}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <p className="text-xs text-textSecondary/60 text-center">
+              Need help? Email{" "}
+              <a href="mailto:support@jobrixa.app" className="text-accent hover:underline">support@jobrixa.app</a>
+            </p>
           </div>
         )}
 

@@ -120,7 +120,7 @@ export default function Dashboard() {
           <div className="bg-surface border border-border rounded-xl p-6">
             <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Application Activity</h3>
             <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={weeklyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#2A2A38" vertical={false} />
                   <XAxis dataKey="name" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />
@@ -138,7 +138,7 @@ export default function Dashboard() {
           <div className="bg-surface border border-border rounded-xl p-6">
             <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Applications by Source</h3>
             <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={sourceData} layout="vertical" margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#2A2A38" horizontal={false} />
                   <XAxis type="number" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />

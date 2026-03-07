@@ -83,7 +83,7 @@ export default function Analytics() {
               <div title="Dropoff from initial application to final offer"><Info className="w-4 h-4 text-textSecondary" /></div>
             </div>
             <div className="h-[300px] w-full mt-4">
-               <ResponsiveContainer width="100%" height="100%">
+               <ResponsiveContainer width="100%" height={300}>
                  <BarChart data={funnelData} layout="vertical" margin={{ top: 0, right: 30, left: 20, bottom: 0 }}>
                    <XAxis type="number" hide />
                    <YAxis dataKey="name" type="category" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} width={80} />
@@ -105,7 +105,7 @@ export default function Analytics() {
           <div className="bg-surface border border-border rounded-xl p-6">
             <h3 className="text-lg font-display font-semibold mb-6">Response Rate by Source (%)</h3>
             <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={sourceData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#2A2A38" vertical={false} />
                   <XAxis dataKey="name" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />

@@ -8,6 +8,7 @@ import Analytics from './pages/Analytics';
 import Resumes from './pages/Resumes';
 import Settings from './pages/Settings';
 import Discover from './pages/Discover';
+import Pricing from './pages/Pricing';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("jobrixa_token");
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<RootRedirect />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/pipeline" element={<Pipeline />} />
