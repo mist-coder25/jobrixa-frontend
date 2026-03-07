@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import CompanyLogo from "./CompanyLogo";
 import { X, Building2, Briefcase, Link, MapPin, DollarSign, Calendar, Tags, CheckCircle2, Loader2, Globe } from "lucide-react";
 import api from "../api/axios";
@@ -85,8 +86,29 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
 
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-surface border border-border rounded-2xl w-full max-w-2xl shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-200">
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            key="modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            onClick={onClose}
+          />
+          {/* Modal container */}
+          <motion.div
+            key="modal-box"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 350 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+          >
+          <div className="pointer-events-auto bg-surface border border-border rounded-2xl w-full max-w-2xl shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden">
         
         {/* Header */}
         <div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0">
@@ -300,7 +322,10 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
           </button>
         </div>
 
-      </div>
-    </div>
+          </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

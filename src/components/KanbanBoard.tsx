@@ -1,8 +1,10 @@
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
+import { motion, AnimatePresence } from "framer-motion";
 import ApplicationCard from "./ApplicationCard";
 import type { JobApplication } from "./ApplicationCard";
 import { Briefcase } from "lucide-react";
+import { columnStagger, columnItem } from "../hooks/useAnimatedMount";
 
 const STATUS_COLUMNS = [
   { id: "SAVED", title: "Saved" },
@@ -28,12 +30,21 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
   return (
     <div className="flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar h-full pl-4 md:pl-8 pr-4 pb-6 pt-6">
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex gap-4 h-full min-w-max items-start">
+        {/* Columns stagger in on load */}
+        <motion.div
+          className="flex gap-4 h-full min-w-max items-start"
+          initial="hidden"
+          animate="visible"
+          variants={columnStagger}
+        >
           {STATUS_COLUMNS.map((col) => {
             const columnApps = getAppsForStatus(col.id);
             return (
-              <div key={col.id} className="w-[320px] flex flex-col bg-primary/20 rounded-xl border border-border/50 max-h-full">
-                
+              <motion.div
+                key={col.id}
+                variants={columnItem}
+                className="w-[320px] flex flex-col bg-primary/20 rounded-xl border border-border/50 max-h-full"
+              >
                 {/* Column Header */}
                 <div className="flex justify-between items-center p-4 border-b border-border/50 shrink-0">
                   <div className="flex items-center gap-2">
@@ -45,9 +56,15 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                     }`} />
                     <h3 className="font-display font-semibold text-textPrimary text-sm tracking-wide uppercase">{col.title}</h3>
                   </div>
-                  <div className="bg-surface border border-border text-textSecondary text-xs font-bold px-2 py-0.5 rounded-md">
+                  <motion.div
+                    key={columnApps.length}
+                    initial={{ scale: 1.3 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    className="bg-surface border border-border text-textSecondary text-xs font-bold px-2 py-0.5 rounded-md"
+                  >
                     {loading ? "-" : columnApps.length}
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Droppable Area */}
@@ -56,13 +73,13 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className={`flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3 transition-colors ${
-                        snapshot.isDraggingOver ? "bg-surface/30" : ""
+                      className={`flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3 transition-colors duration-200 ${
+                        snapshot.isDraggingOver ? "bg-accent/5" : ""
                       }`}
                     >
                       {loading ? (
                         Array.from({ length: 3 }).map((_, idx) => (
-                          <div key={idx} className="p-4 rounded-xl border border-border/30 bg-surface/50 animate-pulse">
+                          <div key={idx} className="p-4 rounded-xl border border-border/30 bg-surface/50 skeleton">
                             <div className="flex items-start gap-4">
                               <div className="w-12 h-12 rounded-lg bg-border/40 shrink-0"></div>
                               <div className="flex-1 space-y-2 py-1">
@@ -78,41 +95,55 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                         ))
                       ) : columnApps.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 opacity-30">
-                          <Briefcase size={24} />
+                          <Briefcase size={24} className="floating" />
                           <p className="text-sm mt-2">No applications</p>
                         </div>
                       ) : (
-                        columnApps.map((app, index) => (
-                          <Draggable key={app.id} draggableId={app.id} index={index}>
-                            {(provided, snapshot) => (
-                              <ApplicationCard
-                                app={app}
-                                onClick={() => onCardClick(app)}
-                                innerRef={provided.innerRef}
-                                draggableProps={provided.draggableProps}
-                                dragHandleProps={provided.dragHandleProps}
-                                isDragging={snapshot.isDragging}
-                              />
-                            )}
-                          </Draggable>
-                        ))
+                        <AnimatePresence mode="popLayout">
+                          {columnApps.map((app, index) => (
+                            <Draggable key={app.id} draggableId={app.id} index={index}>
+                              {(provided, snapshot) => (
+                                <motion.div
+                                  layout
+                                  initial={{ opacity: 0, scale: 0.85, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.85, y: -10 }}
+                                  transition={{ duration: 0.25, ease: "backOut" }}
+                                  whileHover={!snapshot.isDragging ? { y: -3, boxShadow: "0 8px 30px rgba(108, 99, 255, 0.22)" } : {}}
+                                  whileTap={{ scale: 0.97 }}
+                                >
+                                  <ApplicationCard
+                                    app={app}
+                                    onClick={() => onCardClick(app)}
+                                    innerRef={provided.innerRef}
+                                    draggableProps={provided.draggableProps}
+                                    dragHandleProps={provided.dragHandleProps}
+                                    isDragging={snapshot.isDragging}
+                                  />
+                                </motion.div>
+                              )}
+                            </Draggable>
+                          ))}
+                        </AnimatePresence>
                       )}
                       {provided.placeholder}
                       
-                      {/* Add Card Footer inside column */}
-                      <button 
+                      {/* Add Card Footer */}
+                      <motion.button
                         onClick={() => onAddClick(col.id)}
-                        className="w-full py-3 mt-2 rounded-lg border border-dashed border-border text-textSecondary hover:text-textPrimary hover:border-textSecondary hover:bg-surface/50 transition-all flex items-center justify-center gap-2 text-sm font-medium"
+                        whileHover={{ scale: 1.02, borderColor: "rgba(108,99,255,0.5)" }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-3 mt-2 rounded-lg border border-dashed border-border text-textSecondary hover:text-textPrimary hover:bg-surface/50 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
                       >
                         + Add Card
-                      </button>
+                      </motion.button>
                     </div>
                   )}
                 </Droppable>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </DragDropContext>
     </div>
   );

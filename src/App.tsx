@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -9,6 +10,7 @@ import Resumes from './pages/Resumes';
 import Settings from './pages/Settings';
 import Discover from './pages/Discover';
 import Pricing from './pages/Pricing';
+import ToastContainer from './components/Toast';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("jobrixa_token");
@@ -23,13 +25,21 @@ function RootRedirect() {
   return token ? <Navigate to="/pipeline" replace /> : <Navigate to="/login" replace />;
 }
 
-import ToastContainer from './components/Toast';
+/** Inner component with access to useLocation for page transitions */
+function AnimatedRoutes() {
+  const location = useLocation();
 
-function App() {
   return (
-    <>
-      <Router>
-        <Routes>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        style={{ height: "100%" }}
+      >
+        <Routes location={location}>
           <Route path="/" element={<RootRedirect />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -43,6 +53,16 @@ function App() {
             <Route path="/settings" element={<Settings />} />
           </Route>
         </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <Router>
+        <AnimatedRoutes />
       </Router>
       <ToastContainer />
     </>

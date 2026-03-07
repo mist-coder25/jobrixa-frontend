@@ -1,8 +1,31 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import TopBar from "../components/TopBar";
 import api from "../api/axios";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { TrendingUp, Users, Target, CheckCircle2 } from "lucide-react";
+
+/** Counts up from 0 to value over ~1.2s at 60fps */
+function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!value) return;
+    let start = 0;
+    const duration = 1200;
+    const step = value / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= value) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [value]);
+  return <span>{count}{suffix}</span>;
+}
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
@@ -45,6 +68,53 @@ export default function Dashboard() {
     { name: 'Wellfound', value: 20 }, { name: 'Naukri', value: 10 }
   ];
 
+  const statCards = [
+    {
+      label: "Total Applications",
+      value: stats?.totalApplications || 0,
+      suffix: "",
+      icon: <Target className="w-6 h-6" />,
+      color: "accent",
+      bg: "bg-accent/10",
+      text: "text-accent",
+      ring: "bg-accent/5",
+      trend: <span className="text-xs text-[#00D4AA] flex items-center"><TrendingUp className="w-3 h-3 mr-1"/>+12%</span>,
+    },
+    {
+      label: "Response Rate",
+      value: stats?.responseRate || 0,
+      suffix: "%",
+      icon: <Users className="w-6 h-6" />,
+      color: "warning",
+      bg: "bg-warning/10",
+      text: "text-warning",
+      ring: "bg-warning/5",
+      trend: null,
+    },
+    {
+      label: "Interview Rate",
+      value: stats?.interviewRate || 0,
+      suffix: "%",
+      icon: <TrendingUp className="w-6 h-6" />,
+      color: "[#0A66C2]",
+      bg: "bg-[#0A66C2]/10",
+      text: "text-[#0A66C2]",
+      ring: "bg-[#0A66C2]/5",
+      trend: null,
+    },
+    {
+      label: "Total Offers",
+      value: stats?.offerRate || 0,
+      suffix: "%",
+      icon: <CheckCircle2 className="w-6 h-6" />,
+      color: "[#00D4AA]",
+      bg: "bg-[#00D4AA]/10",
+      text: "text-[#00D4AA]",
+      ring: "bg-[#00D4AA]/5",
+      trend: <span className="text-xs text-textSecondary font-medium">of applied</span>,
+    },
+  ];
+
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
       <TopBar title="Dashboard" />
@@ -52,67 +122,32 @@ export default function Dashboard() {
       <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
         {/* Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-surface border border-border rounded-xl p-6 relative overflow-hidden group">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-accent/5 rounded-full group-hover:bg-accent/10 transition-colors"></div>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center text-accent">
-                <Target className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-textSecondary text-sm font-medium">Total Applications</p>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <h3 className="text-2xl font-display font-bold text-textPrimary">{stats?.totalApplications || 0}</h3>
-                  <span className="text-xs text-[#00D4AA] flex items-center"><TrendingUp className="w-3 h-3 mr-1"/> +12%</span>
+          {statCards.map((card, i) => (
+            <motion.div
+              key={card.label}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="bg-surface border border-border rounded-xl p-6 relative overflow-hidden group cursor-default"
+            >
+              <div className={`absolute -right-4 -top-4 w-24 h-24 ${card.ring} rounded-full group-hover:scale-125 transition-transform duration-500`}></div>
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 ${card.bg} rounded-lg flex items-center justify-center ${card.text}`}>
+                  {card.icon}
+                </div>
+                <div>
+                  <p className="text-textSecondary text-sm font-medium">{card.label}</p>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <h3 className="text-2xl font-display font-bold text-textPrimary">
+                      <AnimatedCounter value={card.value} suffix={card.suffix} />
+                    </h3>
+                    {card.trend}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          <div className="bg-surface border border-border rounded-xl p-6 relative overflow-hidden group">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-warning/5 rounded-full group-hover:bg-warning/10 transition-colors"></div>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-warning/10 rounded-lg flex items-center justify-center text-warning">
-                <Users className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-textSecondary text-sm font-medium">Response Rate</p>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <h3 className="text-2xl font-display font-bold text-textPrimary">{stats?.responseRate || 0}%</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-surface border border-border rounded-xl p-6 relative overflow-hidden group">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#0A66C2]/5 rounded-full group-hover:bg-[#0A66C2]/10 transition-colors"></div>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-[#0A66C2]/10 rounded-lg flex items-center justify-center text-[#0A66C2]">
-                <TrendingUp className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-textSecondary text-sm font-medium">Interview Rate</p>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <h3 className="text-2xl font-display font-bold text-textPrimary">{stats?.interviewRate || 0}%</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-surface border border-border rounded-xl p-6 relative overflow-hidden group">
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#00D4AA]/5 rounded-full group-hover:bg-[#00D4AA]/10 transition-colors"></div>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-[#00D4AA]/10 rounded-lg flex items-center justify-center text-[#00D4AA]">
-                <CheckCircle2 className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-textSecondary text-sm font-medium">Total Offers</p>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <h3 className="text-2xl font-display font-bold text-textPrimary">{stats?.offerRate || 0}%</h3>
-                  <span className="text-xs text-textSecondary font-medium">of applied</span>
-                </div>
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Charts */}

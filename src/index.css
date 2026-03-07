@@ -36,3 +36,56 @@
     background: var(--text-secondary); 
   }
 }
+
+/* =============================================
+   ANIMATION UTILITIES
+   ============================================= */
+
+/* Blinking cursor for taglines on auth pages */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink::after {
+  content: "|";
+  animation: blink 1s step-start infinite;
+  margin-left: 2px;
+  color: #6C63FF;
+}
+
+/* Shimmer effect for loading skeletons */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #1A1A24 25%, #2A2A38 50%, #1A1A24 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Glow pulse on primary CTA buttons */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(108, 99, 255, 0.4); }
+  50%       { box-shadow: 0 0 24px rgba(108, 99, 255, 0.8), 0 0 40px rgba(108, 99, 255, 0.3); }
+}
+.btn-glow {
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
+/* Floating animation for empty state icons */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient text for page headings */
+.gradient-text {
+  background: linear-gradient(135deg, #6C63FF, #00D4AA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

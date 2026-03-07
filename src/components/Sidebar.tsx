@@ -1,5 +1,6 @@
 import { NavLink, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { LayoutDashboard, Trello, Compass, PieChart, FileText, Settings, LogOut, Zap, Tag } from "lucide-react";
 import api from "../api/axios";
 
@@ -30,7 +31,6 @@ function PlanBadge({ plan, isActive }: { plan: string; isActive: boolean }) {
       </div>
     );
   }
-  // FREE
   return (
     <div className="px-3 py-1.5 mt-1">
       <Link
@@ -51,7 +51,7 @@ export default function Sidebar() {
   useEffect(() => {
     api.get("/payments/status")
       .then(r => setPlanStatus(r.data as PlanStatus))
-      .catch(() => {}); // silently fail — just show FREE badge
+      .catch(() => {});
   }, []);
 
   const navItems = [
@@ -74,54 +74,85 @@ export default function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-60 h-screen bg-surface border-r border-border fixed left-0 top-0">
-        <div className="p-6">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="p-6"
+        >
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-display font-bold text-white">J</div>
             <h1 className="text-xl font-display font-bold text-textPrimary tracking-wide">Jobrixa</h1>
           </div>
-        </div>
+        </motion.div>
 
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
-          {navItems.map((item) => (
-            <NavLink
+          {navItems.map((item, i) => (
+            <motion.div
               key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 ease-out text-sm ${
-                  isActive
-                    ? "bg-accent/10 border border-accent/20 text-accent font-semibold shadow-[0_0_10px_rgba(108,99,255,0.1)]"
-                    : item.label === "Pricing"
-                      ? "text-accent/80 hover:bg-accent/5 hover:text-accent font-medium"
-                      : "text-textSecondary hover:bg-secondary hover:text-textPrimary font-medium"
-                }`
-              }
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 + i * 0.06, duration: 0.3, ease: "easeOut" }}
             >
-              {item.icon}
-              {item.label}
-              {item.label === "Pricing" && planStatus.plan === "FREE" && (
-                <span className="ml-auto text-[9px] font-bold px-1.5 py-0.5 bg-accent/20 text-accent rounded-full">NEW</span>
-              )}
-            </NavLink>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-150 text-sm ${
+                    isActive
+                      ? "text-accent font-semibold"
+                      : item.label === "Pricing"
+                        ? "text-accent/80 hover:bg-accent/5 hover:text-accent font-medium"
+                        : "text-textSecondary hover:bg-secondary hover:text-textPrimary font-medium"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {/* Animated active highlight using layoutId */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="nav-indicator"
+                        className="absolute inset-0 rounded-lg border border-accent/20 shadow-[0_0_10px_rgba(108,99,255,0.1)]"
+                        style={{ background: "rgba(108, 99, 255, 0.12)" }}
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                      />
+                    )}
+                    <span className="relative z-10">{item.icon}</span>
+                    <span className="relative z-10">{item.label}</span>
+                    {item.label === "Pricing" && planStatus.plan === "FREE" && (
+                      <span className="ml-auto relative z-10 text-[9px] font-bold px-1.5 py-0.5 bg-accent/20 text-accent rounded-full">NEW</span>
+                    )}
+                  </>
+                )}
+              </NavLink>
+            </motion.div>
           ))}
         </nav>
 
         <div className="border-t border-border">
           <PlanBadge plan={planStatus.plan} isActive={planStatus.isActive} />
-          <div className="px-4 pb-4 pt-1 flex items-center justify-between">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+            className="px-4 pb-4 pt-1 flex items-center justify-between"
+          >
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-textSecondary overflow-hidden">
                 <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${userName}`} alt="Avatar" />
               </div>
               <span className="text-sm font-medium text-textPrimary truncate max-w-[100px]">{userName}</span>
             </div>
-            <button
+            <motion.button
               onClick={handleLogout}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               className="text-textSecondary hover:text-danger p-2 rounded-lg transition-colors"
               title="Logout"
             >
               <LogOut size={16} />
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
       </aside>
 

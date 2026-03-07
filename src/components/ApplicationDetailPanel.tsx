@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import CompanyLogo from "./CompanyLogo";
 import { X, ExternalLink, Calendar, MapPin, Target, Globe, FileText, CheckCircle2 } from "lucide-react";
 import type { JobApplication } from "./ApplicationCard";
@@ -69,9 +70,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
   };
 
   if (!isOpen || !app) {
-    return (
-      <div className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 pointer-events-none opacity-0`} />
-    );
+    return null;
   }
 
 
@@ -81,15 +80,27 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
     : (app.tags || []);
 
   return (
-    <>
+    <AnimatePresence>
       {/* Backdrop */}
-      <div 
-        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+      <motion.div
+        key="backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Slide Out Panel */}
-      <div className={`fixed top-0 right-0 z-50 h-full w-full md:w-[450px] bg-surface shadow-[-10px_0_30px_rgba(0,0,0,0.5)] transform transition-transform duration-300 ease-out flex flex-col border-l border-border`}>
+      <motion.div
+        key="panel"
+        initial={{ x: "100%", opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: "100%", opacity: 0 }}
+        transition={{ type: "spring", damping: 28, stiffness: 300 }}
+        className="fixed top-0 right-0 z-50 h-full w-full md:w-[450px] bg-surface shadow-[-10px_0_30px_rgba(0,0,0,0.5)] flex flex-col border-l border-border"
+      >
         
         {/* Header */}
         <div className="p-6 border-b border-border relative">
@@ -289,7 +300,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
           )}
 
         </div>
-      </div>
-    </>
+      </motion.div>
+    </AnimatePresence>
   );
 }
