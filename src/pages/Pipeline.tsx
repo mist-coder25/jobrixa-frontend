@@ -1,25 +1,48 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { DropResult } from "@hello-pangea/dnd";
 import api from "../api/axios";
 import TopBar from "../components/TopBar";
 import KanbanBoard from "../components/KanbanBoard";
 import ApplicationDetailPanel from "../components/ApplicationDetailPanel";
 import AddApplicationModal from "../components/AddApplicationModal";
+import QuickAddModal from "../components/QuickAddModal";
 import { toast } from "../components/Toast";
 import type { JobApplication } from "../components/ApplicationCard";
-import { Zap, X } from "lucide-react";
+import { Zap, X, Link2 } from "lucide-react";
 
 export default function Pipeline() {
+  const location = useLocation();
+
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [addStatus, setAddStatus] = useState("APPLIED");
+  const [prefillData, setPrefillData] = useState<{
+    companyName?: string; jobTitle?: string; jobUrl?: string; location?: string; source?: string;
+  } | undefined>(undefined);
   const [_plan, setPlan] = useState("FREE");
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+
+  // Quick Add from URL state
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+  const [quickAddInitialUrl, setQuickAddInitialUrl] = useState("");
+
   const FREE_LIMIT = 30;
   const WARN_AT = 25;
+
+  // Detect Android/desktop share-sheet URL via query params (?url=... or ?text=...)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sharedUrl = params.get("url") || params.get("text");
+    if (sharedUrl && sharedUrl.startsWith("http")) {
+      setQuickAddInitialUrl(sharedUrl);
+      setIsQuickAddOpen(true);
+      // Clean the URL so refreshing doesn't re-open it
+      window.history.replaceState({}, "", "/pipeline");
+    }
+  }, [location.search]);
 
   useEffect(() => {
     fetchApplications();
@@ -31,7 +54,6 @@ export default function Pipeline() {
       const response = await api.get("/applications");
       const apps = response.data as JobApplication[];
       setApplications(apps);
-      // Check upgrade banner
       try {
         const statusRes = await api.get("/payments/status");
         const p = (statusRes.data as { plan: string; isActive: boolean }).plan;
@@ -49,44 +71,53 @@ export default function Pipeline() {
 
   const onDragEnd = async (result: DropResult) => {
     const { destination, source, draggableId } = result;
-
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-
     const newStatus = destination.droppableId;
-    
-    // Check if dragging inside the same column
-    if (destination.droppableId === source.droppableId) {
-      // Reordering logic optional, currently backend doesn't store rank/index so we skip reordering
-      return;
-    }
-    
-    // Store original apps for rollback
-    const originalApps = [...applications];
+    if (destination.droppableId === source.droppableId) return;
 
-    // Optimistic UI update
-    setApplications(apps => apps.map(app => 
-      app.id === draggableId ? { ...app, status: newStatus } : app
-    ));
+    const originalApps = [...applications];
+    setApplications(apps =>
+      apps.map(app => app.id === draggableId ? { ...app, status: newStatus } : app)
+    );
 
     try {
       await api.patch(`/applications/${draggableId}/status`, { status: newStatus });
       toast.success(`✅ Moved to ${newStatus}`);
     } catch (error) {
       toast.error("Failed to update status. Reverting...");
-      setApplications(originalApps); // Rollback
+      setApplications(originalApps);
       console.error("Pipeline Drag Error:", error);
     }
   };
 
   const handleAddClick = (status: string) => {
+    setPrefillData(undefined);
     setAddStatus(status);
+    setIsAddModalOpen(true);
+  };
+
+  // Called when QuickAddModal confirms parsed data → open AddApplicationModal pre-filled
+  const handleQuickAddPrefill = (data: {
+    companyName: string; jobTitle: string; location: string; source: string; jobUrl: string;
+  }) => {
+    setPrefillData({
+      companyName: data.companyName,
+      jobTitle:    data.jobTitle,
+      jobUrl:      data.jobUrl,
+      source:      data.source,
+    });
+    setAddStatus("APPLIED");
     setIsAddModalOpen(true);
   };
 
   return (
     <div className="h-full flex flex-col relative w-full overflow-hidden bg-primary">
-      <TopBar title="My Pipeline" onAddApplication={() => handleAddClick("APPLIED")} />
+      <TopBar
+        title="My Pipeline"
+        onAddApplication={() => handleAddClick("APPLIED")}
+        onQuickAdd={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
+      />
 
       {/* Upgrade Banner */}
       {showUpgradeBanner && (
@@ -135,10 +166,28 @@ export default function Pipeline() {
       
       <AddApplicationModal 
         isOpen={isAddModalOpen} 
-        onClose={() => setIsAddModalOpen(false)} 
+        onClose={() => { setIsAddModalOpen(false); setPrefillData(undefined); }}
         onAdded={fetchApplications} 
         initialStatus={addStatus}
+        prefill={prefillData}
       />
+
+      {/* Quick Add from URL modal */}
+      <QuickAddModal
+        isOpen={isQuickAddOpen}
+        onClose={() => { setIsQuickAddOpen(false); setQuickAddInitialUrl(""); }}
+        initialUrl={quickAddInitialUrl}
+        onPrefill={handleQuickAddPrefill}
+      />
+
+      {/* Floating Quick Add button for mobile */}
+      <button
+        onClick={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
+        className="md:hidden fixed bottom-32 right-4 w-12 h-12 bg-surface border border-border text-accent rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform z-40"
+        title="Quick Add from URL"
+      >
+        <Link2 className="w-5 h-5" />
+      </button>
     </div>
   );
 }

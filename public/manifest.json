@@ -1,0 +1,26 @@
+{
+  "name": "Jobrixa",
+  "short_name": "Jobrixa",
+  "description": "Track every job application in one place.",
+  "start_url": "/pipeline",
+  "display": "standalone",
+  "background_color": "#0A0A0F",
+  "theme_color": "#6C63FF",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "share_target": {
+    "action": "/pipeline",
+    "method": "GET",
+    "params": {
+      "url": "url",
+      "title": "title",
+      "text": "text"
+    }
+  }
+}

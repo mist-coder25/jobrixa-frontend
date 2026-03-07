@@ -1,13 +1,20 @@
-import { Search, Filter, Plus, Upload } from "lucide-react";
+import { Search, Filter, Plus, Upload, Link2 } from "lucide-react";
 
 interface TopBarProps {
   title: string;
   onAddApplication?: () => void;
+  onQuickAdd?: () => void;
   actionLabel?: string;
   actionIcon?: "plus" | "upload";
 }
 
-export default function TopBar({ title, onAddApplication, actionLabel = "Add Application", actionIcon = "plus" }: TopBarProps) {
+export default function TopBar({
+  title,
+  onAddApplication,
+  onQuickAdd,
+  actionLabel = "Add Application",
+  actionIcon = "plus",
+}: TopBarProps) {
   const Icon = actionIcon === "upload" ? Upload : Plus;
 
   return (
@@ -16,13 +23,14 @@ export default function TopBar({ title, onAddApplication, actionLabel = "Add App
         <h2 className="text-xl font-display font-semibold text-textPrimary">{title}</h2>
       </div>
 
-      <div className="flex items-center gap-3 md:gap-4">
+      <div className="flex items-center gap-2 md:gap-3">
+        {/* Search — desktop only */}
         <div className="hidden md:flex relative group">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-textSecondary group-focus-within:text-accent w-4 h-4 transition-colors" />
           <input
             type="text"
             placeholder="Search..."
-            className="pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent w-56 transition-all"
+            className="pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent w-52 transition-all"
           />
         </div>
 
@@ -30,9 +38,22 @@ export default function TopBar({ title, onAddApplication, actionLabel = "Add App
           <Filter className="w-4 h-4" />
         </button>
 
+        {/* From URL button — shown when onQuickAdd is supplied */}
+        {onQuickAdd && (
+          <button
+            onClick={onQuickAdd}
+            className="flex items-center gap-1.5 px-3 py-2 bg-surface border border-border rounded-lg text-sm font-medium text-textSecondary hover:text-accent hover:border-accent/50 transition-all"
+            title="Quick Add from URL"
+          >
+            <Link2 className="w-4 h-4" />
+            <span className="hidden md:inline">From URL</span>
+          </button>
+        )}
+
+        {/* Primary Add Application CTA */}
         {onAddApplication && (
           <div className="relative group">
-            <div className="absolute -inset-0.5 bg-accent rounded-lg blur opacity-40 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+            <div className="absolute -inset-0.5 bg-accent rounded-lg blur opacity-40 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse" />
             <button
               onClick={onAddApplication}
               className="relative bg-accent hover:bg-[#5A52E8] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-[0_0_15px_rgba(108,99,255,0.4)] transition-all"
@@ -44,7 +65,7 @@ export default function TopBar({ title, onAddApplication, actionLabel = "Add App
         )}
       </div>
 
-      {/* FAB for Mobile */}
+      {/* FAB for Mobile — primary add */}
       {onAddApplication && (
         <button
           onClick={onAddApplication}
