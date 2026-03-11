@@ -20,8 +20,8 @@ export default {
         textSecondary: "var(--text-secondary)",
       },
       fontFamily: {
-        sans: ['"DM Sans"', 'sans-serif'],
-        display: ['"Syne"', 'sans-serif'],
+        sans: ['"Inter"', 'sans-serif'],
+        display: ['"Inter"', 'sans-serif'],
       }
     },
   },

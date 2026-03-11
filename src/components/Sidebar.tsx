@@ -73,7 +73,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-60 h-screen bg-surface border-r border-border fixed left-0 top-0">
+      <aside className="hidden md:flex flex-col w-60 h-screen bg-[#0D1117] border-r border-[#30363D] fixed left-0 top-0">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -81,15 +81,12 @@ export default function Sidebar() {
           className="p-6"
         >
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, #6C63FF 0%, #00D4AA 100%)' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M20 7H4C2.9 7 2 7.9 2 9V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V9C22 7.9 21.1 7 20 7Z" fill="white" fillOpacity="0.9"/>
-                <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M13 13L11.5 15.5L13 14H11L12.5 11.5L11 13H13Z" fill="#0A0A0F"/>
-              </svg>
-            </div>
-            <h1 className="text-xl font-display font-bold text-textPrimary tracking-wide">Jobrixa</h1>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M20 7H4C2.9 7 2 7.9 2 9V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V9C22 7.9 21.1 7 20 7Z" fill="#E6EDF3" fillOpacity="0.9"/>
+              <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" stroke="#E6EDF3" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M13 13L11.5 15.5L13 14H11L12.5 11.5L11 13H13Z" fill="#0D1117"/>
+            </svg>
+            <h1 className="text-xl font-display font-semibold text-[#E6EDF3] tracking-wide">Jobrixa</h1>
           </div>
         </motion.div>
 
@@ -104,31 +101,21 @@ export default function Sidebar() {
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>
-                  `relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-150 text-sm ${
+                  `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 relative ${
                     isActive
-                      ? "text-accent font-semibold"
-                      : item.label === "Pricing"
-                        ? "text-accent/80 hover:bg-accent/5 hover:text-accent font-medium"
-                        : "text-textSecondary hover:bg-secondary hover:text-textPrimary font-medium"
+                      ? 'bg-[#1C2128] text-[#E6EDF3] font-medium'
+                      : 'text-[#7D8590] hover:text-[#E6EDF3] hover:bg-[#1C2128]'
                   }`
                 }
               >
                 {({ isActive }) => (
                   <>
-                    {/* Animated active highlight using layoutId */}
+                    {/* Active left border indicator */}
                     {isActive && (
-                      <motion.div
-                        layoutId="activeNav"
-                        className="absolute inset-0 rounded-lg border border-accent/20 shadow-[0_0_12px_rgba(108,99,255,0.15)]"
-                        style={{ background: "rgba(108, 99, 255, 0.14)" }}
-                        transition={{ type: "spring", bounce: 0.3, duration: 0.45 }}
-                      />
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#4F8EF7] rounded-full" />
                     )}
                     <span className="relative z-10">{item.icon}</span>
                     <span className="relative z-10">{item.label}</span>
-                    {item.label === "Pricing" && planStatus.plan === "FREE" && (
-                      <span className="ml-auto relative z-10 text-[9px] font-bold px-1.5 py-0.5 bg-accent/20 text-accent rounded-full">NEW</span>
-                    )}
                   </>
                 )}
               </NavLink>

@@ -4,36 +4,56 @@
 
 @layer base {
   :root {
-    --bg-primary: #0A0A0F;
-    --bg-secondary: #111118;
-    --bg-surface: #1A1A24;
-    --border: #2A2A38;
-    --accent: #6C63FF;
-    --accent-teal: #00D4AA;
-    --warning: #F59E0B;
-    --danger: #EF4444;
-    --text-primary: #F0F0FF;
-    --text-secondary: #8B8BA8;
+    /* New backgrounds — deep navy, not pure black */
+    --bg-primary: #0D1117;
+    --bg-secondary: #161B22;
+    --bg-surface: #1C2128;
+    --bg-elevated: #22272E;
+    
+    /* Borders — subtle blue-grey */
+    --border: #30363D;
+    --border-subtle: #21262D;
+    
+    /* New accent — sophisticated indigo-blue, NOT purple */
+    --accent: #4F8EF7;
+    --accent-hover: #3B7DE8;
+    --accent-subtle: rgba(79, 142, 247, 0.1);
+    
+    /* Success green */
+    --accent-teal: #3FB950;
+    --accent-teal-subtle: rgba(63, 185, 80, 0.1);
+    
+    /* Warning amber */
+    --warning: #D29922;
+    --danger: #F85149;
+    
+    /* Text */
+    --text-primary: #E6EDF3;
+    --text-secondary: #7D8590;
+    --text-muted: #484F58;
   }
 
   body {
-    @apply bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    @apply bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--bg-primary); 
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--border); 
-    border-radius: 10px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary); 
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484F58; }
+  
+  /* Selection color */
+  ::selection {
+    background: rgba(79, 142, 247, 0.3);
+    color: #E6EDF3;
   }
 }
 
@@ -77,4 +97,21 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Subtle grid background on auth pages */
+.auth-bg {
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, rgba(79, 142, 247, 0.08) 0%, transparent 60%),
+    linear-gradient(rgba(48, 54, 61, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(48, 54, 61, 0.3) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+
+/* Card hover glow */
+.card-hover {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 0 0 1px rgba(79, 142, 247, 0.3), 0 4px 24px rgba(0, 0, 0, 0.4);
 }

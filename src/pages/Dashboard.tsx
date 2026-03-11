@@ -73,45 +73,29 @@ export default function Dashboard() {
       label: "Total Applications",
       value: stats?.totalApplications || 0,
       suffix: "",
-      icon: <Target className="w-6 h-6" />,
-      color: "accent",
-      bg: "bg-accent/10",
-      text: "text-accent",
-      ring: "bg-accent/5",
-      trend: <span className="text-xs text-[#00D4AA] flex items-center"><TrendingUp className="w-3 h-3 mr-1"/>+12%</span>,
+      icon: <Target className="w-4 h-4" />,
+      trend: <span className="flex items-center"><TrendingUp className="w-3 h-3 mr-1"/>+12%</span>,
     },
     {
       label: "Response Rate",
       value: stats?.responseRate || 0,
       suffix: "%",
-      icon: <Users className="w-6 h-6" />,
-      color: "warning",
-      bg: "bg-warning/10",
-      text: "text-warning",
-      ring: "bg-warning/5",
+      icon: <Users className="w-4 h-4" />,
       trend: null,
     },
     {
       label: "Interview Rate",
       value: stats?.interviewRate || 0,
       suffix: "%",
-      icon: <TrendingUp className="w-6 h-6" />,
-      color: "[#0A66C2]",
-      bg: "bg-[#0A66C2]/10",
-      text: "text-[#0A66C2]",
-      ring: "bg-[#0A66C2]/5",
+      icon: <TrendingUp className="w-4 h-4" />,
       trend: null,
     },
     {
-      label: "Total Offers",
+      label: "Offer Rate",
       value: stats?.offerRate || 0,
       suffix: "%",
-      icon: <CheckCircle2 className="w-6 h-6" />,
-      color: "[#00D4AA]",
-      bg: "bg-[#00D4AA]/10",
-      text: "text-[#00D4AA]",
-      ring: "bg-[#00D4AA]/5",
-      trend: <span className="text-xs text-textSecondary font-medium">of applied</span>,
+      icon: <CheckCircle2 className="w-4 h-4" />,
+      trend: <span className="text-xs text-[#7D8590] font-medium">of applied</span>,
     },
   ];
 
@@ -129,23 +113,24 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15, duration: 0.5, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="bg-surface border border-border rounded-xl p-6 relative overflow-hidden group cursor-default"
+              className="bg-[#161B22] border border-[#30363D] rounded-xl p-5 hover:border-[#4F8EF7]/30 transition-colors cursor-default"
             >
-              <div className={`absolute -right-4 -top-4 w-24 h-24 ${card.ring} rounded-full group-hover:scale-125 transition-transform duration-500`}></div>
-              <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 ${card.bg} rounded-lg flex items-center justify-center ${card.text}`}>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-medium text-[#7D8590] uppercase tracking-wider">
+                  {card.label}
+                </span>
+                <div className="w-8 h-8 rounded-lg bg-[#1C2128] flex items-center justify-center text-[#7D8590]">
                   {card.icon}
                 </div>
-                <div>
-                  <p className="text-textSecondary text-sm font-medium">{card.label}</p>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <h3 className="text-2xl font-display font-bold text-textPrimary">
-                      <AnimatedCounter value={card.value} suffix={card.suffix} />
-                    </h3>
-                    {card.trend}
-                  </div>
-                </div>
               </div>
+              <div className="text-2xl font-bold text-[#E6EDF3]">
+                <AnimatedCounter value={card.value} suffix={card.suffix} />
+              </div>
+              {card.trend && (
+                <div className="text-xs text-[#3FB950] mt-1 flex items-center">
+                  {card.trend}
+                </div>
+              )}
             </motion.div>
           ))}
         </div>

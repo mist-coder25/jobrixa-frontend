@@ -46,25 +46,21 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                 className="w-[320px] flex flex-col bg-primary/20 rounded-xl border border-border/50 max-h-full"
               >
                 {/* Column Header */}
-                <div className="flex justify-between items-center p-4 border-b border-border/50 shrink-0">
+                <div className="flex items-center justify-between mb-3 px-1 mt-4 mx-3">
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${
-                      col.id === 'OFFER' ? 'bg-[#00D4AA]' : 
-                      col.id === 'REJECTED' || col.id === 'GHOSTED' ? 'bg-danger' : 
-                      col.id === 'INTERVIEW' ? 'bg-warning' : 
-                      'bg-textSecondary'
+                    <span className={`w-2 h-2 rounded-full ${
+                      col.id === 'OFFER' ? 'bg-[#3FB950]' : 
+                      col.id === 'REJECTED' || col.id === 'GHOSTED' ? 'bg-[#F85149]' : 
+                      col.id === 'INTERVIEW' ? 'bg-[#D29922]' : 
+                      'bg-[#7D8590]'
                     }`} />
-                    <h3 className="font-display font-semibold text-textPrimary text-sm tracking-wide uppercase">{col.title}</h3>
+                    <span className="text-xs font-semibold text-[#7D8590] uppercase tracking-wider">
+                      {col.title}
+                    </span>
+                    <span className="text-xs text-[#484F58] bg-[#1C2128] px-1.5 py-0.5 rounded-md">
+                      {loading ? "-" : columnApps.length}
+                    </span>
                   </div>
-                  <motion.div
-                    key={columnApps.length}
-                    initial={{ scale: 1.3 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    className="bg-surface border border-border text-textSecondary text-xs font-bold px-2 py-0.5 rounded-md"
-                  >
-                    {loading ? "-" : columnApps.length}
-                  </motion.div>
                 </div>
 
                 {/* Droppable Area */}
