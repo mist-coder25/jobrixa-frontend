@@ -102,21 +102,9 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                       }`}
                     >
                       {loading ? (
-                        Array.from({ length: 3 }).map((_, idx) => (
-                          <div key={idx} className="p-4 rounded-xl border border-border/30 bg-surface/50 skeleton">
-                            <div className="flex items-start gap-4">
-                              <div className="w-12 h-12 rounded-lg bg-border/40 shrink-0"></div>
-                              <div className="flex-1 space-y-2 py-1">
-                                <div className="h-4 bg-border/40 rounded w-3/4"></div>
-                                <div className="h-3 bg-border/40 rounded w-1/2"></div>
-                              </div>
-                            </div>
-                            <div className="mt-4 flex justify-between">
-                              <div className="h-4 bg-border/40 rounded w-16"></div>
-                              <div className="h-4 bg-border/40 rounded w-12"></div>
-                            </div>
-                          </div>
-                        ))
+                        <div className="px-3 py-2 space-y-2">
+                          {[1,2,3].map(i => <div key={i} className="h-16 bg-[#21262D] rounded-lg animate-pulse" />)}
+                        </div>
                       ) : columnApps.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
                           <span className="text-3xl mb-2">{EMPTY_HINTS[col.id]?.emoji || 'Briefcase'}</span>

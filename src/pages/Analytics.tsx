@@ -36,10 +36,10 @@ export default function Analytics() {
   // Construct funnel data safely from backend map
   const byStatus = stats?.byStatus || {};
   const funnelData = [
-    { name: 'Applied', value: byStatus['APPLIED'] || 0, color: '#6C63FF' },
-    { name: 'Assessments', value: byStatus['OA'] || 0, color: '#FF4F40' },
-    { name: 'Interviews', value: byStatus['INTERVIEW'] || 0, color: '#F59E0B' },
-    { name: 'Offers', value: byStatus['OFFER'] || 0, color: '#00D4AA' }
+    { name: 'Applied', value: byStatus['APPLIED'] || 0 },
+    { name: 'Assessments', value: byStatus['OA'] || 0 },
+    { name: 'Interviews', value: byStatus['INTERVIEW'] || 0 },
+    { name: 'Offers', value: byStatus['OFFER'] || 0 }
   ];
 
   const sourceData = [
@@ -52,6 +52,8 @@ export default function Analytics() {
     const intensity = Math.random() > 0.8 ? Math.floor(Math.random() * 4) + 1 : 0;
     return intensity;
   });
+
+  const HEAT_COLORS = ['#21262D', '#1a3a5c', '#1d5a9e', '#2470d4', '#4F8EF7'];
 
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar text-textPrimary">
@@ -91,11 +93,7 @@ export default function Analytics() {
                      cursor={{ fill: 'transparent' }}
                      contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                    />
-                   <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={32}>
-                      {funnelData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                   </Bar>
+                   <Bar dataKey="value" fill="#4F8EF7" radius={[0, 4, 4, 0]} barSize={32} />
                  </BarChart>
                </ResponsiveContainer>
             </div>
@@ -114,7 +112,11 @@ export default function Analytics() {
                     cursor={{fill: '#2A2A38', opacity: 0.4}}
                     contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                   />
-                  <Bar dataKey="rate" fill="#6C63FF" radius={[4, 4, 0, 0]} barSize={40} />
+                  <Bar dataKey="rate" radius={[4, 4, 0, 0]} barSize={40}>
+                    {sourceData.map((_, i) => (
+                      <Cell key={i} fill={['#4F8EF7','#3FB950','#D29922','#A371F7'][i % 4]} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -132,12 +134,8 @@ export default function Analytics() {
                      {heatmapCells.slice(colIndex * 7, (colIndex + 1) * 7).map((intensity, rowIndex) => (
                        <div 
                          key={rowIndex} 
-                         className={`w-3.5 h-3.5 rounded-sm transition-colors cursor-pointer hover:ring-1 hover:ring-textPrimary
-                           ${intensity === 0 ? 'bg-primary' : 
-                             intensity === 1 ? 'bg-[#00D4AA]/20' : 
-                             intensity === 2 ? 'bg-[#00D4AA]/50' : 
-                             intensity === 3 ? 'bg-[#00D4AA]/80' : 
-                             'bg-[#00D4AA]'}`}
+                         className="w-3.5 h-3.5 rounded-sm transition-colors cursor-pointer hover:ring-1 hover:ring-textPrimary"
+                         style={{ backgroundColor: HEAT_COLORS[intensity] }}
                          title={`${intensity} applications`}
                        ></div>
                      ))}
@@ -147,11 +145,11 @@ export default function Analytics() {
             </div>
             <div className="flex items-center justify-end gap-2 mt-4 text-xs font-medium text-textSecondary">
                <span>Less</span>
-               <div className="w-3.5 h-3.5 rounded-sm bg-primary"></div>
-               <div className="w-3.5 h-3.5 rounded-sm bg-[#00D4AA]/20"></div>
-               <div className="w-3.5 h-3.5 rounded-sm bg-[#00D4AA]/50"></div>
-               <div className="w-3.5 h-3.5 rounded-sm bg-[#00D4AA]/80"></div>
-               <div className="w-3.5 h-3.5 rounded-sm bg-[#00D4AA]"></div>
+               <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[0] }}></div>
+               <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[1] }}></div>
+               <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[2] }}></div>
+               <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[3] }}></div>
+               <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[4] }}></div>
                <span>More</span>
             </div>
         </div>
