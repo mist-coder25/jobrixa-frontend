@@ -10,6 +10,7 @@ import Resumes from './pages/Resumes';
 import Settings from './pages/Settings';
 import Discover from './pages/Discover';
 import Pricing from './pages/Pricing';
+import ForgotPassword from './pages/ForgotPassword';
 import ToastContainer from './components/Toast';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -43,6 +44,7 @@ function AnimatedRoutes() {
           <Route path="/" element={<RootRedirect />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />

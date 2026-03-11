@@ -10,6 +10,10 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleGoogleAuth = () => {
+    toast.success('Google login coming soon! Use email for now 🚀');
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -57,7 +61,7 @@ export default function Login() {
 
           <div>
             <div className="flex items-center justify-end mb-1">
-              <a href="#" className="text-xs text-[#4F8EF7] hover:text-[#3B7DE8] transition-colors">Forgot password?</a>
+              <span onClick={() => navigate('/forgot-password')} className="text-xs text-[#4F8EF7] hover:text-[#3B7DE8] transition-colors cursor-pointer hover:underline">Forgot password?</span>
             </div>
             <input
               type="password"
@@ -84,7 +88,7 @@ export default function Login() {
           <div className="flex-1 h-px bg-[#30363D]" />
         </div>
 
-        <button className="w-full py-2.5 bg-[#1C2128] hover:bg-[#22272E] border border-[#30363D] text-[#E6EDF3] font-medium rounded-lg text-sm flex items-center justify-center gap-2 transition-colors">
+        <button type="button" onClick={handleGoogleAuth} className="w-full py-2.5 bg-[#1C2128] hover:bg-[#22272E] border border-[#30363D] text-[#E6EDF3] font-medium rounded-lg text-sm flex items-center justify-center gap-2 transition-colors">
           <svg width="16" height="16" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
