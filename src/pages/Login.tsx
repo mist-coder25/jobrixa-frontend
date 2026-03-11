@@ -27,14 +27,18 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen auth-bg flex items-center justify-center p-4 bg-[#0D1117] text-[#E6EDF3]">
-      <div className="w-full max-w-sm bg-[#161B22] border border-[#30363D] rounded-2xl p-8 relative z-10 shadow-2xl">
+    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#4F8EF7]/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#A371F7]/6 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative w-full max-w-sm bg-[#161B22] border border-[#30363D] rounded-2xl p-8 shadow-2xl shadow-black/50">
         <div className="flex flex-col items-center mb-6">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" className="mb-4">
-            <path d="M20 7H4C2.9 7 2 7.9 2 9V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V9C22 7.9 21.1 7 20 7Z" fill="#E6EDF3" fillOpacity="0.9"/>
-            <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" stroke="#E6EDF3" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M13 13L11.5 15.5L13 14H11L12.5 11.5L11 13H13Z" fill="#161B22"/>
-          </svg>
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <div className="w-8 h-8 rounded-lg bg-[#4F8EF7] flex items-center justify-center">
+              <span className="text-white font-black text-sm">J</span>
+            </div>
+            <span className="font-bold text-[#E6EDF3] text-lg">Jobrixa</span>
+          </div>
           <h1 className="text-xl font-semibold text-[#E6EDF3]">Welcome back</h1>
           <p className="text-sm text-[#7D8590] mt-1">Sign in to your Jobrixa account</p>
         </div>

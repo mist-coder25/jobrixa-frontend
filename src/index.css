@@ -115,3 +115,10 @@
 .card-hover:hover {
   box-shadow: 0 0 0 1px rgba(79, 142, 247, 0.3), 0 4px 24px rgba(0, 0, 0, 0.4);
 }
+
+/* Main content background — subtle dot pattern */
+.main-content {
+  background-color: #0D1117;
+  background-image: radial-gradient(#21262D 1px, transparent 1px);
+  background-size: 24px 24px;
+}

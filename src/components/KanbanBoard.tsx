@@ -16,6 +16,18 @@ const STATUS_COLUMNS = [
   { id: "GHOSTED", title: "Ghosted" },
 ];
 
+const COLUMN_COLORS: Record<string, string> = {
+  SAVED: '#7D8590',
+  APPLIED: '#4F8EF7',
+  OA: '#D29922',
+  INTERVIEW: '#A371F7',
+  TECHNICAL: '#3FB950',
+  HR: '#F0883E',
+  OFFER: '#3FB950',
+  REJECTED: '#F85149',
+  GHOSTED: '#F85149'
+};
+
 interface KanbanBoardProps {
   applications: JobApplication[];
   onDragEnd: (result: DropResult) => void;
@@ -43,21 +55,14 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
               <motion.div
                 key={col.id}
                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-                className="w-[320px] flex flex-col bg-primary/20 rounded-xl border border-border/50 max-h-full"
+                className="w-[320px] flex flex-col bg-[#161B22] rounded-xl border border-[#30363D] min-w-[260px] max-h-full"
+                style={{ borderTop: `2px solid ${COLUMN_COLORS[col.id] || '#7D8590'}` }}
               >
                 {/* Column Header */}
-                <div className="flex items-center justify-between mb-3 px-1 mt-4 mx-3">
+                <div className="px-4 py-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${
-                      col.id === 'OFFER' ? 'bg-[#3FB950]' : 
-                      col.id === 'REJECTED' || col.id === 'GHOSTED' ? 'bg-[#F85149]' : 
-                      col.id === 'INTERVIEW' ? 'bg-[#D29922]' : 
-                      'bg-[#7D8590]'
-                    }`} />
-                    <span className="text-xs font-semibold text-[#7D8590] uppercase tracking-wider">
-                      {col.title}
-                    </span>
-                    <span className="text-xs text-[#484F58] bg-[#1C2128] px-1.5 py-0.5 rounded-md">
+                    <span className="text-xs font-semibold text-[#7D8590] uppercase tracking-wider">{col.title}</span>
+                    <span className="text-xs bg-[#21262D] text-[#7D8590] px-1.5 py-0.5 rounded-md font-medium">
                       {loading ? "-" : columnApps.length}
                     </span>
                   </div>

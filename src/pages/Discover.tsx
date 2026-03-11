@@ -17,21 +17,13 @@ const SOURCE_COLORS: Record<string, string> = {
 };
 
 function TrustBadge({ score }: { score: number }) {
-  const color =
-    score >= 70 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" :
-    score >= 40 ? "bg-yellow-500/15 text-yellow-400 border-yellow-500/30" :
-                  "bg-red-500/15 text-red-400 border-red-500/30";
+  const trustColor = score > 80 ? '#3FB950' : score > 60 ? '#D29922' : '#F85149';
   return (
-    <span className={`px-2.5 py-1 rounded-full border text-[10px] font-bold flex items-center gap-1 shrink-0 ${color}`}>
-      <span className="opacity-70">Trust</span> {score}
+    <span style={{ color: trustColor, borderColor: `${trustColor}30`, backgroundColor: `${trustColor}10` }}
+      className="text-xs px-2 py-0.5 rounded-full border font-medium shrink-0">
+      Trust {score}
     </span>
   );
-}
-
-function trustBorderColor(score: number): string {
-  if (score >= 70) return "border-l-emerald-500";
-  if (score >= 40) return "border-l-yellow-500";
-  return "border-l-red-500";
 }
 
 
@@ -39,10 +31,8 @@ function trustBorderColor(score: number): string {
 function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: (job: NormalizedJob) => void }) {
   const srcColor = SOURCE_COLORS[job.source] ?? SOURCE_COLORS.default;
 
-  const borderAccent = trustBorderColor(job.trustScore);
-
   return (
-    <div className={`group bg-surface border border-border border-l-2 ${borderAccent} rounded-xl p-5 flex flex-col gap-4 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 transition-all duration-200 hover:-translate-y-0.5`}>
+    <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-5 flex flex-col gap-4 hover:border-[#4F8EF7]/40 hover:shadow-lg hover:shadow-[#4F8EF7]/5 transition-all cursor-pointer">
       {/* Header */}
       <div className="flex items-start gap-3">
         <CompanyLogo companyName={job.company} size={48} className="border border-border/50" containerPadding="p-1.5" />
@@ -74,7 +64,7 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
 
       {/* Salary + Meta Row */}
       <div className="flex items-center justify-between text-xs">
-        <span className="text-emerald-400 font-semibold">{job.salaryLabel}</span>
+        <span className="text-[#3FB950] font-semibold text-sm">{job.salaryLabel}</span>
         <div className="flex items-center gap-2">
           <span className={`px-2 py-0.5 rounded-full border text-[10px] font-medium ${srcColor}`}>{job.source}</span>
           <span className="flex items-center gap-1 text-textSecondary/60">
@@ -95,7 +85,7 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
         </a>
         <button
           onClick={() => onAddToTracker(job)}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-accent hover:bg-[#5A52E8] text-white text-xs font-medium transition-all shadow-[0_0_12px_rgba(108,99,255,0.25)]"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-sm font-medium rounded-lg transition-colors"
         >
           <Plus size={12} /> Add to Tracker
         </button>

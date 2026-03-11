@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import TopBar from "../components/TopBar";
 import api from "../api/axios";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { TrendingUp, Users, Target, CheckCircle2 } from "lucide-react";
 
 /** Counts up from 0 to value over ~1.2s at 60fps */
@@ -75,6 +75,7 @@ export default function Dashboard() {
       suffix: "",
       icon: <Target className="w-4 h-4" />,
       trend: <span className="flex items-center"><TrendingUp className="w-3 h-3 mr-1"/>+12%</span>,
+      borderColor: "border-l-[#4F8EF7]"
     },
     {
       label: "Response Rate",
@@ -82,6 +83,7 @@ export default function Dashboard() {
       suffix: "%",
       icon: <Users className="w-4 h-4" />,
       trend: null,
+      borderColor: "border-l-[#3FB950]"
     },
     {
       label: "Interview Rate",
@@ -89,6 +91,7 @@ export default function Dashboard() {
       suffix: "%",
       icon: <TrendingUp className="w-4 h-4" />,
       trend: null,
+      borderColor: "border-l-[#D29922]"
     },
     {
       label: "Offer Rate",
@@ -96,6 +99,7 @@ export default function Dashboard() {
       suffix: "%",
       icon: <CheckCircle2 className="w-4 h-4" />,
       trend: <span className="text-xs text-[#7D8590] font-medium">of applied</span>,
+      borderColor: "border-l-[#A371F7]"
     },
   ];
 
@@ -113,17 +117,17 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15, duration: 0.5, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="bg-[#161B22] border border-[#30363D] rounded-xl p-5 hover:border-[#4F8EF7]/30 transition-colors cursor-default"
+              className={`bg-[#161B22] border border-[#30363D] rounded-xl p-5 border-l-2 ${card.borderColor} hover:border-[#4F8EF7]/30 transition-colors cursor-default`}
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium text-[#7D8590] uppercase tracking-wider">
+                <div className="text-[11px] font-semibold text-[#7D8590] uppercase tracking-wider">
                   {card.label}
-                </span>
+                </div>
                 <div className="w-8 h-8 rounded-lg bg-[#1C2128] flex items-center justify-center text-[#7D8590]">
                   {card.icon}
                 </div>
               </div>
-              <div className="text-2xl font-bold text-[#E6EDF3]">
+              <div className="text-3xl font-bold text-[#E6EDF3] mt-2">
                 <AnimatedCounter value={card.value} suffix={card.suffix} />
               </div>
               {card.trend && (
@@ -142,14 +146,14 @@ export default function Dashboard() {
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={weeklyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2A2A38" vertical={false} />
-                  <XAxis dataKey="name" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
+                  <YAxis tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                     itemStyle={{ color: '#F0F0FF' }}
                   />
-                  <Line type="monotone" dataKey="apps" stroke="#6C63FF" strokeWidth={3} dot={{ fill: '#6C63FF', strokeWidth: 2, r: 4 }} activeDot={{ r: 6 }} />
+                  <Line type="monotone" dataKey="apps" stroke="#4F8EF7" strokeWidth={2} dot={{ fill: '#4F8EF7', r: 3 }} activeDot={{ r: 6 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -160,14 +164,18 @@ export default function Dashboard() {
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={sourceData} layout="vertical" margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2A2A38" horizontal={false} />
-                  <XAxis type="number" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis dataKey="name" type="category" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} width={80} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#21262D" horizontal={false} />
+                  <XAxis type="number" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
+                  <YAxis dataKey="name" type="category" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} width={80} />
                   <Tooltip 
                     cursor={{fill: '#2A2A38', opacity: 0.4}}
                     contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                   />
-                  <Bar dataKey="value" fill="#00D4AA" radius={[0, 4, 4, 0]} barSize={24} />
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={24}>
+                    {sourceData.map((_, i) => (
+                      <Cell key={i} fill={['#4F8EF7','#3FB950','#D29922','#A371F7'][i % 4]} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>

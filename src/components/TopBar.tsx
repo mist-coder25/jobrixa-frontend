@@ -20,27 +20,27 @@ export default function TopBar({
   const Icon = actionIcon === "upload" ? Upload : Plus;
 
   return (
-    <header className="h-16 border-b border-border bg-primary/80 backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 flex items-center justify-between w-full">
+    <header className="h-14 bg-[#0D1117] border-b border-[#21262D] flex items-center justify-between px-6 sticky top-0 z-40 w-full">
       <div className="flex items-center gap-4">
         <div>
-          <h2 className="text-xl font-display font-semibold text-textPrimary">{title}</h2>
-          {subtitle && <p className="text-xs text-textSecondary mt-0.5">{subtitle}</p>}
+          <h1 className="text-base font-semibold text-[#E6EDF3]">{title}</h1>
+          {subtitle && <p className="text-xs text-[#7D8590]">{subtitle}</p>}
         </div>
       </div>
 
       <div className="flex items-center gap-2">
         {/* Search — desktop only */}
         <div className="hidden md:flex relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-textSecondary group-focus-within:text-accent w-4 h-4 transition-colors" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#484F58]" />
           <input
             type="text"
             placeholder="Search..."
-            className="pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent w-48 md:w-64 transition-all"
+            className="w-52 pl-8 pr-3 py-1.5 bg-[#161B22] border border-[#30363D] rounded-md text-sm text-[#E6EDF3] placeholder:text-[#484F58] focus:outline-none focus:border-[#4F8EF7] transition-colors"
           />
         </div>
 
-        <button className="hidden md:flex items-center justify-center p-2 rounded-lg bg-surface border border-border text-textSecondary hover:text-textPrimary hover:border-textSecondary transition-all">
-          <Filter className="w-4 h-4" />
+        <button className="hidden md:flex p-1.5 rounded-md border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#484F58] transition-colors bg-[#161B22]">
+          <Filter size={14} />
         </button>
 
         {/* From URL button — shown when onQuickAdd is supplied */}
