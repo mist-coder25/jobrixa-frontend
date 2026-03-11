@@ -111,6 +111,22 @@ export default function Pipeline() {
     setIsAddModalOpen(true);
   };
 
+  // Calculate health stats
+  const totalApps = applications.length;
+  const activeApps = applications.filter(a => !['REJECTED', 'GHOSTED'].includes(a.status)).length;
+  const interviewCount = applications.filter(a => a.status === 'INTERVIEW').length;
+
+  const counts: Record<string, number> = {};
+  applications.forEach(a => { counts[a.status] = (counts[a.status] || 0) + 1; });
+
+  const COLUMN_COLORS: Record<string, string> = {
+    SAVED: '#7D8590',
+    APPLIED: '#4F8EF7',
+    OA: '#D29922',
+    INTERVIEW: '#A371F7',
+    OFFER: '#3FB950'
+  };
+
   return (
     <div className="h-full flex flex-col relative w-full overflow-hidden bg-primary">
       <TopBar
@@ -119,6 +135,36 @@ export default function Pipeline() {
         onAddApplication={() => handleAddClick("APPLIED")}
         onQuickAdd={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
       />
+
+      {/* Application progress bar — shows how active the job hunt is */}
+      <div className="px-6 py-3 border-b border-[#21262D] flex flex-col md:flex-row md:items-center gap-4 md:gap-6 bg-[#0D1117]">
+        {/* Stage progress */}
+        <div className="flex items-center gap-1.5 flex-1 w-full max-w-xl">
+          {['SAVED','APPLIED','OA','INTERVIEW','OFFER'].map((stage, i) => (
+            <div key={stage} className="flex items-center gap-1.5 flex-1">
+              <div 
+                className="h-1.5 flex-1 rounded-full transition-all"
+                style={{ 
+                  background: counts[stage] > 0 ? COLUMN_COLORS[stage] : '#21262D'
+                }} 
+              />
+              {i < 4 && <div className="w-1 h-1 rounded-full bg-[#30363D]" />}
+            </div>
+          ))}
+        </div>
+        {/* Quick stats */}
+        <div className="flex items-center justify-between md:justify-start gap-4 text-xs font-medium">
+          <span className="text-[#7D8590]">
+            <span className="text-[#E6EDF3]">{totalApps}</span> total
+          </span>
+          <span className="text-[#7D8590]">
+            <span className="text-[#3FB950]">{activeApps}</span> active
+          </span>
+          <span className="text-[#7D8590]">
+            <span className="text-[#D29922]">{interviewCount}</span> interviews
+          </span>
+        </div>
+      </div>
 
       {/* Upgrade Banner */}
       {showUpgradeBanner && (

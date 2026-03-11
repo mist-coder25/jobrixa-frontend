@@ -49,6 +49,11 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: #484F58; }
+
+  /* Kanban horizontal scrollbar */
+  .kanban-scroll::-webkit-scrollbar { height: 6px; }
+  .kanban-scroll::-webkit-scrollbar-track { background: transparent; }
+  .kanban-scroll::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
   
   /* Selection color */
   ::selection {

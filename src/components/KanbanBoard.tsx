@@ -3,7 +3,17 @@ import type { DropResult } from "@hello-pangea/dnd";
 import { motion, AnimatePresence } from "framer-motion";
 import ApplicationCard from "./ApplicationCard";
 import type { JobApplication } from "./ApplicationCard";
-import { Briefcase } from "lucide-react";
+import { Plus } from "lucide-react";
+
+const EMPTY_HINTS: Record<string, { emoji: string; text: string; hint: string }> = {
+  SAVED: { emoji: '🔖', text: 'Jobs you\'re eyeing', hint: 'Paste a job URL to quick-add' },
+  APPLIED: { emoji: '📨', text: 'Applied jobs show here', hint: 'Track every application you send' },
+  OA: { emoji: '💻', text: 'Got an OA? Add it here', hint: 'Online assessments & coding rounds' },
+  INTERVIEW: { emoji: '🎙️', text: 'Interview stage', hint: 'You\'re close — prep hard!' },
+  OFFER: { emoji: '🎉', text: 'Offers land here', hint: 'This is what we\'re working toward' },
+  REJECTED: { emoji: '💪', text: 'Every no is closer to yes', hint: 'Track rejections to spot patterns' },
+  GHOSTED: { emoji: '👻', text: 'Radio silence', hint: 'It happens to the best of us' },
+};
 
 
 const STATUS_COLUMNS = [
@@ -40,11 +50,11 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
   const getAppsForStatus = (status: string) => applications.filter(app => app.status === status);
 
   return (
-    <div className="flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar h-full pl-4 md:pl-8 pr-4 pb-6 pt-6">
+    <div className="flex-1 overflow-x-auto overflow-y-hidden kanban-scroll h-full pl-4 md:pl-8 pr-4 pb-6 pt-6">
       <DragDropContext onDragEnd={onDragEnd}>
         {/* Columns stagger in on load */}
         <motion.div
-          className="flex gap-4 h-full min-w-max items-start"
+          className="flex gap-4 p-6 overflow-x-auto h-[calc(100vh-120px)] items-start"
           initial="hidden"
           animate="visible"
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.3 } } }}
@@ -55,17 +65,30 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
               <motion.div
                 key={col.id}
                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-                className="w-[320px] flex flex-col bg-[#161B22] rounded-xl border border-[#30363D] min-w-[260px] max-h-full"
-                style={{ borderTop: `2px solid ${COLUMN_COLORS[col.id] || '#7D8590'}` }}
+                className="flex flex-col rounded-xl border border-[#21262D] bg-[#0D1117] min-w-[240px] max-w-[240px]"
+                style={{ borderTop: `3px solid ${COLUMN_COLORS[col.id] || '#7D8590'}` }}
               >
                 {/* Column Header */}
-                <div className="px-4 py-3 flex items-center justify-between">
+                <div className="px-4 pt-4 pb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-[#7D8590] uppercase tracking-wider">{col.title}</span>
-                    <span className="text-xs bg-[#21262D] text-[#7D8590] px-1.5 py-0.5 rounded-md font-medium">
-                      {loading ? "-" : columnApps.length}
+                    <span 
+                      className="text-[11px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md"
+                      style={{ 
+                        color: COLUMN_COLORS[col.id] || '#7D8590', 
+                        background: `${COLUMN_COLORS[col.id] || '#7D8590'}15`,
+                        border: `1px solid ${COLUMN_COLORS[col.id] || '#7D8590'}30`
+                      }}
+                    >
+                      {col.title}
                     </span>
+                    <span className="text-xs text-[#484F58] font-medium">{columnApps.length}</span>
                   </div>
+                  <button 
+                    onClick={() => onAddClick(col.id)}
+                    className="w-6 h-6 rounded-md flex items-center justify-center text-[#484F58] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-all"
+                  >
+                    <Plus size={14} />
+                  </button>
                 </div>
 
                 {/* Droppable Area */}
@@ -95,9 +118,10 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                           </div>
                         ))
                       ) : columnApps.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-8 opacity-30 text-center px-2">
-                          <Briefcase size={24} className="floating" />
-                          <p className="text-sm mt-2">No applications yet — go get 'em! 🚀</p>
+                        <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
+                          <span className="text-3xl mb-2">{EMPTY_HINTS[col.id]?.emoji || 'Briefcase'}</span>
+                          <p className="text-xs font-medium text-[#484F58]">{EMPTY_HINTS[col.id]?.text || "No applications yet"}</p>
+                          <p className="text-[10px] text-[#30363D] mt-1">{EMPTY_HINTS[col.id]?.hint || "Add an application"}</p>
                         </div>
                       ) : (
                         <AnimatePresence mode="popLayout">
@@ -130,14 +154,13 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                       {provided.placeholder}
                       
                       {/* Add Card Footer */}
-                      <motion.button
+                      <button
                         onClick={() => onAddClick(col.id)}
-                        whileHover={{ scale: 1.02, borderColor: "rgba(108,99,255,0.5)" }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full py-3 mt-2 rounded-lg border border-dashed border-border text-textSecondary hover:text-textPrimary hover:bg-surface/50 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
+                        className="mx-3 mb-3 py-2 w-[calc(100%-24px)] rounded-lg border border-dashed border-[#30363D] text-[#484F58] text-xs font-medium hover:border-[#4F8EF7]/50 hover:text-[#4F8EF7] hover:bg-[#4F8EF7]/5 transition-all flex items-center justify-center gap-1.5"
                       >
-                        + Add Card
-                      </motion.button>
+                        <Plus size={12} />
+                        Add card
+                      </button>
                     </div>
                   )}
                 </Droppable>
