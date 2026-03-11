@@ -25,7 +25,7 @@ export default function Analytics() {
   if (loading) {
     return (
       <div className="h-full flex flex-col bg-primary">
-        <TopBar title="Analytics" />
+        <TopBar title="Analytics" subtitle="Know your numbers" />
         <div className="flex-1 flex items-center justify-center">
            <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"></div>
         </div>
@@ -55,9 +55,9 @@ export default function Analytics() {
 
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar text-textPrimary">
-      <TopBar title="Advanced Analytics" />
+      <TopBar title="Advanced Analytics" subtitle="Know your numbers" />
 
-      <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
+      <div className="p-6 space-y-8 animate-in fade-in duration-500">
         
         {/* Smart Insights */}
         <div className="bg-gradient-to-r from-accent/20 to-surface border border-accent/30 rounded-xl p-6 relative overflow-hidden flex items-start gap-4 shadow-[0_4px_30px_rgba(108,99,255,0.1)]">
@@ -78,7 +78,7 @@ export default function Analytics() {
           
           {/* Funnel Chart */}
           <div className="bg-surface border border-border rounded-xl p-6">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-display font-semibold">Conversion Funnel</h3>
               <div title="Dropoff from initial application to final offer"><Info className="w-4 h-4 text-textSecondary" /></div>
             </div>
@@ -103,7 +103,7 @@ export default function Analytics() {
 
           {/* Response Rates by Source */}
           <div className="bg-surface border border-border rounded-xl p-6">
-            <h3 className="text-lg font-display font-semibold mb-6">Response Rate by Source (%)</h3>
+            <h3 className="text-lg font-display font-semibold mb-4">Response Rate by Source (%)</h3>
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={sourceData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
@@ -123,7 +123,7 @@ export default function Analytics() {
 
         {/* Heatmap Area Component */}
         <div className="bg-surface border border-border rounded-xl p-6">
-            <h3 className="text-lg font-display font-semibold mb-6">Activity Heatmap</h3>
+            <h3 className="text-lg font-display font-semibold mb-4">Activity Heatmap</h3>
             <div className="w-full overflow-x-auto custom-scrollbar pb-2">
                <div className="flex gap-1" style={{ minWidth: '800px' }}>
                  {/* Split array into columns of 7 for weeks */}

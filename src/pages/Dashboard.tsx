@@ -48,7 +48,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="h-full flex flex-col bg-primary">
-        <TopBar title="Dashboard" />
+        <TopBar title="Dashboard" subtitle="Here's how your search is going" />
         <div className="flex-1 flex items-center justify-center">
           <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"></div>
         </div>
@@ -117,7 +117,7 @@ export default function Dashboard() {
 
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
-      <TopBar title="Dashboard" />
+      <TopBar title="Dashboard" subtitle="Here's how your search is going" />
       
       <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
         {/* Metric Cards */}

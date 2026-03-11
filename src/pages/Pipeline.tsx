@@ -115,6 +115,7 @@ export default function Pipeline() {
     <div className="h-full flex flex-col relative w-full overflow-hidden bg-primary">
       <TopBar
         title="My Pipeline"
+        subtitle="Your job hunt, organized"
         onAddApplication={() => handleAddClick("APPLIED")}
         onQuickAdd={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
       />

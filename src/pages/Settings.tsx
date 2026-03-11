@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import {
-  User, Bell, Shield, Camera, Linkedin, GraduationCap,
+  User, Bell, Shield, Linkedin, GraduationCap,
   IndianRupee, X, Plus, Eye, EyeOff, AlertTriangle, Loader2, Save, Check, Trash2, Zap, CreditCard, Mail, RefreshCw, Unlink, CheckCircle2
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import api from "../api/axios";
 import { toast } from "../components/Toast";
+import AvatarSelector from "../components/AvatarSelector";
 
 type Tab = "profile" | "notifications" | "account" | "billing" | "integrations";
 
@@ -198,7 +199,6 @@ export default function Settings() {
   const removeSkill = (skill: string) => setSkills(prev => prev.filter(s => s !== skill));
 
   const avatarBg = `hsl(${(profile?.name?.charCodeAt(0) ?? 0) * 7 % 360}, 60%, 40%)`;
-  const initial = profile?.name?.charAt(0)?.toUpperCase() ?? "?";
 
   const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "profile",      label: "Profile",       icon: <User size={16} /> },
@@ -212,10 +212,10 @@ export default function Settings() {
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
       <TopBar title="Settings" />
 
-      <div className="p-6 md:p-8 max-w-3xl mx-auto w-full">
+      <div className="p-6 max-w-3xl mx-auto w-full">
 
         {/* Tab Navigation */}
-        <div className="flex gap-1 bg-surface border border-border rounded-xl p-1 mb-8">
+        <div className="flex gap-1 bg-surface border border-border rounded-xl p-1 mt-2 mb-6">
           {TABS.map(tab => (
             <button
               key={tab.id}
@@ -243,20 +243,13 @@ export default function Settings() {
               <>
                 {/* Avatar */}
                 <div className="flex justify-center">
-                  <div className="relative group cursor-pointer">
-                    <div
-                      className="w-24 h-24 rounded-full flex items-center justify-center text-white font-bold text-4xl font-display shadow-lg"
-                      style={{ background: avatarBg }}
-                    >
-                      {initial}
-                    </div>
-                    <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                      <Camera size={20} className="text-white" />
-                    </div>
-                    <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-accent rounded-full flex items-center justify-center border-2 border-primary">
-                      <Plus size={14} className="text-white" />
-                    </div>
-                  </div>
+                  <AvatarSelector
+                    currentInitial={profile?.name?.charAt(0).toUpperCase() || 'U'}
+                    currentColor={profile?.avatarUrl || avatarBg}
+                    onSelect={(_avatarId, bg) => {
+                      setProfile(prev => prev ? ({ ...prev, avatarUrl: bg }) : prev);
+                    }}
+                  />
                 </div>
 
                 {/* Fields */}

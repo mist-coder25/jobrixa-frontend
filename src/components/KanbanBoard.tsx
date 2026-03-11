@@ -94,9 +94,9 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                           </div>
                         ))
                       ) : columnApps.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-8 opacity-30">
+                        <div className="flex flex-col items-center justify-center py-8 opacity-30 text-center px-2">
                           <Briefcase size={24} className="floating" />
-                          <p className="text-sm mt-2">No applications</p>
+                          <p className="text-sm mt-2">No applications yet — go get 'em! 🚀</p>
                         </div>
                       ) : (
                         <AnimatePresence mode="popLayout">

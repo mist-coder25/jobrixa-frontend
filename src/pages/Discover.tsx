@@ -149,7 +149,7 @@ export default function Discover() {
       const results = await searchJobs(query || "Software Engineer", location);
       setJobs(results);
     } catch {
-      toast.error("Search failed. Showing sample jobs.");
+      toast.error("Oops, something went wrong. Try again?");
       setJobs(MOCK_JOBS);
     } finally {
       setLoading(false);
@@ -178,9 +178,9 @@ export default function Discover() {
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
       {/* No search/action in TopBar on this page — we have our own prominent search bar below */}
-      <TopBar title="Discover Jobs" />
+      <TopBar title="Discover Jobs" subtitle="Curated for your profile" />
 
-      <div className="p-6 md:p-8 space-y-6">
+      <div className="p-6 space-y-6">
 
         {/* API Key Notice */}
         {!hasAPIKey && (
@@ -198,7 +198,7 @@ export default function Discover() {
         )}
 
         {/* Search Bar */}
-        <div className="space-y-3">
+        <div className="space-y-3 mt-2">
           <div className="flex gap-3">
             <div className="flex-1 relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-textSecondary group-focus-within:text-accent transition-colors" />

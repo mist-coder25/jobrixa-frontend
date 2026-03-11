@@ -81,7 +81,14 @@ export default function Sidebar() {
           className="p-6"
         >
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-display font-bold text-white">J</div>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #6C63FF 0%, #00D4AA 100%)' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 7H4C2.9 7 2 7.9 2 9V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V9C22 7.9 21.1 7 20 7Z" fill="white" fillOpacity="0.9"/>
+                <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M13 13L11.5 15.5L13 14H11L12.5 11.5L11 13H13Z" fill="#0A0A0F"/>
+              </svg>
+            </div>
             <h1 className="text-xl font-display font-bold text-textPrimary tracking-wide">Jobrixa</h1>
           </div>
         </motion.div>
@@ -135,23 +142,23 @@ export default function Sidebar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.4 }}
-            className="px-4 pb-4 pt-1 flex items-center justify-between"
+            className="px-4 pb-4 pt-1 flex flex-col gap-2"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-textSecondary overflow-hidden">
-                <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${userName}`} alt="Avatar" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-textSecondary overflow-hidden">
+                  <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${userName}`} alt="Avatar" />
+                </div>
+                <span className="text-sm font-medium text-textPrimary truncate max-w-[100px]">{userName}</span>
               </div>
-              <span className="text-sm font-medium text-textPrimary truncate max-w-[100px]">{userName}</span>
             </div>
-            <motion.button
+            <button
               onClick={handleLogout}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="text-textSecondary hover:text-danger p-2 rounded-lg transition-colors"
-              title="Logout"
+              className="flex items-center gap-3 px-4 py-3 w-full text-left text-red-400 hover:bg-red-500/10 rounded-lg transition-colors mt-auto"
             >
-              <LogOut size={16} />
-            </motion.button>
+              <LogOut size={18} />
+              <span className="text-sm font-medium">Logout</span>
+            </button>
           </motion.div>
         </div>
       </aside>
@@ -172,6 +179,13 @@ export default function Sidebar() {
             <span className="text-[10px] mt-1 font-medium">{item.label}</span>
           </NavLink>
         ))}
+        <button
+          onClick={handleLogout}
+          className="flex flex-col items-center justify-center p-2 rounded-lg transition-colors text-red-400"
+        >
+          <LogOut size={20} />
+          <span className="text-[10px] mt-1 font-medium">Logout</span>
+        </button>
       </div>
     </>
   );

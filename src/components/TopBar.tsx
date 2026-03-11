@@ -2,6 +2,7 @@ import { Search, Filter, Plus, Upload, Link2 } from "lucide-react";
 
 interface TopBarProps {
   title: string;
+  subtitle?: string;
   onAddApplication?: () => void;
   onQuickAdd?: () => void;
   actionLabel?: string;
@@ -10,6 +11,7 @@ interface TopBarProps {
 
 export default function TopBar({
   title,
+  subtitle,
   onAddApplication,
   onQuickAdd,
   actionLabel = "Add Application",
@@ -20,17 +22,20 @@ export default function TopBar({
   return (
     <header className="h-16 border-b border-border bg-primary/80 backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 flex items-center justify-between w-full">
       <div className="flex items-center gap-4">
-        <h2 className="text-xl font-display font-semibold text-textPrimary">{title}</h2>
+        <div>
+          <h2 className="text-xl font-display font-semibold text-textPrimary">{title}</h2>
+          {subtitle && <p className="text-xs text-textSecondary mt-0.5">{subtitle}</p>}
+        </div>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-2">
         {/* Search — desktop only */}
         <div className="hidden md:flex relative group">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-textSecondary group-focus-within:text-accent w-4 h-4 transition-colors" />
           <input
             type="text"
             placeholder="Search..."
-            className="pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent w-52 transition-all"
+            className="pl-9 pr-4 py-2 bg-surface border border-border rounded-lg text-sm text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent w-48 md:w-64 transition-all"
           />
         </div>
 

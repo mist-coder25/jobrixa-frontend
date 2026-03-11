@@ -53,8 +53,13 @@ export default function Register() {
             transition={{ delay: 0.15, duration: 0.5 }}
             className="flex items-center gap-3 mb-10"
           >
-            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center font-display font-bold text-white text-xl">
-              J
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #6C63FF 0%, #00D4AA 100%)' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 7H4C2.9 7 2 7.9 2 9V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V9C22 7.9 21.1 7 20 7Z" fill="white" fillOpacity="0.9"/>
+                <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M13 13L11.5 15.5L13 14H11L12.5 11.5L11 13H13Z" fill="#0A0A0F"/>
+              </svg>
             </div>
             <h1 className="text-3xl font-display font-bold tracking-wide">Jobrixa</h1>
           </motion.div>
@@ -104,8 +109,13 @@ export default function Register() {
         <div className="w-full max-w-md">
           {/* Mobile Header */}
           <div className="md:hidden flex items-center justify-center gap-2 mb-8">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-display font-bold text-white text-lg">
-              J
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #6C63FF 0%, #00D4AA 100%)' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 7H4C2.9 7 2 7.9 2 9V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V9C22 7.9 21.1 7 20 7Z" fill="white" fillOpacity="0.9"/>
+                <path d="M16 7V5C16 3.9 15.1 3 14 3H10C8.9 3 8 3.9 8 5V7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M13 13L11.5 15.5L13 14H11L12.5 11.5L11 13H13Z" fill="#0A0A0F"/>
+              </svg>
             </div>
             <h1 className="text-2xl font-display font-bold tracking-wide text-textPrimary">Jobrixa</h1>
           </div>
@@ -134,7 +144,7 @@ export default function Register() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                   placeholder="John Doe"
                   required
                 />
@@ -146,7 +156,7 @@ export default function Register() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                   placeholder="name@example.com"
                   required
                 />
@@ -158,7 +168,7 @@ export default function Register() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                   placeholder="••••••••"
                   required
                   autoComplete="new-password"
@@ -171,7 +181,7 @@ export default function Register() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                  className="w-full bg-primary/50 border border-border rounded-lg px-4 py-3 text-textPrimary placeholder:text-textSecondary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                   placeholder="••••••••"
                   required
                   autoComplete="new-password"
