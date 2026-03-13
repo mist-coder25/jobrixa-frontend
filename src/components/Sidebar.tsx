@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LayoutDashboard, Trello, Compass, PieChart, FileText, Settings, LogOut, Zap } from "lucide-react";
+import api from "../api/axios";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -15,6 +17,17 @@ export default function Sidebar() {
     { label: "Pricing", path: "/pricing", icon: <Zap size={20} /> },
     { label: "Settings", path: "/settings", icon: <Settings size={20} /> },
   ];
+
+  const [missedCount, setMissedCount] = useState(0);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jobrixa_token");
+    if (token) {
+      api.get('/applications/missed')
+        .then((r: any) => setMissedCount(r.data.missedCount))
+        .catch(() => {});
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("jobrixa_token");
@@ -40,7 +53,6 @@ export default function Sidebar() {
             </div>
             <div className="flex flex-col">
               <span className="font-display font-bold text-[#E6EDF3] text-lg tracking-tight leading-none">Jobrixa</span>
-
             </div>
           </div>
         </motion.div>
@@ -71,12 +83,16 @@ export default function Sidebar() {
               >
                 {({ isActive }) => (
                   <>
-                    {/* Active left border indicator */}
                     {isActive && (
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#4F8EF7] rounded-full" />
                     )}
                     <span className="relative z-10">{item.icon}</span>
                     <span className="relative z-10">{item.label}</span>
+                    {item.label === "Analytics" && missedCount > 0 && (
+                      <span className="ml-auto text-[10px] bg-[#F85149] text-white px-1.5 py-0.5 rounded-full font-bold relative z-10">
+                        {missedCount}
+                      </span>
+                    )}
                   </>
                 )}
               </NavLink>
