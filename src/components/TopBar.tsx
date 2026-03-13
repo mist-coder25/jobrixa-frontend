@@ -43,19 +43,21 @@ export default function TopBar({
           />
         </div>
 
-        <div className="relative">
-          <button 
-            onClick={onFilterClick}
-            className="flex p-1.5 rounded-md border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] bg-[#161B22] transition-all relative group"
-          >
-            <Filter size={14} className="group-hover:rotate-12 transition-transform" />
-            {activeFilterCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#4F8EF7] rounded-full text-white text-[9px] flex items-center justify-center font-bold animate-scale-in">
-                {activeFilterCount}
-              </span>
-            )}
-          </button>
-        </div>
+        {onFilterClick && (
+          <div className="relative">
+            <button 
+              onClick={onFilterClick}
+              className="flex p-1.5 rounded-md border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] bg-[#161B22] transition-all relative group"
+            >
+              <Filter size={14} className="group-hover:rotate-12 transition-transform" />
+              {activeFilterCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#4F8EF7] rounded-full text-white text-[9px] flex items-center justify-center font-bold animate-scale-in">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+          </div>
+        )}
 
         {/* From URL button — shown when onQuickAdd is supplied */}
         {onQuickAdd && (
