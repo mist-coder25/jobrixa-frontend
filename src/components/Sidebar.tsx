@@ -40,7 +40,6 @@ export default function Sidebar() {
             </div>
             <div className="flex flex-col">
               <span className="font-display font-bold text-[#E6EDF3] text-lg tracking-tight leading-none">Jobrixa</span>
-              <span className="text-[10px] text-[#484F58] font-medium tracking-widest mt-0.5">PLATFORM</span>
             </div>
           </div>
         </motion.div>
