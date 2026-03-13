@@ -12,6 +12,7 @@ import Discover from './pages/Discover';
 import Pricing from './pages/Pricing';
 import ForgotPassword from './pages/ForgotPassword';
 import ToastContainer from './components/Toast';
+import Landing from './pages/Landing';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("jobrixa_token");
@@ -23,7 +24,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function RootRedirect() {
   const token = localStorage.getItem("jobrixa_token");
-  return token ? <Navigate to="/pipeline" replace /> : <Navigate to="/login" replace />;
+  return token ? <Navigate to="/pipeline" replace /> : <Landing />;
 }
 
 /** Inner component with access to useLocation for page transitions */
