@@ -34,24 +34,38 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<any>(null);
   const [missedData, setMissedData] = useState<any>(null);
+  const [hasAnyApp, setHasAnyApp] = useState<boolean | null>(null); // null = loading
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const [statsRes, missedRes] = await Promise.all([
-          api.get("/applications/analytics"),
-          api.get("/applications/missed")
+        const t = Date.now();
+        const [statsRes, missedRes, appsRes] = await Promise.all([
+          api.get(`/applications/analytics?t=${t}`),
+          api.get(`/applications/missed?t=${t}`),
+          api.get("/applications")
         ]);
-        setStats(statsRes.data);
+        
+        const statsData = statsRes.data;
+        const appsData = appsRes.data;
+        
+        setStats(statsData);
         setMissedData(missedRes.data);
+        
+        // Comprehensive check for apps
+        const hasApps = (statsData.totalApplications > 0) || 
+                        (Array.isArray(appsData) ? appsData.length > 0 : (appsData?.content?.length > 0));
+        
+        setHasAnyApp(hasApps);
       } catch (err) {
         console.error(err);
+        setHasAnyApp(false);
       } finally {
         setLoading(false);
       }
     };
-    fetchAnalytics();
+    fetchDashboardData();
   }, []);
 
   if (loading) {
@@ -83,7 +97,7 @@ export default function Dashboard() {
       value: stats?.totalApplications || 0,
       suffix: "",
       icon: <Target className="w-4 h-4" />,
-      trend: <span className="flex items-center"><TrendingUp className="w-3 h-3 mr-1"/>+12%</span>,
+      trend: null,
       borderColor: "border-l-[#4F8EF7]"
     },
     {
@@ -117,8 +131,8 @@ export default function Dashboard() {
       <TopBar title="Dashboard" subtitle="Here's how your search is going" showSearch />
       
       <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
-        {/* Welcome banner — shows only when total applications < 5 */}
-        {(stats?.totalApplications || 0) < 5 && (
+        {/* Welcome banner — only show if we KNOW there are zero apps */}
+        {hasAnyApp === false && (
           <div className="bg-gradient-to-r from-[#161B22] to-[#1C2128] border border-[#30363D] rounded-2xl p-6 flex items-center justify-between overflow-hidden relative shadow-lg">
             <div className="absolute right-0 top-0 w-48 h-48 bg-[#4F8EF7]/5 rounded-full blur-2xl" />
             <div className="flex-1 relative z-10">
