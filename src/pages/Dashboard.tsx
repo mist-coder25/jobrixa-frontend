@@ -38,26 +38,32 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch raw applications list — most reliable source of truth
+    // Fetch raw applications — handles both array and paginated response
     api.get('/applications')
       .then(r => {
-        console.log('Applications response:', r.data);
         const data = r.data;
-        // Handle both array response and paginated {content:[]} response
-        const list = Array.isArray(data) ? data : (data?.content ?? []);
-        console.log('List length:', list.length);
+        let list: any[] = [];
+        if (Array.isArray(data)) {
+          list = data;
+        } else if (data?.content && Array.isArray(data.content)) {
+          list = data.content;
+        } else if (data?.totalElements !== undefined) {
+          // Paginated response — use totalElements directly
+          list = new Array(data.totalElements).fill(null);
+        }
+        console.log('Dashboard apps check — list length:', list.length, '| raw:', data);
         setHasAnyApp(list.length > 0);
       })
       .catch(() => {
         setHasAnyApp(false);
       });
 
-    // Fetch analytics separately for stat cards
+    // Analytics stats (separate call)
     api.get('/applications/analytics?t=' + Date.now())
       .then(r => setStats(r.data))
       .catch(() => {});
 
-    // Fetch missed items
+    // Missed data (separate call)  
     api.get('/applications/missed?t=' + Date.now())
       .then(r => setMissedData(r.data))
       .catch(() => {})

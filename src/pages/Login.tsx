@@ -21,7 +21,7 @@ export default function Login() {
       const response = await api.post("/auth/login", { email, password });
       localStorage.setItem("jobrixa_token", response.data.token);
       localStorage.setItem("jobrixa_user", email.split('@')[0]);
-      navigate("/pipeline");
+      navigate("/dashboard");
       toast.success("Successfully logged in!");
     } catch (err) {
       toast.error("Invalid email or password");
