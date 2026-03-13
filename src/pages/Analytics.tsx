@@ -7,20 +7,6 @@ import { Lightbulb, Info } from "lucide-react";
 export default function Analytics() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [missedData, setMissedData] = useState<{
-    missed: Array<{
-      id: string;
-      company: string;
-      role: string;
-      status: string;
-      deadline: string;
-      missedAt: string;
-      source: string;
-    }>;
-    missedCount: number;
-    totalOaAndInterviews: number;
-    missedPercent: number;
-  } | null>(null);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -34,12 +20,6 @@ export default function Analytics() {
       }
     };
     fetchAnalytics();
-  }, []);
-
-  useEffect(() => {
-    api.get('/applications/missed')
-      .then(r => setMissedData(r.data))
-      .catch(() => {});
   }, []);
 
   if (loading) {
@@ -172,148 +152,6 @@ export default function Analytics() {
                <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[4] }}></div>
                <span>More</span>
             </div>
-        </div>
-
-        {/* Missed Opportunities Section */}
-        <div className="mt-10">
-          
-          {/* Section header */}
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-base font-semibold text-[#E6EDF3]">Missed Opportunities</h2>
-              <p className="text-xs text-[#7D8590] mt-0.5">
-                Assessments and interviews you didn't respond to
-              </p>
-            </div>
-            {missedData && (
-              <div className="flex items-center gap-4">
-                {/* Miss rate stat */}
-                <div className="text-right">
-                  <div className="text-2xl font-bold"
-                    style={{ color: missedData.missedPercent > 50 ? '#F85149' : missedData.missedPercent > 25 ? '#D29922' : '#3FB950' }}>
-                    {missedData.missedPercent}%
-                  </div>
-                  <div className="text-xs text-[#7D8590]">miss rate</div>
-                </div>
-                {/* Count stat */}
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-[#E6EDF3]">{missedData.missedCount}</div>
-                  <div className="text-xs text-[#7D8590]">missed</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-[#E6EDF3]">{missedData.totalOaAndInterviews}</div>
-                  <div className="text-xs text-[#7D8590]">total OA/interviews</div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* No missed — good state */}
-          {missedData && missedData.missedCount === 0 && (
-            <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-8 flex flex-col items-center justify-center text-center">
-              <div className="text-4xl mb-3">🎯</div>
-              <p className="text-sm font-semibold text-[#E6EDF3]">No missed opportunities!</p>
-              <p className="text-xs text-[#7D8590] mt-1">
-                You've responded to every assessment and interview. Keep it up!
-              </p>
-            </div>
-          )}
-
-          {/* Missed list */}
-          {missedData && missedData.missedCount > 0 && (
-            <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden">
-              
-              {/* Summary bar */}
-              <div className="px-5 py-3 border-b border-[#21262D] bg-[#1C2128] flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#F85149]" />
-                  <span className="text-xs font-medium text-[#E6EDF3]">
-                    {missedData.missedCount} missed out of {missedData.totalOaAndInterviews} total
-                  </span>
-                </div>
-                {/* Progress bar */}
-                <div className="flex items-center gap-2">
-                  <div className="w-32 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
-                    <div className="h-full rounded-full transition-all"
-                      style={{
-                        width: `${missedData.missedPercent}%`,
-                        background: missedData.missedPercent > 50 ? '#F85149' :
-                                    missedData.missedPercent > 25 ? '#D29922' : '#3FB950'
-                      }} />
-                  </div>
-                  <span className="text-xs text-[#7D8590]">{missedData.missedPercent}% miss rate</span>
-                </div>
-              </div>
-
-              {/* Table header */}
-              <div className="invisible md:visible grid md:grid-cols-5 px-5 py-2 border-b border-[#21262D]">
-                {['Company', 'Role', 'Type', 'Deadline', 'Missed On'].map(h => (
-                  <span key={h} className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wider">
-                    {h}
-                  </span>
-                ))}
-              </div>
-
-              {/* Rows */}
-              {missedData.missed.map((item, i) => (
-                <div key={item.id}
-                  className={`grid grid-cols-1 md:grid-cols-5 px-5 py-3 items-center hover:bg-[#1C2128] transition-colors ${
-                    i < missedData.missed.length - 1 ? 'border-b border-[#21262D]' : ''
-                  }`}>
-                  
-                  {/* Company */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-md bg-[#F85149]/10 border border-[#F85149]/20 flex items-center justify-center text-xs font-bold text-[#F85149] flex-shrink-0">
-                      {item.company.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="text-sm font-medium text-[#E6EDF3] truncate">{item.company}</span>
-                  </div>
-
-                  {/* Role */}
-                  <span className="text-sm text-[#7D8590] truncate pr-2">{item.role}</span>
-
-                  {/* Type badge */}
-                  <div>
-                    <span className={`text-xs px-2 py-1 rounded-md font-medium ${
-                      item.status === 'OA_ASSESSMENT'
-                        ? 'bg-[#D29922]/10 text-[#D29922] border border-[#D29922]/20'
-                        : 'bg-[#A371F7]/10 text-[#A371F7] border border-[#A371F7]/20'
-                    }`}>
-                      {item.status === 'OA_ASSESSMENT' ? 'OA / Assessment' : 'Interview'}
-                    </span>
-                  </div>
-
-                  {/* Deadline */}
-                  <span className="text-sm text-[#F85149]">
-                    {item.deadline
-                      ? new Date(item.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-                      : 'No deadline set'}
-                  </span>
-
-                  {/* Missed on */}
-                  <span className="text-sm text-[#484F58]">
-                    {new Date(item.missedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                  </span>
-                </div>
-              ))}
-
-              {/* Footer tip */}
-              <div className="px-5 py-3 border-t border-[#21262D] bg-[#0D1117]">
-                <p className="text-xs text-[#484F58]">
-                  💡 Tip: Set a deadline when adding OA/Interview cards so Jobrixa can automatically mark them as missed if you don't update the status.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Loading state */}
-          {!missedData && (
-            <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-6 space-y-3">
-              {[1,2,3].map(i => (
-                <div key={i} className="h-10 bg-[#21262D] rounded-lg animate-pulse" />
-              ))}
-            </div>
-          )}
         </div>
 
       </div>

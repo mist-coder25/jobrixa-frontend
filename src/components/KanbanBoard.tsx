@@ -5,41 +5,41 @@ import ApplicationCard from "./ApplicationCard";
 import type { JobApplication } from "./ApplicationCard";
 import { Plus } from "lucide-react";
 
-const EMPTY_HINTS: Record<string, { img: string; text: string; hint: string }> = {
+const EMPTY_HINTS: Record<string, { emoji: string; text: string; hint: string }> = {
   SAVED: {
-    img: 'https://illustrations.popsy.co/amber/looking-for-job.svg',
+    emoji: '🔖',
     text: "Jobs you're eyeing",
     hint: 'Paste a job URL to quick-add'
   },
   APPLIED: {
-    img: 'https://illustrations.popsy.co/amber/sending-mail.svg',
+    emoji: '📨',
     text: 'Applied jobs show here',
     hint: 'Track every application you send'
   },
   OA: {
-    img: 'https://illustrations.popsy.co/amber/programmer.svg',
+    emoji: '💻',
     text: "Got an OA? Add it here",
     hint: 'Online assessments & coding rounds'
   },
   INTERVIEW: {
-    img: 'https://illustrations.popsy.co/amber/online-meeting.svg',
+    emoji: '🎙️',
     text: 'Interview stage',
     hint: "You're close — prep hard!"
   },
   OFFER: {
-    img: 'https://illustrations.popsy.co/amber/trophy.svg',
+    emoji: '🎉',
     text: 'Offers land here',
     hint: "This is what we're working toward"
   },
   REJECTED: {
-    img: 'https://illustrations.popsy.co/amber/feeling-blue.svg',
+    emoji: '💪',
     text: 'Every no is closer to yes',
     hint: 'Track rejections to spot patterns'
   },
   GHOSTED: {
-    img: 'https://illustrations.popsy.co/amber/shrugging-man.svg',
-    text: 'Radio silence',
-    hint: 'It happens to the best of us'
+    emoji: '👻',
+    text: 'Ghosted companies appear here',
+    hint: 'No response after 14 days = ghosted'
   },
 };
 
@@ -63,7 +63,7 @@ const COLUMN_COLORS: Record<string, string> = {
   HR: '#F0883E',
   OFFER: '#3FB950',
   REJECTED: '#F85149',
-  GHOSTED: '#F85149'
+  GHOSTED: '#484F58'
 };
 
 interface KanbanBoardProps {
@@ -135,11 +135,7 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                         </div>
                       ) : columnApps.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-6 px-4 text-center">
-                          <img 
-                            src={EMPTY_HINTS[col.id]?.img} 
-                            alt={EMPTY_HINTS[col.id]?.text} 
-                            className="w-24 h-24 object-contain mb-3 opacity-60 grayscale hover:grayscale-0 transition-all duration-500" 
-                          />
+                          <span className="text-4xl mb-3 opacity-80">{EMPTY_HINTS[col.id]?.emoji}</span>
                           <p className="text-xs font-bold text-[#E6EDF3] mb-1">{EMPTY_HINTS[col.id]?.text || "No applications yet"}</p>
                           <p className="text-[10px] text-[#484F58] leading-relaxed">{EMPTY_HINTS[col.id]?.hint || "Add an application"}</p>
                         </div>

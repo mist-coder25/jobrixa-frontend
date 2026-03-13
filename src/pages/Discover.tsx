@@ -178,7 +178,7 @@ export default function Discover() {
         title="Discover Jobs" 
         subtitle="Curated for your profile" 
         onFilterClick={() => setFilterOpen(true)}
-        activeFilterCount={(filters.roleType ? 1 : 0) + (filters.experience ? 1 : 0) + (filters.dateRange !== 'all' ? 1 : 0)}
+        activeFilterCount={(filters.roleType ? 1 : 0) + (filters.experience ? 1 : 0) + (filters.dateRange !== 'all' ? 1 : 0) + (filters.location ? 1 : 0)}
       />
 
       <div className="p-8 space-y-8 max-w-7xl mx-auto w-full">
@@ -272,11 +272,7 @@ export default function Discover() {
           </div>
         ) : displayedJobs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <img
-              src="https://illustrations.popsy.co/amber/searching.svg"
-              alt="No results"
-              className="w-56 h-56 object-contain mb-6 opacity-80"
-            />
+            <span className="text-5xl mb-4 block">🔍</span>
             <h3 className="text-xl font-display font-bold text-textPrimary mb-2">No jobs found</h3>
             <p className="text-textSecondary text-sm max-w-xs leading-relaxed">
               We couldn't find any jobs matching your criteria. Try adjusting your keywords or clearing filters.

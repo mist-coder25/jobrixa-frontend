@@ -136,11 +136,7 @@ export default function Dashboard() {
                 + Add First Application
               </button>
             </div>
-            <img
-              src="https://illustrations.popsy.co/amber/man-with-a-laptop.svg"
-              alt="Get started"
-              className="hidden md:block w-40 h-40 object-contain relative z-10 transform translate-x-4"
-            />
+            <span className="hidden md:block text-6xl transform translate-x-4">👋</span>
           </div>
         )}
 

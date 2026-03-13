@@ -1,28 +1,16 @@
-import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import api from "../api/axios";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Trello, Compass, BarChart2, FileText, Settings, LogOut, Zap } from "lucide-react";
+import { LayoutDashboard, Trello, Compass, PieChart, FileText, Settings, LogOut, Zap } from "lucide-react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const userName = localStorage.getItem("jobrixa_user") || "User";
-  const [missedCount, setMissedCount] = useState(0);
-
-  useEffect(() => {
-    const token = localStorage.getItem("jobrixa_token");
-    if (token) {
-      api.get('/applications/missed')
-        .then(r => setMissedCount(r.data.missedCount))
-        .catch(() => {});
-    }
-  }, []);
 
   const navItems = [
     { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={20} /> },
     { label: "Pipeline", path: "/pipeline", icon: <Trello size={20} /> },
     { label: "Discover", path: "/discover", icon: <Compass size={20} /> },
-    { label: "Analytics", path: "/analytics", icon: <BarChart2 size={20} />, badge: missedCount > 0 ? missedCount : null },
+    { label: "Analytics", path: "/analytics", icon: <PieChart size={20} /> },
     { label: "Resumes", path: "/resumes", icon: <FileText size={20} /> },
     { label: "Pricing", path: "/pricing", icon: <Zap size={20} /> },
     { label: "Settings", path: "/settings", icon: <Settings size={20} /> },
@@ -52,6 +40,7 @@ export default function Sidebar() {
             </div>
             <div className="flex flex-col">
               <span className="font-display font-bold text-[#E6EDF3] text-lg tracking-tight leading-none">Jobrixa</span>
+
             </div>
           </div>
         </motion.div>
@@ -87,12 +76,7 @@ export default function Sidebar() {
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#4F8EF7] rounded-full" />
                     )}
                     <span className="relative z-10">{item.icon}</span>
-                    <span className="relative z-10 flex-1">{item.label}</span>
-                    {item.badge && (
-                      <span className="relative z-10 ml-auto bg-[#F85149] text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                        {item.badge}
-                      </span>
-                    )}
+                    <span className="relative z-10">{item.label}</span>
                   </>
                 )}
               </NavLink>

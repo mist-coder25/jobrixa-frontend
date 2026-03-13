@@ -10,7 +10,6 @@ import Resumes from './pages/Resumes';
 import Settings from './pages/Settings';
 import Discover from './pages/Discover';
 import Pricing from './pages/Pricing';
-import Landing from './pages/Landing';
 import ForgotPassword from './pages/ForgotPassword';
 import ToastContainer from './components/Toast';
 
@@ -24,7 +23,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function RootRedirect() {
   const token = localStorage.getItem("jobrixa_token");
-  return token ? <Navigate to="/pipeline" replace /> : <Landing />;
+  return token ? <Navigate to="/pipeline" replace /> : <Navigate to="/login" replace />;
 }
 
 /** Inner component with access to useLocation for page transitions */

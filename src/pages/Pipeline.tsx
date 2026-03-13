@@ -129,7 +129,8 @@ export default function Pipeline() {
     APPLIED: '#4F8EF7',
     OA: '#D29922',
     INTERVIEW: '#A371F7',
-    OFFER: '#3FB950'
+    OFFER: '#3FB950',
+    GHOSTED: '#484F58'
   };
 
   return (
