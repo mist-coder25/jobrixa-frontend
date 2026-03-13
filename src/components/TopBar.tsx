@@ -5,6 +5,8 @@ interface TopBarProps {
   subtitle?: string;
   onAddApplication?: () => void;
   onQuickAdd?: () => void;
+  onFilterClick?: () => void;
+  activeFilterCount?: number;
   actionLabel?: string;
   actionIcon?: "plus" | "upload";
 }
@@ -14,6 +16,8 @@ export default function TopBar({
   subtitle,
   onAddApplication,
   onQuickAdd,
+  onFilterClick,
+  activeFilterCount = 0,
   actionLabel = "Add Application",
   actionIcon = "plus",
 }: TopBarProps) {
@@ -39,9 +43,19 @@ export default function TopBar({
           />
         </div>
 
-        <button className="hidden md:flex p-2 rounded-lg border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#4F8EF7] transition-all bg-[#161B22] shadow-sm">
-          <Filter size={16} />
-        </button>
+        <div className="relative">
+          <button 
+            onClick={onFilterClick}
+            className="hidden md:flex p-2 rounded-lg border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#4F8EF7] transition-all bg-[#161B22] shadow-sm relative group"
+          >
+            <Filter size={16} className="group-hover:rotate-12 transition-transform" />
+            {activeFilterCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#4F8EF7] rounded-full text-white text-[9px] flex items-center justify-center font-black animate-scale-in">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+        </div>
 
         {/* From URL button — shown when onQuickAdd is supplied */}
         {onQuickAdd && (

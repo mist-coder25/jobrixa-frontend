@@ -27,15 +27,24 @@ function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: strin
   return <span>{count}{suffix}</span>;
 }
 
+import { useNavigate } from "react-router-dom";
+import MissedTracker from "../components/MissedTracker";
+
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<any>(null);
+  const [missedData, setMissedData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await api.get("/applications/analytics");
-        setStats(res.data);
+        const [statsRes, missedRes] = await Promise.all([
+          api.get("/applications/analytics"),
+          api.get("/applications/missed")
+        ]);
+        setStats(statsRes.data);
+        setMissedData(missedRes.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -108,6 +117,36 @@ export default function Dashboard() {
       <TopBar title="Dashboard" subtitle="Here's how your search is going" />
       
       <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
+        {/* Welcome banner — shows only when total applications < 5 */}
+        {(stats?.totalApplications || 0) < 5 && (
+          <div className="bg-gradient-to-r from-[#161B22] to-[#1C2128] border border-[#30363D] rounded-2xl p-6 flex items-center justify-between overflow-hidden relative shadow-lg">
+            <div className="absolute right-0 top-0 w-48 h-48 bg-[#4F8EF7]/5 rounded-full blur-2xl" />
+            <div className="flex-1 relative z-10">
+              <h2 className="text-xl font-bold text-[#E6EDF3] mb-1">
+                Welcome to Jobrixa! 👋
+              </h2>
+              <p className="text-sm text-[#7D8590] mb-5 max-w-md leading-relaxed">
+                Start tracking your applications and never miss an opportunity again. Add your first application to get started.
+              </p>
+              <button
+                onClick={() => navigate('/pipeline')}
+                className="px-5 py-2.5 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-[#4F8EF7]/20 hover:scale-105 active:scale-95 flex items-center gap-2"
+              >
+                <Target size={16} />
+                + Add First Application
+              </button>
+            </div>
+            <img
+              src="https://illustrations.popsy.co/amber/man-with-a-laptop.svg"
+              alt="Get started"
+              className="hidden md:block w-40 h-40 object-contain relative z-10 transform translate-x-4"
+            />
+          </div>
+        )}
+
+        {/* Missed Opportunities Tracker */}
+        <MissedTracker data={missedData} />
+
         {/* Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {statCards.map((card, i) => (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CompanyLogo from "./CompanyLogo";
-import { X, Building2, Briefcase, Link, MapPin, DollarSign, Calendar, Tags, CheckCircle2, Loader2, Globe } from "lucide-react";
+import { X, Building2, Briefcase, Link, MapPin, DollarSign, Calendar, Tags, CheckCircle2, Loader2, Globe, AlertTriangle } from "lucide-react";
 import api from "../api/axios";
 import { toast } from "./Toast";
 
@@ -29,6 +29,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
     source: "LinkedIn",
     status: "APPLIED",
     appliedAt: new Date().toISOString().split('T')[0],
+    deadline: "",
     location: "",
     salaryMin: "",
     salaryMax: "",
@@ -68,6 +69,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
         ...formData,
         salaryMin: formData.salaryMin ? parseInt(formData.salaryMin) : null,
         salaryMax: formData.salaryMax ? parseInt(formData.salaryMax) : null,
+        deadline: formData.deadline || null,
         tags: tagsArray
       };
 
@@ -187,6 +189,22 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
                   />
                 </div>
               </div>
+
+              {(formData.status === "OA" || formData.status === "INTERVIEW") && (
+                <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                  <label className="text-xs uppercase tracking-wider font-medium text-amber-500 flex items-center gap-1">
+                    <AlertTriangle size={12} /> Deadline / Event Date
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-500/60 pointer-events-none" />
+                    <input 
+                      type="date" 
+                      value={formData.deadline} onChange={e => handleChange("deadline", e.target.value)}
+                      className="w-full bg-primary border border-amber-500/30 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-amber-500 text-textPrimary [color-scheme:dark]"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">

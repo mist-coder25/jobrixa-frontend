@@ -10,6 +10,8 @@ import QuickAddModal from "../components/QuickAddModal";
 import { toast } from "../components/Toast";
 import type { JobApplication } from "../components/ApplicationCard";
 import { Zap, X, Link2 } from "lucide-react";
+import FilterPanel, { DEFAULT_FILTERS } from '../components/FilterPanel';
+import type { FilterState } from '../components/FilterPanel';
 
 export default function Pipeline() {
   const location = useLocation();
@@ -25,9 +27,12 @@ export default function Pipeline() {
   const [_plan, setPlan] = useState("FREE");
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
 
-  // Quick Add from URL state
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const [quickAddInitialUrl, setQuickAddInitialUrl] = useState("");
+  
+  // Filter state
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
   const FREE_LIMIT = 30;
   const WARN_AT = 25;
@@ -134,6 +139,8 @@ export default function Pipeline() {
         subtitle="Your job hunt, organized"
         onAddApplication={() => handleAddClick("APPLIED")}
         onQuickAdd={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
+        onFilterClick={() => setFilterOpen(true)}
+        activeFilterCount={filters.status.length + filters.source.length + (filters.dateRange !== 'all' ? 1 : 0) + (filters.hasInterview ? 1 : 0) + (filters.hasOffer ? 1 : 0)}
       />
 
       {/* Application progress bar — shows how active the job hunt is */}
@@ -194,11 +201,37 @@ export default function Pipeline() {
       )}
       
       <KanbanBoard 
-        applications={applications} 
+        applications={applications.filter(app => {
+          if (filters.status.length > 0 && !filters.status.includes(app.status)) return false;
+          if (filters.source.length > 0 && (!app.source || !filters.source.includes(app.source))) return false;
+          if (filters.dateRange === '7days' && app.appliedAt) {
+            const d = new Date(); d.setDate(d.getDate() - 7);
+            if (new Date(app.appliedAt!) < d) return false;
+          }
+          if (filters.dateRange === '30days' && app.appliedAt) {
+            const d = new Date(); d.setDate(d.getDate() - 30);
+            if (new Date(app.appliedAt!) < d) return false;
+          }
+          if (filters.dateRange === '3months' && app.appliedAt) {
+            const d = new Date(); d.setMonth(d.getMonth() - 3);
+            if (new Date(app.appliedAt!) < d) return false;
+          }
+          if (filters.hasOffer && app.status !== 'OFFER') return false;
+          if (filters.hasInterview && app.status !== 'INTERVIEW') return false;
+          return true;
+        })} 
         onDragEnd={onDragEnd} 
         onCardClick={setSelectedApp} 
         onAddClick={handleAddClick} 
         loading={loading}
+      />
+
+      <FilterPanel
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        filters={filters}
+        onChange={setFilters}
+        onReset={() => setFilters(DEFAULT_FILTERS)}
       />
 
       <ApplicationDetailPanel 

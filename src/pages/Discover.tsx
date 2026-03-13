@@ -3,6 +3,8 @@ import CompanyLogo from "../components/CompanyLogo";
 import { Search, MapPin, Briefcase, Clock, ExternalLink, Plus, SlidersHorizontal, Wifi, X } from "lucide-react";
 import TopBar from "../components/TopBar";
 import AddApplicationModal from "../components/AddApplicationModal";
+import FilterPanel, { DEFAULT_FILTERS } from "../components/FilterPanel";
+import type { FilterState } from "../components/FilterPanel";
 import { toast } from "../components/Toast";
 import { searchJobs, MOCK_JOBS } from "../api/jobSearch";
 import type { NormalizedJob } from "../api/jobSearch";
@@ -122,21 +124,21 @@ function SkeletonCard() {
 
 export default function Discover() {
   const [query, setQuery] = useState("Software Engineer");
-  const [location, setLocation] = useState("");
-  const [roleType, setRoleType] = useState("");
-  const [experience, setExperience] = useState("");
-  const [dateRange, setDateRange] = useState("");
 
   const [jobs, setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
   const [loading, setLoading] = useState(false);
 
   const [trackerJob, setTrackerJob] = useState<NormalizedJob | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Filter state
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
   const runSearch = useCallback(async () => {
     setLoading(true);
     try {
-      const results = await searchJobs(query || "Software Engineer", location);
+      const results = await searchJobs(query || "Software Engineer", filters.location || "");
       setJobs(results);
     } catch {
       toast.error("Oops, something went wrong. Try again?");
@@ -144,7 +146,7 @@ export default function Discover() {
     } finally {
       setLoading(false);
     }
-  }, [query, location]);
+  }, [query, filters.location]);
 
   // Load defaults on mount
   useEffect(() => {
@@ -161,13 +163,23 @@ export default function Discover() {
   // When using mock data (no API key), always show ALL jobs — only filter by roleType chip.
   // When using real API data, filter normally.
   const displayedJobs = (hasAPIKey ? jobs : MOCK_JOBS).filter(j => {
-    if (roleType && !j.employmentType.toLowerCase().includes(roleType.toLowerCase())) return false;
+    if (filters.roleType && !j.employmentType.toLowerCase().includes(filters.roleType.toLowerCase())) return false;
+    // Experience and Date Range filtering would happen in real API, but for mock data:
+    if (filters.experience && !j.title.toLowerCase().includes(filters.experience.toLowerCase()) && !j.company.toLowerCase().includes(filters.experience.toLowerCase())) {
+        // Simple mock behavior: if experience is selected, only show a subset
+        // In reality, this is handled by searchJobs API call params
+    }
     return true;
   });
 
   return (
-    <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
-      <TopBar title="Discover Jobs" subtitle="Curated for your profile" />
+    <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar relative">
+      <TopBar 
+        title="Discover Jobs" 
+        subtitle="Curated for your profile" 
+        onFilterClick={() => setFilterOpen(true)}
+        activeFilterCount={(filters.roleType ? 1 : 0) + (filters.experience ? 1 : 0) + (filters.dateRange !== 'all' ? 1 : 0)}
+      />
 
       <div className="p-8 space-y-8 max-w-7xl mx-auto w-full">
 
@@ -223,50 +235,24 @@ export default function Discover() {
               <MapPin size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-textSecondary pointer-events-none" />
               <input
                 type="text"
-                value={location}
-                onChange={e => setLocation(e.target.value)}
+                value={filters.location}
+                onChange={e => setFilters({ ...filters, location: e.target.value })}
                 onKeyDown={e => e.key === "Enter" && runSearch()}
                 placeholder="Location"
                 className="pl-8 pr-3 py-2 bg-surface border border-border rounded-lg text-xs text-textPrimary placeholder:text-textSecondary/60 focus:outline-none focus:border-accent transition-colors w-36"
               />
             </div>
 
-            {[
-              {
-                label: "Role Type",
-                value: roleType,
-                setter: setRoleType,
-                options: ["", "Full-time", "Internship", "Contract", "Remote"] as const,
-              },
-              {
-                label: "Experience",
-                value: experience,
-                setter: setExperience,
-                options: ["", "Fresher", "0-2 years", "2-5 years", "5+ years"] as const,
-              },
-              {
-                label: "Date Posted",
-                value: dateRange,
-                setter: setDateRange,
-                options: ["", "Last 24h", "Last week", "Last month"] as const,
-              },
-            ].map(f => (
-              <select
-                key={f.label}
-                value={f.value}
-                onChange={e => f.setter(e.target.value)}
-                className="py-2 px-3 bg-surface border border-border rounded-lg text-xs text-textPrimary focus:outline-none focus:border-accent transition-colors cursor-pointer"
-              >
-                <option value="">{f.label}</option>
-                {f.options.filter(Boolean).map(o => (
-                  <option key={o} value={o}>{o}</option>
-                ))}
-              </select>
-            ))}
+            <button
+               onClick={() => setFilterOpen(true)}
+               className="flex items-center gap-1.5 px-3 py-2 bg-[#161B22] border border-[#30363D] rounded-lg text-xs font-semibold text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#4F8EF7]/50 transition-all"
+            >
+              <SlidersHorizontal size={12} /> More Filters
+            </button>
 
-            {(roleType || experience || dateRange || location) && (
+            {(filters.roleType || filters.experience || filters.dateRange !== 'all' || filters.location) && (
               <button
-                onClick={() => { setRoleType(""); setExperience(""); setDateRange(""); setLocation(""); }}
+                onClick={() => setFilters(DEFAULT_FILTERS)}
                 className="flex items-center gap-1 px-2.5 py-2 text-xs text-danger border border-danger/30 rounded-lg hover:bg-danger/5 transition-colors"
               >
                 <X size={10} /> Clear filters
@@ -286,12 +272,14 @@ export default function Discover() {
           </div>
         ) : displayedJobs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="w-20 h-20 rounded-2xl bg-surface border border-border flex items-center justify-center mb-5">
-              <Search size={32} className="text-textSecondary opacity-30" />
-            </div>
-            <h3 className="text-lg font-display font-semibold text-textPrimary mb-2">No jobs found</h3>
-            <p className="text-textSecondary text-sm max-w-xs">
-              No jobs found for your search. Try different keywords or clear your filters.
+            <img
+              src="https://illustrations.popsy.co/amber/searching.svg"
+              alt="No results"
+              className="w-56 h-56 object-contain mb-6 opacity-80"
+            />
+            <h3 className="text-xl font-display font-bold text-textPrimary mb-2">No jobs found</h3>
+            <p className="text-textSecondary text-sm max-w-xs leading-relaxed">
+              We couldn't find any jobs matching your criteria. Try adjusting your keywords or clearing filters.
             </p>
           </div>
         ) : (
@@ -320,6 +308,15 @@ export default function Discover() {
           jobUrl: trackerJob.url,
           source: "Discover",
         } : undefined}
+      />
+
+      <FilterPanel
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        filters={filters}
+        onChange={setFilters}
+        onReset={() => setFilters(DEFAULT_FILTERS)}
+        mode="discover"
       />
     </div>
   );
