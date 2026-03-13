@@ -20,7 +20,7 @@ export default function TopBar({
   const Icon = actionIcon === "upload" ? Upload : Plus;
 
   return (
-    <header className="h-14 bg-[#0D1117] border-b border-[#21262D] flex items-center justify-between px-6 sticky top-0 z-40 w-full">
+    <header className="h-16 bg-[#0D1117]/80 backdrop-blur-md border-b border-[#21262D] flex items-center justify-between px-8 sticky top-0 z-40 w-full transition-all">
       <div className="flex items-center gap-4">
         <div>
           <h1 className="text-base font-semibold text-[#E6EDF3]">{title}</h1>
@@ -39,8 +39,8 @@ export default function TopBar({
           />
         </div>
 
-        <button className="hidden md:flex p-1.5 rounded-md border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#484F58] transition-colors bg-[#161B22]">
-          <Filter size={14} />
+        <button className="hidden md:flex p-2 rounded-lg border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#4F8EF7] transition-all bg-[#161B22] shadow-sm">
+          <Filter size={16} />
         </button>
 
         {/* From URL button — shown when onQuickAdd is supplied */}

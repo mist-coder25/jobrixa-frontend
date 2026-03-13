@@ -59,7 +59,7 @@ export default function Analytics() {
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar text-textPrimary">
       <TopBar title="Advanced Analytics" subtitle="Know your numbers" />
 
-      <div className="p-6 space-y-8 animate-in fade-in duration-500">
+      <div className="p-8 space-y-10 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
         
         {/* Smart Insights */}
         <div className="bg-gradient-to-r from-accent/20 to-surface border border-accent/30 rounded-xl p-6 relative overflow-hidden flex items-start gap-4 shadow-[0_4px_30px_rgba(108,99,255,0.1)]">

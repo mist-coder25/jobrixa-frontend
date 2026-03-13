@@ -212,7 +212,7 @@ export default function Settings() {
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
       <TopBar title="Settings" />
 
-      <div className="p-6 max-w-3xl mx-auto w-full">
+      <div className="p-8 max-w-4xl mx-auto w-full">
 
         {/* Tab Navigation */}
         <div className="flex gap-1 bg-surface border border-border rounded-xl p-1 mt-2 mb-6">

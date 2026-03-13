@@ -31,11 +31,17 @@ export default function Sidebar() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <div className="flex items-center gap-2.5 px-4 py-5 border-b border-[#21262D]">
-            <div className="w-7 h-7 rounded-lg bg-[#4F8EF7] flex items-center justify-center">
-              <span className="text-white font-black text-sm">J</span>
+          <div className="flex items-center gap-3 px-6 py-6 border-b border-[#21262D]">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-tr from-[#4F8EF7] to-[#A371F7] rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000" />
+              <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-[#4F8EF7] to-[#3B7DE8] flex items-center justify-center shadow-lg shadow-[#4F8EF7]/20">
+                <span className="text-white font-black text-base tracking-tighter">J</span>
+              </div>
             </div>
-            <span className="font-bold text-[#E6EDF3] text-base tracking-tight">Jobrixa</span>
+            <div className="flex flex-col">
+              <span className="font-display font-bold text-[#E6EDF3] text-lg tracking-tight leading-none">Jobrixa</span>
+              <span className="text-[10px] text-[#484F58] font-medium tracking-widest mt-0.5">PLATFORM</span>
+            </div>
           </div>
         </motion.div>
 
@@ -104,27 +110,27 @@ export default function Sidebar() {
       </aside>
 
       {/* Mobile Bottom Tab Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-border z-50 px-2 py-2 flex items-center justify-around h-16">
-        {navItems.slice(0, 5).map((item) => (
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-[#0D1117]/95 backdrop-blur-xl border-t border-[#21262D] z-50 px-4 py-3 pb-safe-area flex items-center justify-between h-[max(72px,env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+        {navItems.filter(item => ["Dashboard", "Pipeline", "Analytics", "Settings"].includes(item.label)).map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${
-                isActive ? "text-accent" : "text-textSecondary"
+              `flex flex-col items-center justify-center flex-1 transition-all ${
+                isActive ? "text-[#4F8EF7] scale-110" : "text-[#7D8590]"
               }`
             }
           >
             {item.icon}
-            <span className="text-[10px] mt-1 font-medium">{item.label}</span>
+            <span className="text-[9px] mt-1.5 font-bold uppercase tracking-wider">{item.label}</span>
           </NavLink>
         ))}
         <button
           onClick={handleLogout}
-          className="flex flex-col items-center justify-center p-2 rounded-lg transition-colors text-red-400"
+          className="flex flex-col items-center justify-center flex-1 text-[#F85149] hover:opacity-80 transition-all font-bold"
         >
           <LogOut size={20} />
-          <span className="text-[10px] mt-1 font-medium">Logout</span>
+          <span className="text-[9px] mt-1.5 uppercase tracking-wider">Logout</span>
         </button>
       </div>
     </>

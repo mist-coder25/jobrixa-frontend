@@ -58,8 +58,8 @@ export default function Register() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#0D1117] border border-[#30363D] rounded-lg text-[#E6EDF3] text-sm placeholder:text-[#484F58] focus:outline-none focus:border-[#4F8EF7] focus:ring-1 focus:ring-[#4F8EF7] transition-colors"
-              placeholder="Full name"
+              className="w-full px-4 py-2.5 bg-[#E6EDF3] border border-[#30363D] rounded-lg text-black text-sm placeholder:text-[#484F58] focus:outline-none focus:border-[#4F8EF7] font-medium transition-colors shadow-inner"
+              placeholder="Your full name"
               required
             />
           </div>

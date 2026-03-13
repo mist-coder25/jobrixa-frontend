@@ -167,10 +167,9 @@ export default function Discover() {
 
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
-      {/* No search/action in TopBar on this page — we have our own prominent search bar below */}
       <TopBar title="Discover Jobs" subtitle="Curated for your profile" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-8 space-y-8 max-w-7xl mx-auto w-full">
 
         {/* API Key Notice */}
         {!hasAPIKey && (
@@ -188,7 +187,7 @@ export default function Discover() {
         )}
 
         {/* Search Bar */}
-        <div className="space-y-3 mt-2">
+        <div className="space-y-4 mt-1">
           <div className="flex gap-3">
             <div className="flex-1 relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-textSecondary group-focus-within:text-accent transition-colors" />
