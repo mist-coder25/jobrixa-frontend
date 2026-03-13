@@ -38,34 +38,30 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const t = Date.now();
-        const [statsRes, missedRes, appsRes] = await Promise.all([
-          api.get(`/applications/analytics?t=${t}`),
-          api.get(`/applications/missed?t=${t}`),
-          api.get("/applications")
-        ]);
-        
-        const statsData = statsRes.data;
-        const appsData = appsRes.data;
-        
-        setStats(statsData);
-        setMissedData(missedRes.data);
-        
-        // Comprehensive check for apps
-        const hasApps = (statsData.totalApplications > 0) || 
-                        (Array.isArray(appsData) ? appsData.length > 0 : (appsData?.content?.length > 0));
-        
-        setHasAnyApp(hasApps);
-      } catch (err) {
-        console.error(err);
+    // Fetch raw applications list — most reliable source of truth
+    api.get('/applications')
+      .then(r => {
+        console.log('Applications response:', r.data);
+        const data = r.data;
+        // Handle both array response and paginated {content:[]} response
+        const list = Array.isArray(data) ? data : (data?.content ?? []);
+        console.log('List length:', list.length);
+        setHasAnyApp(list.length > 0);
+      })
+      .catch(() => {
         setHasAnyApp(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDashboardData();
+      });
+
+    // Fetch analytics separately for stat cards
+    api.get('/applications/analytics?t=' + Date.now())
+      .then(r => setStats(r.data))
+      .catch(() => {});
+
+    // Fetch missed items
+    api.get('/applications/missed?t=' + Date.now())
+      .then(r => setMissedData(r.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -131,26 +127,24 @@ export default function Dashboard() {
       <TopBar title="Dashboard" subtitle="Here's how your search is going" showSearch />
       
       <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
-        {/* Welcome banner — only show if we KNOW there are zero apps */}
+        {/* Only render when we KNOW it's empty — null means still loading */}
         {hasAnyApp === false && (
-          <div className="bg-gradient-to-r from-[#161B22] to-[#1C2128] border border-[#30363D] rounded-2xl p-6 flex items-center justify-between overflow-hidden relative shadow-lg">
-            <div className="absolute right-0 top-0 w-48 h-48 bg-[#4F8EF7]/5 rounded-full blur-2xl" />
-            <div className="flex-1 relative z-10">
-              <h2 className="text-xl font-bold text-[#E6EDF3] mb-1">
+          <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-6 mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-semibold text-[#E6EDF3] mb-1">
                 Welcome to Jobrixa! 👋
               </h2>
-              <p className="text-sm text-[#7D8590] mb-5 max-w-md leading-relaxed">
-                Start tracking your applications and never miss an opportunity again. Add your first application to get started.
+              <p className="text-sm text-[#7D8590] mb-4">
+                Start tracking your applications and never miss an opportunity again.
               </p>
               <button
                 onClick={() => navigate('/pipeline')}
-                className="px-5 py-2.5 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-[#4F8EF7]/20 hover:scale-105 active:scale-95 flex items-center gap-2"
+                className="bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
               >
-                <Target size={16} />
                 + Add First Application
               </button>
             </div>
-            <span className="hidden md:block text-6xl transform translate-x-4">👋</span>
+            <span className="text-6xl">👋</span>
           </div>
         )}
 
