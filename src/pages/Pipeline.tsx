@@ -138,11 +138,32 @@ export default function Pipeline() {
       <TopBar
         title="My Pipeline"
         subtitle="Your job hunt, organized"
-        onAddApplication={() => handleAddClick("APPLIED")}
-        onQuickAdd={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
+        showSearch
         onFilterClick={() => setFilterOpen(true)}
         activeFilterCount={filters.status.length + filters.source.length + (filters.dateRange !== 'all' ? 1 : 0) + (filters.hasInterview ? 1 : 0) + (filters.hasOffer ? 1 : 0)}
-      />
+      >
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
+            className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-[#161B22] border border-[#30363D] rounded-lg text-sm font-medium text-[#7D8590] hover:text-[#4F8EF7] hover:border-[#4F8EF7]/50 transition-all"
+            title="Quick Add from URL"
+          >
+            <Link2 className="w-4 h-4" />
+            <span>From URL</span>
+          </button>
+          
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-[#4F8EF7] rounded-lg blur opacity-40 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse" />
+            <button
+              onClick={() => handleAddClick("APPLIED")}
+              className="relative bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-[0_0_15px_rgba(79,142,247,0.4)] transition-all"
+            >
+              <Zap className="w-4 h-4" />
+              <span className="hidden md:inline">Add Application</span>
+            </button>
+          </div>
+        </div>
+      </TopBar>
 
       {/* Application progress bar — shows how active the job hunt is */}
       <div className="px-6 py-3 border-b border-[#21262D] flex flex-col md:flex-row md:items-center gap-4 md:gap-6 bg-[#0D1117]">

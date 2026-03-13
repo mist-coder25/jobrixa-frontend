@@ -68,7 +68,15 @@ export default function Resumes() {
 
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
-      <TopBar title="My Resumes" onAddApplication={openModal} actionLabel="Upload Resume" actionIcon="upload" />
+      <TopBar title="My Resumes">
+        <button
+          onClick={openModal}
+          className="flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-[0_0_15px_rgba(79,142,247,0.3)]"
+        >
+          <Upload size={15} /> 
+          <span className="hidden md:inline">Upload Resume</span>
+        </button>
+      </TopBar>
 
       <div className="p-6 md:p-8 flex-1">
         {resumes.length === 0 ? (

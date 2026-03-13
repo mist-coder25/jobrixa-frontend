@@ -177,6 +177,7 @@ export default function Discover() {
       <TopBar 
         title="Discover Jobs" 
         subtitle="Curated for your profile" 
+        showSearch
         onFilterClick={() => setFilterOpen(true)}
         activeFilterCount={(filters.roleType ? 1 : 0) + (filters.experience ? 1 : 0) + (filters.dateRange !== 'all' ? 1 : 0) + (filters.location ? 1 : 0)}
       />
