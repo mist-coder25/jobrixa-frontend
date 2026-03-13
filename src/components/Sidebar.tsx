@@ -1,10 +1,22 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LayoutDashboard, Trello, Compass, PieChart, FileText, Settings, LogOut, Zap } from "lucide-react";
+import api from "../api/axios";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const userName = localStorage.getItem("jobrixa_user") || "User";
+  const [missedCount, setMissedCount] = useState(0);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jobrixa_token");
+    if (token) {
+      api.get('/applications/missed')
+        .then(r => setMissedCount(r.data.missedCount))
+        .catch(() => {});
+    }
+  }, []);
 
   const navItems = [
     { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={20} /> },
@@ -76,6 +88,11 @@ export default function Sidebar() {
                     )}
                     <span className="relative z-10">{item.icon}</span>
                     <span className="relative z-10">{item.label}</span>
+                    {item.label === "Analytics" && missedCount > 0 && (
+                      <span className="ml-auto text-[10px] bg-[#F85149] text-white px-1.5 py-0.5 rounded-full font-bold animate-pulse">
+                        {missedCount}
+                      </span>
+                    )}
                   </>
                 )}
               </NavLink>
@@ -115,12 +132,19 @@ export default function Sidebar() {
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center flex-1 transition-all ${
+              `flex flex-col items-center justify-center flex-1 transition-all relative ${
                 isActive ? "text-[#4F8EF7] scale-110" : "text-[#7D8590]"
               }`
             }
           >
-            {item.icon}
+            <div className="relative">
+              {item.icon}
+              {item.label === "Analytics" && missedCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#F85149] text-white text-[9px] rounded-full flex items-center justify-center font-bold border-2 border-[#0D1117]">
+                  {missedCount}
+                </span>
+              )}
+            </div>
             <span className="text-[9px] mt-1.5 font-bold uppercase tracking-wider">{item.label}</span>
           </NavLink>
         ))}
