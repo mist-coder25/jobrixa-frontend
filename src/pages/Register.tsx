@@ -144,9 +144,9 @@ export default function Register() {
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#3FB950]/5 rounded-full blur-3xl" />
         
         <img
-          src="https://illustrations.popsy.co/gray/work-from-home.svg"
-          alt="Job tracking illustration"
-          className="w-72 h-72 object-contain mb-8 opacity-90"
+          src="https://illustrations.popsy.co/amber/remote-work.svg"
+          alt="Job hunting illustration"
+          className="w-80 h-80 object-contain mb-8"
         />
         
         <h2 className="text-2xl font-bold text-[#E6EDF3] text-center mb-3">
@@ -157,20 +157,19 @@ export default function Register() {
           Track every application, ace every interview, and land the job you deserve.
         </p>
 
-        <div className="mt-8 space-y-3 w-full max-w-xs">
-          {[
-            { icon: '📋', title: 'Track every application', desc: 'Kanban board across all stages' },
-            { icon: '📊', title: 'Real-time analytics', desc: 'Response rates, interview rates, more' },
-            { icon: '🔔', title: 'Never miss a deadline', desc: 'Auto-tracks OAs and interviews' },
-          ].map(f => (
-            <div key={f.title} className="flex items-center gap-3 bg-[#1C2128] border border-[#30363D] rounded-xl px-4 py-3">
-              <span style={{ fontSize: '16px' }}>{f.icon}</span>
-              <div>
-                <p className="text-xs font-semibold text-[#E6EDF3]">{f.title}</p>
-                <p className="text-xs text-[#7D8590]">{f.desc}</p>
+        <div className="mt-12 flex items-center gap-3 bg-[#1C2128] border border-[#30363D] rounded-xl px-4 py-3 shadow-lg">
+          <div className="flex -space-x-2">
+            {['#4F8EF7','#3FB950','#D29922','#A371F7'].map((color, i) => (
+              <div key={i} className="w-7 h-7 rounded-full border-2 border-[#161B22] flex items-center justify-center text-[10px] font-bold text-white shadow-sm"
+                style={{background: color}}>
+                {['S','R','A','M'][i]}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-[#E6EDF3]">2,400+ students trust Jobrixa</p>
+            <p className="text-[10px] text-[#7D8590]">tracking their placements</p>
+          </div>
         </div>
       </div>
     </div>

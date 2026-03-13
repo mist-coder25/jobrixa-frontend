@@ -25,12 +25,8 @@ export default function Analytics() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const [statsRes, missedRes] = await Promise.all([
-          api.get("/applications/analytics"),
-          api.get("/applications/missed")
-        ]);
-        setStats(statsRes.data);
-        setMissedData(missedRes.data);
+        const res = await api.get("/applications/analytics");
+        setStats(res.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -38,6 +34,12 @@ export default function Analytics() {
       }
     };
     fetchAnalytics();
+  }, []);
+
+  useEffect(() => {
+    api.get('/applications/missed')
+      .then(r => setMissedData(r.data))
+      .catch(() => {});
   }, []);
 
   if (loading) {
@@ -173,11 +175,12 @@ export default function Analytics() {
         </div>
 
         {/* Missed Opportunities Section */}
-        <div className="bg-surface border border-border rounded-xl p-6">
+        <div className="mt-10">
+          
           {/* Section header */}
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-lg font-display font-semibold">Missed Opportunities</h2>
+              <h2 className="text-base font-semibold text-[#E6EDF3]">Missed Opportunities</h2>
               <p className="text-xs text-[#7D8590] mt-0.5">
                 Assessments and interviews you didn't respond to
               </p>
@@ -190,16 +193,16 @@ export default function Analytics() {
                     style={{ color: missedData.missedPercent > 50 ? '#F85149' : missedData.missedPercent > 25 ? '#D29922' : '#3FB950' }}>
                     {missedData.missedPercent}%
                   </div>
-                  <div className="text-[10px] text-[#7D8590] uppercase tracking-wider font-bold">miss rate</div>
+                  <div className="text-xs text-[#7D8590]">miss rate</div>
                 </div>
                 {/* Count stat */}
                 <div className="text-right">
                   <div className="text-2xl font-bold text-[#E6EDF3]">{missedData.missedCount}</div>
-                  <div className="text-[10px] text-[#7D8590] uppercase tracking-wider font-bold">missed</div>
+                  <div className="text-xs text-[#7D8590]">missed</div>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-[#E6EDF3]">{missedData.totalOaAndInterviews}</div>
-                  <div className="text-[10px] text-[#7D8590] uppercase tracking-wider font-bold">total rounds</div>
+                  <div className="text-xs text-[#7D8590]">total OA/interviews</div>
                 </div>
               </div>
             )}
@@ -210,7 +213,7 @@ export default function Analytics() {
             <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-8 flex flex-col items-center justify-center text-center">
               <div className="text-4xl mb-3">🎯</div>
               <p className="text-sm font-semibold text-[#E6EDF3]">No missed opportunities!</p>
-              <p className="text-xs text-[#7D8590] mt-1 font-medium">
+              <p className="text-xs text-[#7D8590] mt-1">
                 You've responded to every assessment and interview. Keep it up!
               </p>
             </div>
@@ -218,89 +221,86 @@ export default function Analytics() {
 
           {/* Missed list */}
           {missedData && missedData.missedCount > 0 && (
-            <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden shadow-xl">
+            <div className="bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden">
               
               {/* Summary bar */}
-              <div className="px-5 py-3 border-b border-[#21262D] bg-[#1C2128]/50 flex items-center justify-between">
+              <div className="px-5 py-3 border-b border-[#21262D] bg-[#1C2128] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#F85149] animate-pulse shadow-[0_0_8px_#F85149]" />
-                  <span className="text-xs font-bold text-[#E6EDF3]">
+                  <div className="w-2 h-2 rounded-full bg-[#F85149]" />
+                  <span className="text-xs font-medium text-[#E6EDF3]">
                     {missedData.missedCount} missed out of {missedData.totalOaAndInterviews} total
                   </span>
                 </div>
                 {/* Progress bar */}
                 <div className="flex items-center gap-2">
-                  <div className="w-32 h-1.5 bg-[#21262D] rounded-full overflow-hidden border border-white/5">
-                    <div className="h-full rounded-full transition-all duration-1000"
+                  <div className="w-32 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all"
                       style={{
                         width: `${missedData.missedPercent}%`,
                         background: missedData.missedPercent > 50 ? '#F85149' :
                                     missedData.missedPercent > 25 ? '#D29922' : '#3FB950'
                       }} />
                   </div>
-                  <span className="text-[10px] font-bold text-[#7D8590]">{missedData.missedPercent}% Loss Rate</span>
+                  <span className="text-xs text-[#7D8590]">{missedData.missedPercent}% miss rate</span>
                 </div>
               </div>
 
               {/* Table header */}
-              <div className="grid grid-cols-5 px-5 py-2.5 bg-[#0D1117]/50 border-b border-[#21262D]">
-                {['Company', 'Role', 'Status', 'Deadline', 'Missed At'].map(h => (
-                  <span key={h} className="text-[10px] font-black text-[#484F58] uppercase tracking-[0.2em]">
+              <div className="invisible md:visible grid md:grid-cols-5 px-5 py-2 border-b border-[#21262D]">
+                {['Company', 'Role', 'Type', 'Deadline', 'Missed On'].map(h => (
+                  <span key={h} className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wider">
                     {h}
                   </span>
                 ))}
               </div>
 
               {/* Rows */}
-              <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
-                {missedData.missed.map((item, i) => (
-                  <div key={item.id}
-                    className={`grid grid-cols-5 px-5 py-4 items-center hover:bg-[#1C2128] transition-all group ${
-                      i < missedData.missed.length - 1 ? 'border-b border-[#21262D]' : ''
+              {missedData.missed.map((item, i) => (
+                <div key={item.id}
+                  className={`grid grid-cols-1 md:grid-cols-5 px-5 py-3 items-center hover:bg-[#1C2128] transition-colors ${
+                    i < missedData.missed.length - 1 ? 'border-b border-[#21262D]' : ''
+                  }`}>
+                  
+                  {/* Company */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-md bg-[#F85149]/10 border border-[#F85149]/20 flex items-center justify-center text-xs font-bold text-[#F85149] flex-shrink-0">
+                      {item.company.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-sm font-medium text-[#E6EDF3] truncate">{item.company}</span>
+                  </div>
+
+                  {/* Role */}
+                  <span className="text-sm text-[#7D8590] truncate pr-2">{item.role}</span>
+
+                  {/* Type badge */}
+                  <div>
+                    <span className={`text-xs px-2 py-1 rounded-md font-medium ${
+                      item.status === 'OA_ASSESSMENT'
+                        ? 'bg-[#D29922]/10 text-[#D29922] border border-[#D29922]/20'
+                        : 'bg-[#A371F7]/10 text-[#A371F7] border border-[#A371F7]/20'
                     }`}>
-                    
-                    {/* Company */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#F85149]/10 border border-[#F85149]/20 flex items-center justify-center text-xs font-black text-[#F85149] group-hover:scale-110 transition-transform">
-                        {item.company.charAt(0).toUpperCase()}
-                      </div>
-                      <span className="text-sm font-bold text-[#E6EDF3] truncate group-hover:text-white">{item.company}</span>
-                    </div>
-
-                    {/* Role */}
-                    <span className="text-sm text-[#7D8590] truncate pr-2 font-medium">{item.role}</span>
-
-                    {/* Type badge */}
-                    <div>
-                      <span className={`text-[10px] px-2 py-1 rounded-md font-black uppercase tracking-wider ${
-                        item.status === 'OA' || item.status === 'OA_ASSESSMENT'
-                          ? 'bg-[#D29922]/10 text-[#D29922] border border-[#D29922]/20 shadow-[0_0_10px_rgba(210,153,34,0.1)]'
-                          : 'bg-[#A371F7]/10 text-[#A371F7] border border-[#A371F7]/20 shadow-[0_0_10px_rgba(163,113,247,0.1)]'
-                      }`}>
-                        {item.status.includes('OA') ? 'OA / Assessment' : 'Interview'}
-                      </span>
-                    </div>
-
-                    {/* Deadline */}
-                    <span className="text-sm font-bold text-[#F85149]/80 group-hover:text-[#F85149] transition-colors">
-                      {item.deadline
-                        ? new Date(item.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-                        : 'No deadline set'}
-                    </span>
-
-                    {/* Missed on */}
-                    <span className="text-sm text-[#484F58] font-medium">
-                      {new Date(item.missedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {item.status === 'OA_ASSESSMENT' ? 'OA / Assessment' : 'Interview'}
                     </span>
                   </div>
-                ))}
-              </div>
+
+                  {/* Deadline */}
+                  <span className="text-sm text-[#F85149]">
+                    {item.deadline
+                      ? new Date(item.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                      : 'No deadline set'}
+                  </span>
+
+                  {/* Missed on */}
+                  <span className="text-sm text-[#484F58]">
+                    {new Date(item.missedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </span>
+                </div>
+              ))}
 
               {/* Footer tip */}
-              <div className="px-5 py-3 border-t border-[#21262D] bg-[#0D1117] flex items-center gap-2">
-                <Info size={14} className="text-[#484F58]" />
-                <p className="text-[11px] text-[#484F58] font-medium italic">
-                  Tip: Set a deadline when adding applications so Jobrixa can automatically track OAs and Interviews.
+              <div className="px-5 py-3 border-t border-[#21262D] bg-[#0D1117]">
+                <p className="text-xs text-[#484F58]">
+                  💡 Tip: Set a deadline when adding OA/Interview cards so Jobrixa can automatically mark them as missed if you don't update the status.
                 </p>
               </div>
             </div>

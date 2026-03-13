@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { LayoutDashboard, Trello, Compass, PieChart, FileText, Settings, LogOut, Zap } from "lucide-react";
 import api from "../api/axios";
+import { motion } from "framer-motion";
+import { LayoutDashboard, Trello, Compass, BarChart2, FileText, Settings, LogOut, Zap } from "lucide-react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export default function Sidebar() {
     { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={20} /> },
     { label: "Pipeline", path: "/pipeline", icon: <Trello size={20} /> },
     { label: "Discover", path: "/discover", icon: <Compass size={20} /> },
-    { label: "Analytics", path: "/analytics", icon: <PieChart size={20} /> },
+    { label: "Analytics", path: "/analytics", icon: <BarChart2 size={20} />, badge: missedCount > 0 ? missedCount : null },
     { label: "Resumes", path: "/resumes", icon: <FileText size={20} /> },
     { label: "Pricing", path: "/pricing", icon: <Zap size={20} /> },
     { label: "Settings", path: "/settings", icon: <Settings size={20} /> },
@@ -87,10 +87,10 @@ export default function Sidebar() {
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#4F8EF7] rounded-full" />
                     )}
                     <span className="relative z-10">{item.icon}</span>
-                    <span className="relative z-10">{item.label}</span>
-                    {item.label === "Analytics" && missedCount > 0 && (
-                      <span className="ml-auto text-[10px] bg-[#F85149] text-white px-1.5 py-0.5 rounded-full font-bold animate-pulse">
-                        {missedCount}
+                    <span className="relative z-10 flex-1">{item.label}</span>
+                    {item.badge && (
+                      <span className="relative z-10 ml-auto bg-[#F85149] text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                        {item.badge}
                       </span>
                     )}
                   </>
@@ -132,19 +132,12 @@ export default function Sidebar() {
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center flex-1 transition-all relative ${
+              `flex flex-col items-center justify-center flex-1 transition-all ${
                 isActive ? "text-[#4F8EF7] scale-110" : "text-[#7D8590]"
               }`
             }
           >
-            <div className="relative">
-              {item.icon}
-              {item.label === "Analytics" && missedCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#F85149] text-white text-[9px] rounded-full flex items-center justify-center font-bold border-2 border-[#0D1117]">
-                  {missedCount}
-                </span>
-              )}
-            </div>
+            {item.icon}
             <span className="text-[9px] mt-1.5 font-bold uppercase tracking-wider">{item.label}</span>
           </NavLink>
         ))}
