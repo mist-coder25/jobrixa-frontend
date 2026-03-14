@@ -49,6 +49,8 @@ export default function Sidebar() {
     navigate("/login");
   };
 
+  const isPro = plan?.toUpperCase() === 'PRO';
+
   return (
     <>
       {/* Desktop Sidebar */}
@@ -116,12 +118,12 @@ export default function Sidebar() {
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">
           {/* Upgrade banner */}
-          <div className={`${plan?.toUpperCase() === "PRO" ? "bg-[#3FB950]/10 border-[#3FB950]/20" : "bg-[#4F8EF7]/10 border-[#4F8EF7]/20"} border rounded-lg px-3 py-2`}>
+          <div className={`${isPro ? "bg-[#3FB950]/10 border-[#3FB950]/20" : "bg-[#4F8EF7]/10 border-[#4F8EF7]/20"} border rounded-lg px-3 py-2`}>
             <div className="flex items-center justify-between">
-              <span className={`text-xs ${plan?.toUpperCase() === "PRO" ? "text-[#3FB950]" : "text-[#4F8EF7]"} font-medium`}>
-                {plan?.toUpperCase() === "PRO" ? "Pro Plan" : "Free Plan"}
+              <span className={`text-xs ${isPro ? "text-[#3FB950]" : "text-[#4F8EF7]"} font-medium`}>
+                {isPro ? "Pro Plan" : "Free Plan"}
               </span>
-              {plan?.toUpperCase() !== "PRO" && (
+              {!isPro && (
                 <span 
                   onClick={() => navigate('/pricing')}
                   className="text-[10px] text-[#4F8EF7] cursor-pointer hover:underline font-bold uppercase tracking-wider"
@@ -132,12 +134,12 @@ export default function Sidebar() {
             </div>
             <div className="mt-1 h-1 bg-[#21262D] rounded-full overflow-hidden">
               <div 
-                className={`h-1 ${plan?.toUpperCase() === "PRO" ? "bg-[#3FB950]" : "bg-[#4F8EF7]"} rounded-full transition-all duration-1000`} 
-                style={{ width: plan?.toUpperCase() === "PRO" ? "100%" : `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
+                className={`h-1 ${isPro ? "bg-[#3FB950]" : "bg-[#4F8EF7]"} rounded-full transition-all duration-1000`} 
+                style={{ width: isPro ? "100%" : `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
               />
             </div>
             <span className="text-[10px] text-[#7D8590] mt-0.5 block">
-              {plan?.toUpperCase() === "PRO" ? "Unlimited applications" : `${appCount ?? 0}/30 applications used`}
+              {isPro ? "Unlimited applications" : `${appCount ?? 0}/30 applications used`}
             </span>
           </div>
           {/* User row */}

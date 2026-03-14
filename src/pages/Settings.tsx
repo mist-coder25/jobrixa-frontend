@@ -458,9 +458,9 @@ export default function Settings() {
 
             {/* Current Plan Card */}
             <div className={`rounded-2xl p-6 border ${
-              billingStatus?.plan === "PRO" && billingStatus.isActive
+              billingStatus?.plan?.toUpperCase() === "PRO" && billingStatus.isActive
                 ? "bg-accent/10 border-accent/30 shadow-[0_0_20px_rgba(108,99,255,0.1)]"
-                : billingStatus?.plan === "CAMPUS" && billingStatus.isActive
+                : billingStatus?.plan?.toUpperCase() === "CAMPUS" && billingStatus.isActive
                   ? "bg-teal-500/10 border-teal-500/30"
                   : "bg-surface border-border"
             }`}>
@@ -469,9 +469,9 @@ export default function Settings() {
                   <p className="text-xs uppercase tracking-wider font-medium text-textSecondary mb-1">Current Plan</p>
                   <div className="flex items-center gap-2">
                     <span className="text-2xl font-display font-bold text-textPrimary">
-                      {billingStatus?.plan ?? "FREE"}
+                      {billingStatus?.plan?.toUpperCase() ?? "FREE"}
                     </span>
-                    {billingStatus?.plan !== "FREE" && billingStatus?.isActive && (
+                    {billingStatus?.plan?.toUpperCase() !== "FREE" && billingStatus?.isActive && (
                       <span className="text-accent text-lg">✦</span>
                     )}
                   </div>
@@ -480,11 +480,11 @@ export default function Settings() {
                       Expires: {new Date(billingStatus.planExpiresAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
                     </p>
                   )}
-                  {billingStatus?.plan === "FREE" && (
+                  {billingStatus?.plan?.toUpperCase() === "FREE" && (
                     <p className="text-xs text-textSecondary mt-1">30 application limit</p>
                   )}
                 </div>
-                {(billingStatus?.plan === "FREE" || !billingStatus?.isActive) && (
+                {(billingStatus?.plan?.toUpperCase() === "FREE" || !billingStatus?.isActive) && (
                   <Link
                     to="/pricing"
                     className="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-sm font-semibold transition-all shadow-[0_0_16px_rgba(108,99,255,0.3)]"
