@@ -19,7 +19,7 @@ export default function Sidebar() {
 
   const [missedCount, setMissedCount] = useState(0);
   const [appCount, setAppCount] = useState<number | null>(null);
-  const [plan, setPlan] = useState<string>("FREE");
+  const [plan, setPlan] = useState<string>(localStorage.getItem("jobrixa_plan") || "FREE");
 
   useEffect(() => {
     const token = localStorage.getItem("jobrixa_token");
@@ -37,7 +37,9 @@ export default function Sidebar() {
 
       api.get('/users/me')
         .then((r: any) => {
-          setPlan(r.data.plan || "FREE");
+          const freshPlan = r.data.plan || "FREE";
+          setPlan(freshPlan);
+          localStorage.setItem("jobrixa_plan", freshPlan);
         })
         .catch(() => {});
     }

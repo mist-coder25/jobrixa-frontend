@@ -30,6 +30,7 @@ export default function Register() {
       const response = await api.post("/auth/register", { fullName, email, password });
       localStorage.setItem("jobrixa_token", response.data.token);
       localStorage.setItem("jobrixa_user", fullName);
+      localStorage.setItem("jobrixa_plan", "FREE");
       navigate("/dashboard");
       toast.success("Account created successfully!");
     } catch (err) {

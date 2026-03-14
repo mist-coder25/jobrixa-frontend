@@ -54,11 +54,15 @@ export function usePayment(onSuccess?: () => void) {
       theme: { color: "#6C63FF" },
       handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
         try {
-          await api.post("/payments/verify", {
+          const verifyRes = await api.post("/payments/verify", {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
           });
+          const newPlan = verifyRes.data.plan;
+          if (newPlan) {
+            localStorage.setItem("jobrixa_plan", newPlan);
+          }
           toast.success(`🎉 Welcome to Jobrixa ${plan.startsWith("PRO") ? "Pro" : "Campus"}!`);
           onSuccess?.();
         } catch {
