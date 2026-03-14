@@ -68,7 +68,10 @@ export default function Resumes() {
 
   return (
     <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
-      <TopBar title="My Resumes">
+      <TopBar 
+        title="My Resumes" 
+        subtitle="Store different resume versions and track which one gets the most callbacks."
+      >
         <button
           onClick={openModal}
           className="flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-[0_0_15px_rgba(79,142,247,0.3)]"

@@ -19,10 +19,11 @@ const AVATARS = [
 interface Props {
   currentInitial: string;
   currentColor?: string;
+  customStyle?: React.CSSProperties;
   onSelect: (avatarId: string, bg: string) => void;
 }
 
-export default function AvatarSelector({ currentInitial, currentColor = 'bg-accent', onSelect }: Props) {
+export default function AvatarSelector({ currentInitial, currentColor = 'bg-accent', customStyle = {}, onSelect }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -30,7 +31,8 @@ export default function AvatarSelector({ currentInitial, currentColor = 'bg-acce
       {/* Current Avatar */}
       <div
         onClick={() => setOpen(!open)}
-        className={`w-20 h-20 rounded-full ${currentColor} flex items-center justify-center text-2xl font-bold text-white cursor-pointer hover:opacity-90 transition-opacity relative mx-auto`}
+        className={`w-20 h-20 rounded-full ${currentColor.includes('bg-') ? currentColor : ''} flex items-center justify-center text-2xl font-bold text-white cursor-pointer hover:opacity-90 transition-opacity relative mx-auto`}
+        style={customStyle}
       >
         {currentInitial}
         <div className="absolute bottom-0 right-0 w-6 h-6 bg-accent rounded-full flex items-center justify-center text-xs">

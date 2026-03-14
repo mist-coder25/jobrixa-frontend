@@ -192,41 +192,59 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-surface border border-border rounded-xl p-6">
             <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Application Activity</h3>
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={weeklyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
-                  <YAxis tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
-                    itemStyle={{ color: '#F0F0FF' }}
-                  />
-                  <Line type="monotone" dataKey="apps" stroke="#4F8EF7" strokeWidth={2} dot={{ fill: '#4F8EF7', r: 3 }} activeDot={{ r: 6 }} />
-                </LineChart>
-              </ResponsiveContainer>
+            <div className="h-[300px] w-full flex items-center justify-center">
+              {hasAnyApp ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={weeklyData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
+                    <XAxis dataKey="name" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
+                    <YAxis tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
+                      itemStyle={{ color: '#F0F0FF' }}
+                    />
+                    <Line type="monotone" dataKey="apps" stroke="#4F8EF7" strokeWidth={2} dot={{ fill: '#4F8EF7', r: 3 }} activeDot={{ r: 6 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full bg-[#1C2128] flex items-center justify-center mx-auto mb-3 text-[#586069]">
+                    <Target size={20} />
+                  </div>
+                  <p className="text-sm text-[#7D8590]">No activity data yet</p>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="bg-surface border border-border rounded-xl p-6">
             <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Applications by Source</h3>
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={sourceData} layout="vertical" margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#21262D" horizontal={false} />
-                  <XAxis type="number" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
-                  <YAxis dataKey="name" type="category" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} width={80} />
-                  <Tooltip 
-                    cursor={{fill: '#2A2A38', opacity: 0.4}}
-                    contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
-                  />
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={24}>
-                    {sourceData.map((_, i) => (
-                      <Cell key={i} fill={['#4F8EF7','#3FB950','#D29922','#A371F7'][i % 4]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="h-[300px] w-full flex items-center justify-center">
+              {hasAnyApp ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={sourceData} layout="vertical" margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#21262D" horizontal={false} />
+                    <XAxis type="number" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
+                    <YAxis dataKey="name" type="category" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} width={80} />
+                    <Tooltip 
+                      cursor={{fill: '#2A2A38', opacity: 0.4}}
+                      contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
+                    />
+                    <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={24}>
+                      {sourceData.map((_, i) => (
+                        <Cell key={i} fill={['#4F8EF7','#3FB950','#D29922','#A371F7'][i % 4]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full bg-[#1C2128] flex items-center justify-center mx-auto mb-3 text-[#586069]">
+                    <Users size={20} />
+                  </div>
+                  <p className="text-sm text-[#7D8590]">No source data yet</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

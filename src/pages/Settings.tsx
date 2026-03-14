@@ -246,6 +246,7 @@ export default function Settings() {
                   <AvatarSelector
                     currentInitial={profile?.name?.charAt(0).toUpperCase() || 'U'}
                     currentColor={profile?.avatarUrl || avatarBg}
+                    customStyle={profile?.avatarUrl ? {} : { backgroundColor: avatarBg }}
                     onSelect={(_avatarId, bg) => {
                       setProfile(prev => prev ? ({ ...prev, avatarUrl: bg }) : prev);
                     }}

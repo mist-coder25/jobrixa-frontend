@@ -19,12 +19,17 @@ export default function Sidebar() {
   ];
 
   const [missedCount, setMissedCount] = useState(0);
+  const [appCount, setAppCount] = useState<number | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("jobrixa_token");
     if (token) {
       api.get('/applications/missed')
         .then((r: any) => setMissedCount(r.data.missedCount))
+        .catch(() => {});
+
+      api.get('/applications/analytics')
+        .then((r: any) => setAppCount(r.data.totalApplications))
         .catch(() => {});
     }
   }, []);
@@ -107,10 +112,15 @@ export default function Sidebar() {
               <span className="text-xs text-[#4F8EF7] font-medium">Free Plan</span>
               <span className="text-xs text-[#4F8EF7] cursor-pointer hover:underline">Upgrade →</span>
             </div>
-            <div className="mt-1 h-1 bg-[#21262D] rounded-full">
-              <div className="h-1 bg-[#4F8EF7] rounded-full w-1/5" />
+            <div className="mt-1 h-1 bg-[#21262D] rounded-full overflow-hidden">
+              <div 
+                className="h-1 bg-[#4F8EF7] rounded-full transition-all duration-1000" 
+                style={{ width: `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
+              />
             </div>
-            <span className="text-[10px] text-[#7D8590] mt-0.5 block">4/30 applications used</span>
+            <span className="text-[10px] text-[#7D8590] mt-0.5 block">
+              {appCount === null ? '...' : appCount}/30 applications used
+            </span>
           </div>
           {/* User row */}
           <div className="flex items-center gap-2 px-1">
