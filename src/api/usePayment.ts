@@ -21,7 +21,7 @@ function loadRazorpayScript(): Promise<boolean> {
 
 export function usePayment(onSuccess?: () => void) {
 
-  const initiatePayment = useCallback(async (plan: "PRO" | "CAMPUS") => {
+  const initiatePayment = useCallback(async (plan: "PRO_MONTHLY" | "PRO_YEARLY" | "CAMPUS", amount?: number) => {
     const loaded = await loadRazorpayScript();
     if (!loaded) {
       toast.error("Could not load payment gateway. Please try again.");
@@ -30,14 +30,17 @@ export function usePayment(onSuccess?: () => void) {
 
     let orderData: { orderId: string; amount: number; currency: string; key: string };
     try {
-      const res = await api.post("/payments/create-order", { plan });
+      const res = await api.post("/payments/create-order", { plan, amount: amount?.toString() });
       orderData = res.data;
     } catch {
       toast.error("Failed to create order. Please try again.");
       return;
     }
 
-    const planLabel = plan === "PRO" ? "Pro Plan — ₹149/month" : "Campus Plan — ₹499/semester";
+    const planLabel = 
+      plan === "PRO_MONTHLY" ? "Pro Plan — ₹149/month" : 
+      plan === "PRO_YEARLY" ? "Pro Plan — ₹999/year" : 
+      "Campus Plan — ₹499/semester";
 
     const options = {
       key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_placeholder",
@@ -55,7 +58,7 @@ export function usePayment(onSuccess?: () => void) {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
           });
-          toast.success(`🎉 Welcome to Jobrixa ${plan === "PRO" ? "Pro" : "Campus"}!`);
+          toast.success(`🎉 Welcome to Jobrixa ${plan.startsWith("PRO") ? "Pro" : "Campus"}!`);
           onSuccess?.();
         } catch {
           toast.error("Payment verification failed. Contact support.");

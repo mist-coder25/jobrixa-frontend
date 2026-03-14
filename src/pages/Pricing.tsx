@@ -50,7 +50,9 @@ export default function Pricing() {
       navigate("/register");
       return;
     }
-    initiatePayment(plan);
+    const amount = billing === "monthly" ? 14900 : 99900;
+    const planType = billing === "monthly" ? "PRO_MONTHLY" : "PRO_YEARLY";
+    initiatePayment(planType, amount);
   };
 
   const proPrice = billing === "monthly" ? 149 : 999;
