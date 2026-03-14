@@ -32,7 +32,8 @@ export function usePayment(onSuccess?: () => void) {
     try {
       const res = await api.post("/payments/create-order", { plan, amount: amount?.toString() });
       orderData = res.data;
-    } catch {
+    } catch (err) {
+      console.error("Order creation failed:", err);
       toast.error("Failed to create order. Please try again.");
       return;
     }

@@ -45,9 +45,9 @@ export default function Pricing() {
     setTimeout(() => navigate("/dashboard"), 1500);
   });
 
-  const handleUpgrade = (plan: "PRO") => {
+  const handleUpgrade = () => {
     if (!isLoggedIn) {
-      navigate("/register");
+      navigate(`/login?returnUrl=/pricing`);
       return;
     }
     const amount = billing === "monthly" ? 14900 : 99900;
@@ -189,7 +189,7 @@ export default function Pricing() {
             </ul>
 
             <button
-              onClick={() => handleUpgrade("PRO")}
+              onClick={() => handleUpgrade()}
               className="w-full py-3 bg-white text-accent rounded-xl text-sm font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
             >
               Upgrade to Pro <ArrowRight size={15} />
