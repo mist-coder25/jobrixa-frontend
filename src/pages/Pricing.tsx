@@ -12,15 +12,26 @@ const FREE_FEATURES = [
   "Resume library (3 max)",
 ];
 
-const PRO_FEATURES = [
+const PRO_MONTHLY_FEATURES = [
   "Unlimited applications",
   "Full analytics & insights",
   "Activity timeline & events",
   "Follow-up reminders",
   "Priority email support",
-  "All resume versions",
-  "Trust score on job listings",
-  "Early access to new features",
+];
+
+const PRO_YEARLY_FEATURES = [
+  { text: "Unlimited applications", badge: null },
+  { text: "Full analytics & insights", badge: null },
+  { text: "Activity timeline & events", badge: null },
+  { text: "Follow-up reminders", badge: null },
+  { text: "Priority email support", badge: null },
+  { text: "All resume versions", badge: null },
+  { text: "Trust score on job listings", badge: null },
+  { text: "Early access to new features", badge: null },
+  { text: "Missed & ghosted tracker", badge: "Yearly" },
+  { text: "Export data to CSV", badge: "Yearly" },
+  { text: "Application deadline reminders via email", badge: "Yearly" },
 ];
 
 const CAMPUS_FEATURES = [
@@ -159,12 +170,28 @@ export default function Pricing() {
             </div>
 
             <ul className="space-y-3 mb-8 flex-1">
-              {PRO_FEATURES.map(f => (
-                <li key={f} className="flex items-start gap-2.5 text-sm text-white/90">
-                  <Check size={15} className="text-white shrink-0 mt-0.5" />
-                  {f}
-                </li>
-              ))}
+              {billing === "monthly" ? (
+                PRO_MONTHLY_FEATURES.map(f => (
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-white/90">
+                    <Check size={15} className="text-white shrink-0 mt-0.5" />
+                    {f}
+                  </li>
+                ))
+              ) : (
+                PRO_YEARLY_FEATURES.map(f => (
+                  <li key={f.text} className="flex items-start gap-2.5 text-sm text-white/90">
+                    <Check size={15} className="text-white shrink-0 mt-0.5" />
+                    <span>
+                      {f.text}
+                      {f.badge && (
+                        <span className="ml-2 px-1.5 py-0.5 bg-emerald-400 text-[#000] text-[9px] font-black rounded uppercase">
+                          {f.badge}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))
+              )}
             </ul>
 
             <button
