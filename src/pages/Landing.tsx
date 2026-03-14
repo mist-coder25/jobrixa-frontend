@@ -100,15 +100,7 @@ export default function Landing() {
             </button>
           </motion.div>
 
-          {/* Honest small print */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-xs text-[#484F58] mt-4"
-          >
-            Free forever for up to 30 applications. No credit card required.
-          </motion.p>
+
         </div>
 
         {/* Dashboard mockup */}
@@ -358,7 +350,7 @@ export default function Landing() {
             <span className="hover:text-[#7D8590] cursor-pointer" onClick={() => navigate('/pricing')}>Pricing</span>
             <span className="hover:text-[#7D8590] cursor-pointer" onClick={() => navigate('/login')}>Login</span>
             <span className="hover:text-[#7D8590] cursor-pointer" onClick={() => navigate('/register')}>Sign up</span>
-            <span className="text-[#484F58]">support@jobrixa.app</span>
+            <a href="mailto:snehalthube29@gmail.com" className="hover:text-[#7D8590] transition-colors">snehalthube29@gmail.com</a>
           </div>
         </div>
       </footer>
