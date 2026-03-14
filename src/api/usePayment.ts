@@ -66,6 +66,7 @@ export function usePayment(onSuccess?: () => void) {
           const finalPlan = (backendPlan && backendPlan !== "FREE") ? backendPlan : optimisticPlan;
           
           localStorage.setItem("jobrixa_plan", finalPlan);
+          window.dispatchEvent(new Event("planUpdated"));
           
           toast.success(`🎉 Welcome to Jobrixa ${plan.startsWith("PRO") ? "Pro" : "Campus"}!`);
           onSuccess?.();

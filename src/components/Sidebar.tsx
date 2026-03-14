@@ -54,7 +54,36 @@ export default function Sidebar() {
         })
         .catch(() => {});
     }
-  }, []);
+
+    const handlePlanUpdate = () => {
+      const p = localStorage.getItem("jobrixa_plan");
+      if (p) setPlan(p);
+    };
+
+    window.addEventListener("planUpdated", handlePlanUpdate);
+    
+    // Auto-poll if on Free plan (to catch successful payments even if event fails)
+    let interval: any;
+    if (plan === "FREE") {
+      interval = setInterval(() => {
+        api.get('/users/me')
+          .then((r: any) => {
+            const freshPlan = r.data.plan;
+            if (freshPlan && freshPlan.toUpperCase() !== "FREE") {
+              setPlan(freshPlan);
+              localStorage.setItem("jobrixa_plan", freshPlan);
+              window.dispatchEvent(new Event("planUpdated"));
+            }
+          })
+          .catch(() => {});
+      }, 10000);
+    }
+
+    return () => {
+      window.removeEventListener("planUpdated", handlePlanUpdate);
+      if (interval) clearInterval(interval);
+    };
+  }, [plan]);
 
   return (
     <>
@@ -122,39 +151,56 @@ export default function Sidebar() {
         </nav>
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">
-          {/* Upgrade banner */}
-          <div className={`${isPro ? "bg-[#3FB950]/10 border-[#3FB950]/20" : "bg-[#4F8EF7]/10 border-[#4F8EF7]/20"} border rounded-lg px-3 py-2`}>
-            <div className="flex items-center justify-between">
-              <span className={`text-xs ${isPro ? "text-[#3FB950]" : "text-[#4F8EF7]"} font-medium`}>
-                {isPro ? "Pro Plan" : "Free Plan"}
-              </span>
-              {!isPro && (
+          {/* Upgrade banner — only show if NOT pro */}
+          {!isPro && (
+            <div className="bg-[#4F8EF7]/10 border border-[#4F8EF7]/20 rounded-lg px-3 py-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-[#4F8EF7] font-medium">Free Plan</span>
                 <span 
                   onClick={() => navigate('/pricing')}
                   className="text-[10px] text-[#4F8EF7] cursor-pointer hover:underline font-bold uppercase tracking-wider"
                 >
                   Upgrade →
                 </span>
-              )}
+              </div>
+              <div className="mt-1.5 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-[#4F8EF7] rounded-full transition-all duration-1000" 
+                  style={{ width: `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-[#7D8590] mt-1.5 block">
+                {appCount ?? 0}/30 applications used
+              </span>
             </div>
-            <div className="mt-1 h-1 bg-[#21262D] rounded-full overflow-hidden">
-              <div 
-                className={`h-1 ${isPro ? "bg-[#3FB950]" : "bg-[#4F8EF7]"} rounded-full transition-all duration-1000`} 
-                style={{ width: isPro ? "100%" : `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
-              />
+          )}
+
+          {/* User Row - Enhanced for Pro */}
+          <div className={`mt-2 flex items-center justify-between p-2 rounded-xl transition-colors group ${isPro ? 'bg-accent/5 border border-accent/20' : 'hover:bg-[#161B22]'}`}>
+            <div className="flex items-center gap-3 overflow-hidden">
+              <div className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center font-bold text-xs ring-2 ${isPro ? 'bg-accent text-white ring-accent/30 shadow-[0_0_10px_rgba(108,99,255,0.3)]' : 'bg-[#21262D] text-[#7D8590] ring-transparent'}`}>
+                {userName.charAt(0).toUpperCase()}
+              </div>
+              <div className="flex flex-col min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-semibold text-[#E6EDF3] truncate max-w-[90px]">{userName}</span>
+                  {isPro && (
+                    <span className="px-1.2 px-[5px] py-0.5 bg-accent text-[7px] font-black text-white rounded-[4px] shadow-[0_0_10px_rgba(108,99,255,0.4)] tracking-tighter shrink-0">
+                      PRO
+                    </span>
+                  )}
+                </div>
+                <span className="text-[10px] text-[#7D8590] truncate leading-none mt-0.5">
+                  {isPro ? "Premium Member" : "Standard Account"}
+                </span>
+              </div>
             </div>
-            <span className="text-[10px] text-[#7D8590] mt-0.5 block">
-              {isPro ? "Unlimited applications" : `${appCount ?? 0}/30 applications used`}
-            </span>
-          </div>
-          {/* User row */}
-          <div className="flex items-center gap-2 px-1">
-            <div className="w-7 h-7 rounded-full bg-[#4F8EF7] flex items-center justify-center text-xs font-bold text-white">
-              {userName.charAt(0).toUpperCase()}
-            </div>
-            <span className="text-sm text-[#C9D1D9] flex-1 truncate">{userName}</span>
-            <button onClick={handleLogout} className="text-[#7D8590] hover:text-[#F85149] transition-colors">
-              <LogOut size={14} />
+            <button 
+              onClick={handleLogout}
+              className="p-1.5 rounded-lg text-[#7D8590] hover:text-[#F85149] hover:bg-[#F85149]/10 transition-all opacity-0 group-hover:opacity-100 shrink-0"
+              title="Logout"
+            >
+              <LogOut size={16} />
             </button>
           </div>
         </div>
