@@ -109,39 +109,44 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Right side — illustration panel */}
+      {/* Right side — clean info panel */}
       <div className="hidden lg:flex flex-1 bg-[#161B22] border-l border-[#21262D] flex-col items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#4F8EF7]/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#3FB950]/5 rounded-full blur-3xl" />
         
-        <img
-          src="https://illustrations.popsy.co/gray/work-from-home.svg"
-          alt="Job tracking illustration"
-          className="w-72 h-72 object-contain mb-8 opacity-90"
-        />
-        
-        <h2 className="text-2xl font-bold text-[#E6EDF3] text-center mb-3">
-          Your job hunt,<br />
-          <span style={{color: '#4F8EF7'}}>finally organized.</span>
-        </h2>
-        <p className="text-sm text-[#7D8590] text-center max-w-xs leading-relaxed">
-          Track every application, ace every interview, and land the job you deserve.
-        </p>
+        <div className="text-center max-w-sm relative z-10">
+          <div className="text-6xl mb-8">🎯</div>
+          <h2 className="text-3xl font-bold text-[#E6EDF3] mb-4">
+            Your job hunt,<br />
+            <span className="text-[#4F8EF7]">finally organized.</span>
+          </h2>
+          <p className="text-[#7D8590] mb-10 text-sm leading-relaxed">
+            Track every application, ace every interview, and land the job you deserve.
+          </p>
 
-        <div className="mt-8 space-y-3 w-full max-w-xs">
-          {[
-            { icon: '📋', title: 'Track every application', desc: 'Kanban board across all stages' },
-            { icon: '📊', title: 'Real-time analytics', desc: 'Response rates, interview rates, more' },
-            { icon: '🔔', title: 'Never miss a deadline', desc: 'Auto-tracks OAs and interviews' },
-          ].map(f => (
-            <div key={f.title} className="flex items-center gap-3 bg-[#1C2128] border border-[#30363D] rounded-xl px-4 py-3">
-              <span style={{ fontSize: '16px' }}>{f.icon}</span>
+          <div className="space-y-3 text-left">
+            <div className="flex items-center gap-3 bg-[#1C2128] border border-[#30363D] rounded-xl px-4 py-3">
+              <span className="text-xl">📋</span>
               <div>
-                <p className="text-xs font-semibold text-[#E6EDF3]">{f.title}</p>
-                <p className="text-xs text-[#7D8590]">{f.desc}</p>
+                <p className="text-[#E6EDF3] text-sm font-medium">Track every application</p>
+                <p className="text-[#7D8590] text-xs">Kanban board across all stages</p>
               </div>
             </div>
-          ))}
+            <div className="flex items-center gap-3 bg-[#1C2128] border border-[#30363D] rounded-xl px-4 py-3">
+              <span className="text-xl">📊</span>
+              <div>
+                <p className="text-[#E6EDF3] text-sm font-medium">Real-time analytics</p>
+                <p className="text-[#7D8590] text-xs">Response rates, interview rates, more</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-[#1C2128] border border-[#30363D] rounded-xl px-4 py-3">
+              <span className="text-xl">🔔</span>
+              <div>
+                <p className="text-[#E6EDF3] text-sm font-medium">Never miss a deadline</p>
+                <p className="text-[#7D8590] text-xs">Auto-tracks OAs and interviews</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
