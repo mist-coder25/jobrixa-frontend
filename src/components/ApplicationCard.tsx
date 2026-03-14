@@ -15,6 +15,8 @@ export interface JobApplication {
   isRemote?: boolean;
   tags?: string[] | string;
   jobDescription?: string;
+  notes?: string;
+  deadline?: string;
   createdAt?: string;
   updatedAt?: string;
 }

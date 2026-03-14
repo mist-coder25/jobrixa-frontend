@@ -78,11 +78,11 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
   const getAppsForStatus = (status: string) => applications.filter(app => app.status === status);
 
   return (
-    <div className="flex-1 overflow-x-auto overflow-y-hidden kanban-scroll h-full pl-4 md:pl-8 pr-4 pb-6 pt-6">
+    <div className="flex-1 overflow-x-auto overflow-y-hidden kanban-scroll h-full pl-4 md:pl-8 pr-4 pb-6 pt-6 snap-x md:snap-none scroll-smooth">
       <DragDropContext onDragEnd={onDragEnd}>
         {/* Columns stagger in on load */}
         <motion.div
-          className="flex gap-4 p-6 overflow-x-auto h-[calc(100vh-120px)] items-start"
+          className="flex gap-4 p-4 md:p-6 h-[calc(100vh-150px)] items-start"
           initial="hidden"
           animate="visible"
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.3 } } }}
@@ -93,7 +93,7 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
               <motion.div
                 key={col.id}
                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-                className="flex flex-col rounded-xl border border-[#21262D] bg-[#0D1117] min-w-[240px] max-w-[240px]"
+                className="flex flex-col rounded-xl border border-[#21262D] bg-[#0D1117] min-w-[280px] md:min-w-[300px] snap-center"
                 style={{ borderTop: `3px solid ${COLUMN_COLORS[col.id] || '#7D8590'}` }}
               >
                 {/* Column Header */}
