@@ -22,9 +22,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function RootRedirect() {
+function PublicRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem("jobrixa_token");
-  return token ? <Navigate to="/pipeline" replace /> : <Landing />;
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return <>{children}</>;
 }
 
 /** Inner component with access to useLocation for page transitions */
@@ -42,10 +45,10 @@ function AnimatedRoutes() {
         style={{ height: "100%" }}
       >
         <Routes location={location}>
-          <Route path="/" element={<RootRedirect />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+          <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
           <Route path="/pricing" element={<Pricing />} />
           <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
