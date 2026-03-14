@@ -347,10 +347,10 @@ export default function Landing() {
             <span className="text-xs text-[#484F58] ml-2">© 2026</span>
           </div>
           <div className="flex items-center gap-6 text-xs text-[#484F58]">
-            <span className="hover:text-[#7D8590] cursor-pointer" onClick={() => navigate('/pricing')}>Pricing</span>
-            <span className="hover:text-[#7D8590] cursor-pointer" onClick={() => navigate('/login')}>Login</span>
-            <span className="hover:text-[#7D8590] cursor-pointer" onClick={() => navigate('/register')}>Sign up</span>
-            <a href="mailto:snehalthube29@gmail.com" className="hover:text-[#7D8590] transition-colors">snehalthube29@gmail.com</a>
+            <span className="hover:text-[#7D8590] cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-[#7D8590] cursor-pointer">Terms</span>
+            <span className="hover:text-[#7D8590] cursor-pointer">Contact</span>
+            <span className="text-[#484F58]">support@jobrixa.app</span>
           </div>
         </div>
       </footer>
