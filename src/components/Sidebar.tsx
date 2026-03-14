@@ -116,12 +116,12 @@ export default function Sidebar() {
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">
           {/* Upgrade banner */}
-          <div className={`${plan === "PRO" ? "bg-[#3FB950]/10 border-[#3FB950]/20" : "bg-[#4F8EF7]/10 border-[#4F8EF7]/20"} border rounded-lg px-3 py-2`}>
+          <div className={`${plan?.toUpperCase() === "PRO" ? "bg-[#3FB950]/10 border-[#3FB950]/20" : "bg-[#4F8EF7]/10 border-[#4F8EF7]/20"} border rounded-lg px-3 py-2`}>
             <div className="flex items-center justify-between">
-              <span className={`text-xs ${plan === "PRO" ? "text-[#3FB950]" : "text-[#4F8EF7]"} font-medium`}>
-                {plan === "PRO" ? "Pro Plan" : "Free Plan"}
+              <span className={`text-xs ${plan?.toUpperCase() === "PRO" ? "text-[#3FB950]" : "text-[#4F8EF7]"} font-medium`}>
+                {plan?.toUpperCase() === "PRO" ? "Pro Plan" : "Free Plan"}
               </span>
-              {plan === "FREE" && (
+              {plan?.toUpperCase() !== "PRO" && (
                 <span 
                   onClick={() => navigate('/pricing')}
                   className="text-[10px] text-[#4F8EF7] cursor-pointer hover:underline font-bold uppercase tracking-wider"
@@ -132,12 +132,12 @@ export default function Sidebar() {
             </div>
             <div className="mt-1 h-1 bg-[#21262D] rounded-full overflow-hidden">
               <div 
-                className={`h-1 ${plan === "PRO" ? "bg-[#3FB950]" : "bg-[#4F8EF7]"} rounded-full transition-all duration-1000`} 
-                style={{ width: plan === "PRO" ? "100%" : `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
+                className={`h-1 ${plan?.toUpperCase() === "PRO" ? "bg-[#3FB950]" : "bg-[#4F8EF7]"} rounded-full transition-all duration-1000`} 
+                style={{ width: plan?.toUpperCase() === "PRO" ? "100%" : `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
               />
             </div>
             <span className="text-[10px] text-[#7D8590] mt-0.5 block">
-              {plan === "PRO" ? "Unlimited applications" : `${appCount ?? 0}/30 applications used`}
+              {plan?.toUpperCase() === "PRO" ? "Unlimited applications" : `${appCount ?? 0}/30 applications used`}
             </span>
           </div>
           {/* User row */}

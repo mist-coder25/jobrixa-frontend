@@ -508,7 +508,9 @@ export default function Settings() {
                 </div>
               ) : (
                 <div className="divide-y divide-border">
-                  {billingStatus.payments.map(p => (
+                  {billingStatus.payments
+                    .filter(p => p.status === 'SUCCESS' || p.status === 'success' || p.status === 'COMPLETED')
+                    .map(p => (
                     <div key={p.id} className="px-6 py-4 flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-textPrimary">{p.plan} Plan</p>
