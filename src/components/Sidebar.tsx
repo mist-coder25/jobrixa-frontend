@@ -21,6 +21,15 @@ export default function Sidebar() {
   const [appCount, setAppCount] = useState<number | null>(null);
   const [plan, setPlan] = useState<string>(localStorage.getItem("jobrixa_plan") || "FREE");
 
+  const handleLogout = () => {
+    localStorage.removeItem("jobrixa_token");
+    localStorage.removeItem("jobrixa_user");
+    localStorage.removeItem("jobrixa_plan");
+    navigate("/login");
+  };
+
+  const isPro = plan?.toUpperCase().startsWith('PRO') || plan?.toUpperCase() === 'CAMPUS';
+
   useEffect(() => {
     const token = localStorage.getItem("jobrixa_token");
     if (token) {
@@ -37,21 +46,15 @@ export default function Sidebar() {
 
       api.get('/users/me')
         .then((r: any) => {
-          const freshPlan = r.data.plan || "FREE";
-          setPlan(freshPlan);
-          localStorage.setItem("jobrixa_plan", freshPlan);
+          const freshPlan = r.data.plan;
+          if (freshPlan) {
+            setPlan(freshPlan);
+            localStorage.setItem("jobrixa_plan", freshPlan);
+          }
         })
         .catch(() => {});
     }
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("jobrixa_token");
-    localStorage.removeItem("jobrixa_user");
-    navigate("/login");
-  };
-
-  const isPro = plan?.toUpperCase() === 'PRO';
 
   return (
     <>

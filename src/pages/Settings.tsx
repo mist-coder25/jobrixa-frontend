@@ -458,11 +458,9 @@ export default function Settings() {
 
             {/* Current Plan Card */}
             <div className={`rounded-2xl p-6 border ${
-              billingStatus?.plan?.toUpperCase() === "PRO" && billingStatus.isActive
+              (billingStatus?.plan?.toUpperCase().startsWith("PRO") || billingStatus?.plan?.toUpperCase() === "CAMPUS") && billingStatus.isActive
                 ? "bg-accent/10 border-accent/30 shadow-[0_0_20px_rgba(108,99,255,0.1)]"
-                : billingStatus?.plan?.toUpperCase() === "CAMPUS" && billingStatus.isActive
-                  ? "bg-teal-500/10 border-teal-500/30"
-                  : "bg-surface border-border"
+                : "bg-surface border-border"
             }`}>
               <div className="flex items-start justify-between">
                 <div>

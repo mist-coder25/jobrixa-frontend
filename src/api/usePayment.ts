@@ -59,10 +59,14 @@ export function usePayment(onSuccess?: () => void) {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
           });
-          const newPlan = verifyRes.data.plan;
-          if (newPlan) {
-            localStorage.setItem("jobrixa_plan", newPlan);
-          }
+          
+          // Optimistic plan update if backend is still deploying
+          const backendPlan = verifyRes.data.plan;
+          const optimisticPlan = plan.startsWith("PRO") ? "PRO" : (plan === "CAMPUS" ? "CAMPUS" : "FREE");
+          const finalPlan = (backendPlan && backendPlan !== "FREE") ? backendPlan : optimisticPlan;
+          
+          localStorage.setItem("jobrixa_plan", finalPlan);
+          
           toast.success(`🎉 Welcome to Jobrixa ${plan.startsWith("PRO") ? "Pro" : "Campus"}!`);
           onSuccess?.();
         } catch {

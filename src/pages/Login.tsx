@@ -20,8 +20,10 @@ export default function Login() {
     try {
       const response = await api.post("/auth/login", { email, password });
       localStorage.setItem("jobrixa_token", response.data.token);
-      localStorage.setItem("jobrixa_user", response.data.user.fullName || email.split('@')[0]);
-      localStorage.setItem("jobrixa_plan", response.data.user.plan || "FREE");
+      localStorage.setItem("jobrixa_user", response.data.user?.fullName || email.split('@')[0]);
+      if (response.data.user?.plan) {
+        localStorage.setItem("jobrixa_plan", response.data.user.plan);
+      }
       navigate("/dashboard");
       toast.success("Successfully logged in!");
     } catch (err) {
