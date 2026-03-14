@@ -110,7 +110,12 @@ export default function Sidebar() {
           <div className="bg-[#4F8EF7]/10 border border-[#4F8EF7]/20 rounded-lg px-3 py-2">
             <div className="flex items-center justify-between">
               <span className="text-xs text-[#4F8EF7] font-medium">Free Plan</span>
-              <span className="text-xs text-[#4F8EF7] cursor-pointer hover:underline">Upgrade →</span>
+              <span 
+                onClick={() => navigate('/pricing')}
+                className="text-[10px] text-[#4F8EF7] cursor-pointer hover:underline font-bold uppercase tracking-wider"
+              >
+                Upgrade →
+              </span>
             </div>
             <div className="mt-1 h-1 bg-[#21262D] rounded-full overflow-hidden">
               <div 
