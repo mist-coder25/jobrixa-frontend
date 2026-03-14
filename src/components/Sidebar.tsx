@@ -19,6 +19,7 @@ export default function Sidebar() {
 
   const [missedCount, setMissedCount] = useState(0);
   const [appCount, setAppCount] = useState<number | null>(null);
+  const [plan, setPlan] = useState<string>("FREE");
 
   useEffect(() => {
     const token = localStorage.getItem("jobrixa_token");
@@ -31,6 +32,12 @@ export default function Sidebar() {
         .then((r: any) => {
           const count = r.data.totalEverCreated ?? r.data.totalApplications ?? 0;
           setAppCount(count);
+        })
+        .catch(() => {});
+
+      api.get('/users/me')
+        .then((r: any) => {
+          setPlan(r.data.plan || "FREE");
         })
         .catch(() => {});
     }
@@ -109,24 +116,28 @@ export default function Sidebar() {
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">
           {/* Upgrade banner */}
-          <div className="bg-[#4F8EF7]/10 border border-[#4F8EF7]/20 rounded-lg px-3 py-2">
+          <div className={`${plan === "PRO" ? "bg-[#3FB950]/10 border-[#3FB950]/20" : "bg-[#4F8EF7]/10 border-[#4F8EF7]/20"} border rounded-lg px-3 py-2`}>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-[#4F8EF7] font-medium">Free Plan</span>
-              <span 
-                onClick={() => navigate('/pricing')}
-                className="text-[10px] text-[#4F8EF7] cursor-pointer hover:underline font-bold uppercase tracking-wider"
-              >
-                Upgrade →
+              <span className={`text-xs ${plan === "PRO" ? "text-[#3FB950]" : "text-[#4F8EF7]"} font-medium`}>
+                {plan === "PRO" ? "Pro Plan" : "Free Plan"}
               </span>
+              {plan === "FREE" && (
+                <span 
+                  onClick={() => navigate('/pricing')}
+                  className="text-[10px] text-[#4F8EF7] cursor-pointer hover:underline font-bold uppercase tracking-wider"
+                >
+                  Upgrade →
+                </span>
+              )}
             </div>
             <div className="mt-1 h-1 bg-[#21262D] rounded-full overflow-hidden">
               <div 
-                className="h-1 bg-[#4F8EF7] rounded-full transition-all duration-1000" 
-                style={{ width: `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
+                className={`h-1 ${plan === "PRO" ? "bg-[#3FB950]" : "bg-[#4F8EF7]"} rounded-full transition-all duration-1000`} 
+                style={{ width: plan === "PRO" ? "100%" : `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
               />
             </div>
             <span className="text-[10px] text-[#7D8590] mt-0.5 block">
-              {appCount ?? 0}/30 applications used
+              {plan === "PRO" ? "Unlimited applications" : `${appCount ?? 0}/30 applications used`}
             </span>
           </div>
           {/* User row */}
