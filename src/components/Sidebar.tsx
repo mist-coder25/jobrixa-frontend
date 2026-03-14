@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Trello, Compass, PieChart, FileText, Settings, LogOut, Zap } from "lucide-react";
+import { LayoutDashboard, Trello, Compass, PieChart, Settings, LogOut, Zap } from "lucide-react";
 import api from "../api/axios";
 
 export default function Sidebar() {
@@ -13,7 +13,6 @@ export default function Sidebar() {
     { label: "Pipeline", path: "/pipeline", icon: <Trello size={20} /> },
     { label: "Discover", path: "/discover", icon: <Compass size={20} /> },
     { label: "Analytics", path: "/analytics", icon: <PieChart size={20} /> },
-    { label: "Resumes", path: "/resumes", icon: <FileText size={20} /> },
     { label: "Pricing", path: "/pricing", icon: <Zap size={20} /> },
     { label: "Settings", path: "/settings", icon: <Settings size={20} /> },
   ];
@@ -29,7 +28,10 @@ export default function Sidebar() {
         .catch(() => {});
 
       api.get('/applications/analytics')
-        .then((r: any) => setAppCount(r.data.totalEverCreated))
+        .then((r: any) => {
+          const count = r.data.totalEverCreated ?? r.data.totalApplications ?? 0;
+          setAppCount(count);
+        })
         .catch(() => {});
     }
   }, []);
@@ -124,7 +126,7 @@ export default function Sidebar() {
               />
             </div>
             <span className="text-[10px] text-[#7D8590] mt-0.5 block">
-              {appCount === null ? '...' : appCount}/30 applications used
+              {appCount ?? 0}/30 applications used
             </span>
           </div>
           {/* User row */}
