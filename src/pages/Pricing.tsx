@@ -34,16 +34,6 @@ const PRO_YEARLY_FEATURES = [
   { text: "Application deadline reminders via email", badge: "Yearly" },
 ];
 
-const CAMPUS_FEATURES = [
-  "Everything in Pro",
-  "Campus placement mode",
-  "Batch analytics comparison",
-  "Drive calendar integration",
-  "Placement cell dashboard",
-  "Bulk import from Excel",
-  "Dedicated campus support",
-];
-
 export default function Pricing() {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("jobrixa_token");
@@ -53,16 +43,13 @@ export default function Pricing() {
     setTimeout(() => navigate("/dashboard"), 1500);
   });
 
-  const handleUpgrade = (plan: "PRO" | "CAMPUS") => {
+  const handleUpgrade = (plan: "PRO") => {
     if (!isLoggedIn) {
       navigate("/register");
       return;
     }
     initiatePayment(plan);
   };
-
-  const proPrice = billing === "monthly" ? 149 : 83; // ₹999/yr = ₹83/mo
-  const campusPrice = billing === "monthly" ? 499 : 499; // per semester no change
 
   return (
     <div className="min-h-screen bg-primary text-textPrimary">
@@ -101,9 +88,10 @@ export default function Pricing() {
           </p>
         </div>
 
-        {/* Billing Toggle */}
         <div className="flex items-center justify-center gap-4 mb-12">
-          <span className={`text-sm font-medium ${billing === "monthly" ? "text-textPrimary" : "text-textSecondary"}`}>Monthly</span>
+          <span className={`text-sm font-medium ${billing === "monthly" ? "text-textPrimary" : "text-textSecondary"}`}>
+            Monthly (₹149/mo)
+          </span>
           <button
             onClick={() => setBilling(b => b === "monthly" ? "yearly" : "monthly")}
             className={`relative w-12 h-6 rounded-full transition-all duration-200 ${billing === "yearly" ? "bg-accent" : "bg-border"}`}
@@ -111,17 +99,17 @@ export default function Pricing() {
             <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${billing === "yearly" ? "left-7" : "left-1"}`} />
           </button>
           <span className={`text-sm font-medium ${billing === "yearly" ? "text-textPrimary" : "text-textSecondary"}`}>
-            Yearly <span className="text-emerald-400 text-xs font-bold ml-1">Save 44%</span>
+            Yearly (₹999/yr) <span className="text-emerald-400 text-xs font-bold ml-1">Save ₹789</span>
           </span>
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start max-w-4xl mx-auto">
 
           {/* Free */}
-          <div className="bg-surface border border-border rounded-2xl p-8 flex flex-col">
+          <div className="bg-surface border border-border rounded-2xl p-8 flex flex-col h-full">
             <div className="mb-6">
-              <p className="text-textSecondary text-sm font-medium uppercase tracking-wider mb-2">Free</p>
+              <p className="text-textSecondary text-sm font-medium uppercase tracking-wider mb-2">Free Plan</p>
               <div className="flex items-end gap-2">
                 <span className="text-4xl font-display font-bold text-textPrimary">₹0</span>
                 <span className="text-textSecondary text-sm mb-1">forever</span>
@@ -147,8 +135,8 @@ export default function Pricing() {
           </div>
 
           {/* Pro — Hero */}
-          <div className="relative bg-accent rounded-2xl p-8 flex flex-col shadow-[0_0_60px_rgba(108,99,255,0.35)] border border-accent/50 -mt-4">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <div className="relative bg-accent rounded-3xl p-8 flex flex-col shadow-[0_0_60px_rgba(108,99,255,0.3)] border border-accent/50 h-full scale-105">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap">
               <span className="px-4 py-1 bg-white text-accent text-xs font-bold rounded-full shadow-lg">
                 ✦ MOST POPULAR
               </span>
@@ -158,15 +146,20 @@ export default function Pricing() {
               <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
                 <Zap size={20} className="text-white" />
               </div>
-              <p className="text-white/70 text-sm font-medium uppercase tracking-wider mb-2">Pro</p>
+              <p className="text-white/70 text-sm font-medium uppercase tracking-wider mb-2">Pro Plan</p>
               <div className="flex items-end gap-2">
-                <span className="text-4xl font-display font-bold text-white">₹{proPrice}</span>
-                <span className="text-white/60 text-sm mb-1">/month</span>
+                <span className="text-4xl font-display font-bold text-white">
+                  ₹{billing === "monthly" ? "149" : "999"}
+                </span>
+                <span className="text-white/60 text-sm mb-1">
+                  /{billing === "monthly" ? "month" : "year"}
+                </span>
               </div>
-              {billing === "yearly" && (
-                <p className="text-white/60 text-xs mt-1">Billed ₹999/year · Save ₹789</p>
+              {billing === "yearly" ? (
+                <p className="text-white/60 text-xs mt-1">Billed once annually · Save ₹789</p>
+              ) : (
+                <p className="text-white/70 text-sm mt-2">For serious job hunters</p>
               )}
-              <p className="text-white/70 text-sm mt-2">For serious job hunters</p>
             </div>
 
             <ul className="space-y-3 mb-8 flex-1">
@@ -199,37 +192,6 @@ export default function Pricing() {
               className="w-full py-3 bg-white text-accent rounded-xl text-sm font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
             >
               Upgrade to Pro <ArrowRight size={15} />
-            </button>
-          </div>
-
-          {/* Campus */}
-          <div className="bg-surface border border-teal-500/30 rounded-2xl p-8 flex flex-col">
-            <div className="mb-6">
-              <div className="w-10 h-10 rounded-xl bg-teal-500/15 flex items-center justify-center mb-3">
-                <GraduationCap size={20} className="text-teal-400" />
-              </div>
-              <p className="text-teal-400 text-sm font-medium uppercase tracking-wider mb-2">Campus</p>
-              <div className="flex items-end gap-2">
-                <span className="text-4xl font-display font-bold text-textPrimary">₹{campusPrice}</span>
-                <span className="text-textSecondary text-sm mb-1">/semester</span>
-              </div>
-              <p className="text-textSecondary text-sm mt-2">For college placement season</p>
-            </div>
-
-            <ul className="space-y-3 mb-8 flex-1">
-              {CAMPUS_FEATURES.map(f => (
-                <li key={f} className="flex items-start gap-2.5 text-sm text-textSecondary">
-                  <Check size={15} className="text-teal-400 shrink-0 mt-0.5" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-
-            <button
-              onClick={() => handleUpgrade("CAMPUS")}
-              className="w-full py-3 bg-teal-500/15 border border-teal-500/40 text-teal-400 hover:bg-teal-500 hover:text-white rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2"
-            >
-              Get Campus Plan <ArrowRight size={15} />
             </button>
           </div>
         </div>
