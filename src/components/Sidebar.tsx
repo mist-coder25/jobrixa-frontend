@@ -29,7 +29,7 @@ export default function Sidebar() {
         .catch(() => {});
 
       api.get('/applications/analytics')
-        .then((r: any) => setAppCount(r.data.totalApplications))
+        .then((r: any) => setAppCount(r.data.totalEverCreated))
         .catch(() => {});
     }
   }, []);
