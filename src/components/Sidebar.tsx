@@ -151,6 +151,18 @@ export default function Sidebar() {
         </nav>
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">
+          {/* Upgrade warning at 25/30 apps */}
+          {!isPro && appCount !== null && appCount >= 25 && (
+            <div className="mx-0 mb-2 p-2 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+              <p className="text-yellow-400 text-[10px] font-medium flex items-center gap-1">
+                ⚠️ {30 - appCount} applications remaining!
+              </p>
+              <p className="text-yellow-400/70 text-[9px] mt-0.5">
+                Upgrade to Pro for unlimited tracking.
+              </p>
+            </div>
+          )}
+
           {/* Upgrade banner — only show if NOT pro */}
           {!isPro && (
             <div className="bg-[#4F8EF7]/10 border border-[#4F8EF7]/20 rounded-lg px-3 py-2">

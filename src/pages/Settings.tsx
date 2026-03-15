@@ -498,34 +498,40 @@ export default function Settings() {
               <div className="px-6 py-4 border-b border-border">
                 <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider">Payment History</h3>
               </div>
-              {!billingStatus?.payments?.length ? (
-                <div className="px-6 py-8 text-center">
-                  <CreditCard size={28} className="text-textSecondary/30 mx-auto mb-2" />
-                  <p className="text-textSecondary text-sm">No payments yet</p>
-                  <Link to="/pricing" className="text-accent text-sm hover:underline mt-1 inline-block">View pricing plans →</Link>
-                </div>
-              ) : (
-                <div className="divide-y divide-border">
-                  {billingStatus.payments
-                    .filter(p => p.status === 'SUCCESS' || p.status === 'success' || p.status === 'COMPLETED')
-                    .map(p => (
-                    <div key={p.id} className="px-6 py-4 flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-textPrimary">{p.plan} Plan</p>
-                        <p className="text-xs text-textSecondary">{new Date(p.createdAt).toLocaleDateString("en-IN")}</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold text-textPrimary">₹{(p.amount / 100).toFixed(0)}</span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                          p.status === "SUCCESS" ? "bg-emerald-500/15 text-emerald-400" :
-                          p.status === "PENDING" ? "bg-yellow-500/15 text-yellow-400" :
-                          "bg-red-500/15 text-red-400"
-                        }`}>{p.status}</span>
-                      </div>
+              {(() => {
+                const successfulPayments = billingStatus?.payments?.filter(p => 
+                  ['SUCCESS', 'success', 'COMPLETED', 'completed'].includes(p.status)
+                ) || [];
+
+                if (successfulPayments.length === 0) {
+                  return (
+                    <div className="px-6 py-8 text-center">
+                      <CreditCard size={28} className="text-textSecondary/30 mx-auto mb-2" />
+                      <p className="text-textSecondary text-sm">No payments yet</p>
+                      <Link to="/pricing" className="text-accent text-sm hover:underline mt-1 inline-block">View pricing plans →</Link>
                     </div>
-                  ))}
-                </div>
-              )}
+                  );
+                }
+
+                return (
+                  <div className="divide-y divide-border">
+                    {successfulPayments.map(p => (
+                      <div key={p.id} className="px-6 py-4 flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-textPrimary">{p.plan} Plan</p>
+                          <p className="text-xs text-textSecondary">{new Date(p.createdAt).toLocaleDateString("en-IN")}</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm font-semibold text-textPrimary">₹{(p.amount / 100).toFixed(0)}</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-500/15 text-emerald-400">
+                            SUCCESS
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
 
             <p className="text-xs text-textSecondary/60 text-center">

@@ -102,18 +102,14 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
     if (!app) return;
     setSavingNotes(true);
     try {
-      await api.patch(`/applications/${app.id}`, { notes });
-      toast.success("Notes saved");
+      await api.put(`/applications/${app.id}`, { 
+        ...app, 
+        notes: notes 
+      });
+      toast.success("Notes saved!");
       onUpdate();
     } catch (err) {
-      // Fallback to PUT if PATCH isn't supported
-      try {
-        await api.put(`/applications/${app.id}`, { ...app, notes });
-        toast.success("Notes saved");
-        onUpdate();
-      } catch (innerErr) {
-        toast.error("Failed to save notes");
-      }
+      toast.error("Failed to save notes.");
     } finally {
       setSavingNotes(false);
     }
