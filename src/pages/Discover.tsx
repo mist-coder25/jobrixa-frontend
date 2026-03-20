@@ -125,7 +125,8 @@ function SkeletonCard() {
 const DEFAULT_QUERY = 'software engineer India';
 
 export default function Discover() {
-  const [query, setQuery] = useState(DEFAULT_QUERY);
+  const [inputValue, setInputValue] = useState(""); // what user sees in box
+  const [searchQuery, setSearchQuery] = useState(DEFAULT_QUERY); // used for API
   const [page, setPage] = useState(1);
 
   const [jobs, setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
@@ -155,10 +156,10 @@ export default function Discover() {
 
     try {
       const currentPage = isLoadMore ? page + 1 : 1;
-      const searchQuery = filters.location ? `${query} in ${filters.location}` : query;
+      const apiQuery = filters.location ? `${searchQuery} in ${filters.location}` : searchQuery;
       
       const response = await fetch(
-        `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery || DEFAULT_QUERY)}&page=${currentPage}&num_pages=3&country=in`,
+        `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(apiQuery)}&page=${currentPage}&num_pages=3&country=in`,
         {
           headers: {
             'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
@@ -203,12 +204,20 @@ export default function Discover() {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [query, filters.location, page]);
+  }, [searchQuery, filters.location, page]);
 
-  // Load defaults on mount
+  const handleSearch = () => {
+    const newQuery = inputValue.trim() || DEFAULT_QUERY;
+    setSearchQuery(newQuery);
+    setPage(1);
+    setJobs([]);
+    // runSearch will trigger due to searchQuery dependency in useEffect
+  };
+
+  // Load / Search on query change
   useEffect(() => {
     runSearch();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchQuery]); // Run when query changes or on mount
 
   const handleAddToTracker = (job: NormalizedJob) => {
     setTrackerJob(job);
@@ -263,20 +272,20 @@ export default function Discover() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-textSecondary group-focus-within:text-accent transition-colors" />
               <input
                 type="text"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && runSearch()}
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleSearch()}
                 placeholder="Job title, skill, or company..."
                 className="w-full pl-12 pr-4 py-3.5 bg-surface border border-border rounded-xl text-textPrimary placeholder:text-textSecondary/50 text-sm focus:outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(108,99,255,0.15)] transition-all"
               />
-              {query && (
-                <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-textSecondary hover:text-textPrimary">
+              {inputValue && (
+                <button onClick={() => setInputValue("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-textSecondary hover:text-textPrimary">
                   <X size={14} />
                 </button>
               )}
             </div>
             <button
-              onClick={() => runSearch()}
+              onClick={handleSearch}
               disabled={loading}
               className="px-6 py-3.5 bg-accent hover:bg-[#5A52E8] text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-[0_0_20px_rgba(108,99,255,0.3)] transition-all disabled:opacity-70 shrink-0"
             >
