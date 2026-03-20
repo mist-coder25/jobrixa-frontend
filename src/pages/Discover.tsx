@@ -122,7 +122,7 @@ function SkeletonCard() {
   );
 }
 
-const DEFAULT_QUERY = 'software engineer India';
+const DEFAULT_QUERY = 'jobs India';
 
 export default function Discover() {
   const [inputValue, setInputValue] = useState(""); // what user sees in box
