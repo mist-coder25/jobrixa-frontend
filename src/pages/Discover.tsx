@@ -122,6 +122,23 @@ function SkeletonCard() {
   );
 }
 
+const JOB_CATEGORIES = [
+  'software engineer',
+  'product manager',
+  'data scientist',
+  'marketing manager',
+  'business analyst',
+  'UI UX designer',
+  'finance analyst',
+  'HR manager',
+  'civil engineer',
+  'mechanical engineer',
+  'sales manager',
+  'content writer',
+  'graphic designer',
+  'operations manager',
+  'digital marketing',
+];
 
 const DEFAULT_QUERY = 'jobs India';
 
@@ -130,17 +147,17 @@ export default function Discover() {
   const [searchQuery, setSearchQuery] = useState(DEFAULT_QUERY); // used for API
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    const key = import.meta.env.VITE_RAPIDAPI_KEY;
-    console.log('RapidAPI Key present:', !!key);
-    console.log('Key preview:', key?.substring(0, 10));
-  }, []);
+  const hasAdzuna = !!(import.meta.env.VITE_ADZUNA_APP_ID && import.meta.env.VITE_ADZUNA_APP_KEY);
 
-  if (!import.meta.env.VITE_RAPIDAPI_KEY) {
+  useEffect(() => {
+    console.log('Adzuna Credentials present:', hasAdzuna);
+  }, [hasAdzuna]);
+
+  if (!hasAdzuna) {
     return (
       <div style={{color: '#F85149', padding: '40px', background: '#161B22', borderRadius: '12px', textAlign: 'center', margin: '20px'}}>
-        <h2 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '8px'}}>Missing VITE_RAPIDAPI_KEY</h2>
-        <p style={{fontSize: '14px', color: '#7D8590'}}>Please add your RapidAPI key to the environment variables.</p>
+        <h2 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '8px'}}>Missing Adzuna Credentials</h2>
+        <p style={{fontSize: '14px', color: '#7D8590'}}>Please add VITE_ADZUNA_APP_ID and VITE_ADZUNA_APP_KEY to your env variables.</p>
       </div>
     );
   }
@@ -156,33 +173,57 @@ export default function Discover() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
-  const fetchJobs = async (q: string, p: number) => {
-    const apiQuery = filters.location ? `${q} in ${filters.location}` : q;
-    const response = await fetch(
-      `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(apiQuery)}&page=${p}&num_pages=1&country=in`,
-      {
-        headers: {
-          'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY!,
-          'x-rapidapi-host': 'jsearch.p.rapidapi.com'
-        }
-      }
-    );
-    const data = await response.json();
-    const rawJobs = data.data || [];
-    return rawJobs.map((j: any) => ({
-      id: j.job_id,
-      company: j.employer_name,
-      logoUrl: j.employer_logo || null,
-      title: j.job_title,
-      location: [j.job_city, j.job_country].filter(Boolean).join(', ') || (j.job_is_remote ? 'Remote' : 'India'),
-      isRemote: j.job_is_remote || false,
-      salaryLabel: j.job_min_salary ? `₹${(j.job_min_salary/100000).toFixed(0)}L - ₹${(j.job_max_salary/100000).toFixed(0)}L` : 'Not disclosed',
-      postedLabel: j.job_posted_at_datetime_utc ? `${Math.floor((Date.now() - new Date(j.job_posted_at_datetime_utc).getTime()) / 86400000)}d ago` : 'Recently',
-      url: j.job_apply_link,
-      source: j.job_publisher || 'JSearch',
-      trustScore: Math.floor(70 + Math.random() * 25),
-      employmentType: j.job_employment_type || 'Full-time'
-    }));
+  const normalizeAdzunaJob = (job: any): NormalizedJob => ({
+    id: job.id,
+    company: job.company?.display_name || 'Unknown Company',
+    logoUrl: null, // Adzuna doesn't easily provide company logos in search results
+    title: job.title.replace(/<\/?[^>]+(>|$)/g, ""), // Strip HTML tags
+    location: job.location?.display_name || 'India',
+    isRemote: job.title.toLowerCase().includes('remote') || job.description.toLowerCase().includes('remote'),
+    salaryLabel: job.salary_min && job.salary_max
+      ? `₹${(job.salary_min / 100000).toFixed(1)}L - ₹${(job.salary_max / 100000).toFixed(1)}L`
+      : 'Not disclosed',
+    postedLabel: job.created ? `${Math.floor((Date.now() - new Date(job.created).getTime()) / 86400000)}d ago` : 'Recently',
+    url: job.redirect_url,
+    source: job.category?.label || 'Adzuna',
+    trustScore: Math.floor(75 + Math.random() * 20),
+    employmentType: job.contract_time === 'full_time' ? 'Full-time' : job.contract_time || 'Full-time'
+  });
+
+  const fetchJobs = async (q: string, p: number = 1) => {
+    const APP_ID = import.meta.env.VITE_ADZUNA_APP_ID;
+    const APP_KEY = import.meta.env.VITE_ADZUNA_APP_KEY;
+    const loc = filters.location ? filters.location : '';
+    
+    try {
+      const response = await fetch(
+        `https://api.adzuna.com/v1/api/jobs/in/search/${p}?app_id=${APP_ID}&app_key=${APP_KEY}&results_per_page=15&what=${encodeURIComponent(q)}${loc ? `&where=${encodeURIComponent(loc)}` : ''}&content-type=application/json`
+      );
+      const data = await response.json();
+      return (data.results || []).map(normalizeAdzunaJob);
+    } catch (err) {
+      console.error('Adzuna fetch failed:', err);
+      return [];
+    }
+  };
+
+  const loadDiverseJobs = async () => {
+    setLoading(true);
+    try {
+      const shuffled = [...JOB_CATEGORIES].sort(() => Math.random() - 0.5).slice(0, 5);
+      console.log("Discover: Fetching diverse jobs from Adzuna...");
+      const results = await Promise.all(shuffled.map(q => fetchJobs(q, 1)));
+      const combined = results.flat();
+      const unique = combined.filter((job, index, self) => 
+        index === self.findIndex(j => j.id === job.id)
+      );
+      setJobs(unique.sort(() => Math.random() - 0.5));
+    } catch (err) {
+      console.error("Diverse load failed:", err);
+      setJobs(MOCK_JOBS);
+    } finally {
+      setLoading(false);
+    }
   };
 
 
@@ -234,47 +275,7 @@ export default function Discover() {
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        console.log("Discover: Starting initial simplified load for India...");
-        const response = await fetch(
-          'https://jsearch.p.rapidapi.com/search?query=software+engineer+India&page=1&num_pages=1&country=in',
-          {
-            headers: {
-              'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY!,
-              'x-rapidapi-host': 'jsearch.p.rapidapi.com'
-            }
-          }
-        );
-        const data = await response.json();
-        console.log('API full response:', data);
-        
-        const rawJobs = data.data || [];
-        const results = rawJobs.map((j: any) => ({
-          id: j.job_id,
-          company: j.employer_name,
-          logoUrl: j.employer_logo || null,
-          title: j.job_title,
-          location: [j.job_city, j.job_country].filter(Boolean).join(', ') || (j.job_is_remote ? 'Remote' : 'India'),
-          isRemote: j.job_is_remote || false,
-          salaryLabel: j.job_min_salary ? `₹${(j.job_min_salary/100000).toFixed(0)}L - ₹${(j.job_max_salary/100000).toFixed(0)}L` : 'Not disclosed',
-          postedLabel: j.job_posted_at_datetime_utc ? `${Math.floor((Date.now() - new Date(j.job_posted_at_datetime_utc).getTime()) / 86400000)}d ago` : 'Recently',
-          url: j.job_apply_link,
-          source: j.job_publisher || 'JSearch',
-          trustScore: Math.floor(70 + Math.random() * 25),
-          employmentType: j.job_employment_type || 'Full-time'
-        }));
-        
-        setJobs(results);
-      } catch (err) {
-        console.error('Fetch failed:', err);
-        setJobs(MOCK_JOBS);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    loadDiverseJobs();
   }, []); // Run once on mount
 
   // Search on query/filter changes (skipping mount)
@@ -292,7 +293,7 @@ export default function Discover() {
     setIsModalOpen(true);
   };
 
-  const hasAPIKey = !!import.meta.env.VITE_RAPIDAPI_KEY;
+  const hasAPIKey = hasAdzuna;
 
   // When using mock data (no API key), always show ALL jobs — only filter by roleType chip.
   // When using real API data, filter normally.
@@ -325,9 +326,9 @@ export default function Discover() {
             <div>
               <p className="text-yellow-300 font-medium">Showing demo data</p>
               <p className="text-yellow-400/70 text-xs mt-0.5">
-                Add your free <strong>VITE_RAPIDAPI_KEY</strong> from{" "}
-                <a href="https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch" target="_blank" rel="noopener noreferrer" className="underline">rapidapi.com/jsearch</a>{" "}
-                to <code className="bg-yellow-500/10 px-1 rounded">.env.local</code> to search real jobs.
+                Add your free <strong>Adzuna App ID & Key</strong> from{" "}
+                <a href="https://developer.adzuna.com/" target="_blank" rel="noopener noreferrer" className="underline">developer.adzuna.com</a>{" "}
+                to your environment variables to search real jobs.
               </p>
             </div>
           </div>
