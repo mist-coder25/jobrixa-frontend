@@ -130,6 +130,21 @@ export default function Discover() {
   const [searchQuery, setSearchQuery] = useState(DEFAULT_QUERY); // used for API
   const [page, setPage] = useState(1);
 
+  useEffect(() => {
+    const key = import.meta.env.VITE_RAPIDAPI_KEY;
+    console.log('RapidAPI Key present:', !!key);
+    console.log('Key preview:', key?.substring(0, 10));
+  }, []);
+
+  if (!import.meta.env.VITE_RAPIDAPI_KEY) {
+    return (
+      <div style={{color: '#F85149', padding: '40px', background: '#161B22', borderRadius: '12px', textAlign: 'center', margin: '20px'}}>
+        <h2 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '8px'}}>Missing VITE_RAPIDAPI_KEY</h2>
+        <p style={{fontSize: '14px', color: '#7D8590'}}>Please add your RapidAPI key to the environment variables.</p>
+      </div>
+    );
+  }
+
   const [jobs, setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
