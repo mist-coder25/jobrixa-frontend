@@ -1,6 +1,6 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import CompanyLogo from "../components/CompanyLogo";
-import { Search, MapPin, Briefcase, Clock, ExternalLink, Plus, SlidersHorizontal, Wifi, X } from "lucide-react";
+import { Search, Briefcase, Clock, ExternalLink, Plus, SlidersHorizontal, Wifi, X } from "lucide-react";
 import TopBar from "../components/TopBar";
 import AddApplicationModal from "../components/AddApplicationModal";
 import FilterPanel, { DEFAULT_FILTERS } from "../components/FilterPanel";
@@ -52,7 +52,7 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
       {/* Meta Pills */}
       <div className="flex flex-wrap gap-1.5">
         <span className="flex items-center gap-1 px-2.5 py-1 bg-primary border border-border rounded-full text-xs text-textSecondary">
-          <MapPin size={10} /> {job.location}
+          {job.location}
         </span>
         {job.isRemote && (
           <span className="flex items-center gap-1 px-2.5 py-1 bg-accent/10 border border-accent/20 rounded-full text-xs text-accent font-medium">
@@ -194,6 +194,7 @@ export default function Discover() {
       return;
     }
 
+    console.log("Discover: Fetching diverse jobs...");
     setLoading(true);
     try {
       const shuffled = [...JOB_CATEGORIES].sort(() => Math.random() - 0.5).slice(0, 5);
@@ -202,6 +203,7 @@ export default function Discover() {
       const unique = combined.filter((job, index, self) => 
         index === self.findIndex(j => j.id === job.id)
       );
+      console.log(`Discover: Diverse load complete. Found ${unique.length} unique jobs.`);
       setJobs(unique.sort(() => Math.random() - 0.5));
     } catch (err) {
       console.error("Diverse load failed:", err);
@@ -254,19 +256,25 @@ export default function Discover() {
     const newQuery = q || inputValue.trim() || DEFAULT_QUERY;
     setSearchQuery(newQuery);
     setPage(1);
-    setIsInitialLoad(false);
   };
 
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const isFirstRender = useRef(true);
 
-  // Load / Search on query change
+  // Load diverse jobs on mount
   useEffect(() => {
-    if (isInitialLoad && searchQuery === DEFAULT_QUERY) {
-      loadDiverseJobs();
-    } else {
-      runSearch();
+    console.log("Discover Component Mounted - starting diverse parallel load");
+    loadDiverseJobs();
+  }, []); 
+
+  // Search on query/filter changes (skipping mount)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [searchQuery, isInitialLoad]); 
+    console.log("Search triggered by query/filter update:", searchQuery);
+    runSearch();
+  }, [searchQuery, page, filters.location]); 
 
   const handleAddToTracker = (job: NormalizedJob) => {
     setTrackerJob(job);
