@@ -52,7 +52,7 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
       {/* Meta Pills */}
       <div className="flex flex-wrap gap-1.5">
         <span className="flex items-center gap-1 px-2.5 py-1 bg-primary border border-border rounded-full text-xs text-textSecondary">
-          <MapPin size={12} /> {job.location}
+          <MapPin size={10} /> {job.location}
         </span>
         {job.isRemote && (
           <span className="flex items-center gap-1 px-2.5 py-1 bg-accent/10 border border-accent/20 rounded-full text-xs text-accent font-medium">
@@ -122,7 +122,6 @@ function SkeletonCard() {
   );
 }
 
-const DEFAULT_QUERY = 'jobs India';
 const JOB_CATEGORIES = [
   'software engineer India',
   'product manager India',
@@ -141,20 +140,12 @@ const JOB_CATEGORIES = [
   'digital marketing India',
 ];
 
-const QUICK_FILTERS = [
-  { label: 'Software', query: 'software engineer India' },
-  { label: 'Marketing', query: 'marketing manager India' },
-  { label: 'Finance', query: 'finance analyst India' },
-  { label: 'Design', query: 'UI UX designer India' },
-  { label: 'Management', query: 'product manager India' },
-  { label: 'Operations', query: 'operations manager India' },
-];
+const DEFAULT_QUERY = 'jobs India';
 
 export default function Discover() {
   const [inputValue, setInputValue] = useState(""); // what user sees in box
-  const [searchQuery, setSearchQuery] = useState(""); // empty by default to trigger diverse load
+  const [searchQuery, setSearchQuery] = useState(DEFAULT_QUERY); // used for API
   const [page, setPage] = useState(1);
-  const [isDiverseLoad, setIsDiverseLoad] = useState(true);
 
   const [jobs, setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
   const [loading, setLoading] = useState(false);
@@ -167,13 +158,13 @@ export default function Discover() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
-  const fetchJobs = async (query: string, pageNum: number): Promise<NormalizedJob[]> => {
-    const apiQuery = filters.location ? `${query} in ${filters.location}` : query;
+  const fetchJobs = async (q: string, p: number) => {
+    const apiQuery = filters.location ? `${q} in ${filters.location}` : q;
     const response = await fetch(
-      `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(apiQuery)}&page=${pageNum}&num_pages=1&country=in`,
+      `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(apiQuery)}&page=${p}&num_pages=1&country=in`,
       {
         headers: {
-          'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
+          'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY!,
           'x-rapidapi-host': 'jsearch.p.rapidapi.com'
         }
       }
@@ -196,14 +187,35 @@ export default function Discover() {
     }));
   };
 
+  const loadDiverseJobs = async () => {
+    if (!import.meta.env.VITE_RAPIDAPI_KEY) {
+      setLoading(true);
+      setTimeout(() => { setJobs(MOCK_JOBS); setLoading(false); }, 800);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const shuffled = [...JOB_CATEGORIES].sort(() => Math.random() - 0.5).slice(0, 5);
+      const results = await Promise.all(shuffled.map(q => fetchJobs(q, 1)));
+      const combined = results.flat();
+      const unique = combined.filter((job, index, self) => 
+        index === self.findIndex(j => j.id === job.id)
+      );
+      setJobs(unique.sort(() => Math.random() - 0.5));
+    } catch (err) {
+      console.error("Diverse load failed:", err);
+      setJobs(MOCK_JOBS);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const runSearch = useCallback(async (isLoadMore = false) => {
     if (!import.meta.env.VITE_RAPIDAPI_KEY) {
       if (isLoadMore) return;
       setLoading(true);
-      setTimeout(() => {
-        setJobs(MOCK_JOBS);
-        setLoading(false);
-      }, 800);
+      setTimeout(() => { setJobs(MOCK_JOBS); setLoading(false); }, 800);
       return;
     }
 
@@ -211,35 +223,20 @@ export default function Discover() {
     else setLoading(true);
 
     try {
-      if (!isLoadMore && !searchQuery) {
-        // Diverse Load Mode
-        setIsDiverseLoad(true);
-        const shuffled = [...JOB_CATEGORIES].sort(() => Math.random() - 0.5).slice(0, 5);
-        const resultsArray = await Promise.all(shuffled.map(q => fetchJobs(q, 1)));
-        const combined = resultsArray.flat();
-        const unique = combined.filter((job, index, self) => 
-          index === self.findIndex(j => j.id === job.id)
-        );
-        setJobs(unique.sort(() => Math.random() - 0.5));
-        setPage(1);
+      const currentPage = isLoadMore ? page + 1 : 1;
+      const results = await fetchJobs(searchQuery, currentPage);
+      
+      if (isLoadMore) {
+        setJobs(prev => {
+          const combined = [...prev, ...results];
+          return combined.filter((job, index, self) => 
+            index === self.findIndex(j => j.id === job.id)
+          );
+        });
+        setPage(currentPage);
       } else {
-        // Standard Search Mode
-        setIsDiverseLoad(false);
-        const currentPage = isLoadMore ? page + 1 : 1;
-        const results = await fetchJobs(searchQuery || DEFAULT_QUERY, currentPage);
-
-        if (isLoadMore) {
-          setJobs(prev => {
-            const combined = [...prev, ...results];
-            return combined.filter((job, index, self) => 
-              index === self.findIndex(j => j.id === job.id)
-            );
-          });
-          setPage(currentPage);
-        } else {
-          setJobs(results);
-          setPage(1);
-        }
+        setJobs(results);
+        setPage(1);
       }
     } catch (err) {
       console.error("Search failed:", err);
@@ -253,16 +250,23 @@ export default function Discover() {
     }
   }, [searchQuery, filters.location, page]);
 
-  const handleSearch = (customQuery?: string) => {
-    const q = (customQuery || inputValue).trim();
-    setSearchQuery(q);
+  const handleSearch = (q?: string) => {
+    const newQuery = q || inputValue.trim() || DEFAULT_QUERY;
+    setSearchQuery(newQuery);
     setPage(1);
-    setJobs([]);
+    setIsInitialLoad(false);
   };
 
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  // Load / Search on query change
   useEffect(() => {
-    runSearch();
-  }, [searchQuery]);
+    if (isInitialLoad && searchQuery === DEFAULT_QUERY) {
+      loadDiverseJobs();
+    } else {
+      runSearch();
+    }
+  }, [searchQuery, isInitialLoad]); 
 
   const handleAddToTracker = (job: NormalizedJob) => {
     setTrackerJob(job);
@@ -339,26 +343,6 @@ export default function Discover() {
             </button>
           </div>
 
-          {/* Quick Categories */}
-          <div className="flex flex-wrap gap-2 pt-1 border-b border-border/10 pb-4">
-            {QUICK_FILTERS.map(f => (
-              <button
-                key={f.label}
-                onClick={() => {
-                   setInputValue(f.label);
-                   handleSearch(f.query);
-                }}
-                className={`px-4 py-1.5 rounded-full border text-[11px] font-bold transition-all ${
-                  inputValue === f.label 
-                  ? 'bg-accent/10 border-accent text-accent' 
-                  : 'bg-surface border-border text-textSecondary hover:border-accent/40 hover:text-textPrimary leading-none'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-
           {/* Filter Row */}
           <div className="flex flex-wrap items-center gap-2">
             <SlidersHorizontal size={14} className="text-textSecondary shrink-0" />
@@ -368,9 +352,9 @@ export default function Discover() {
                 type="text"
                 value={filters.location}
                 onChange={e => setFilters({ ...filters, location: e.target.value })}
-                onKeyDown={e => e.key === "Enter" && runSearch()}
+                onKeyDown={e => e.key === "Enter" && handleSearch()}
                 placeholder="Location"
-                className="px-3 py-2 bg-surface border border-border rounded-lg text-xs text-textPrimary placeholder:text-textSecondary/60 focus:outline-none focus:border-accent transition-colors w-36"
+                className="pl-3 pr-3 py-2 bg-surface border border-border rounded-lg text-xs text-textPrimary placeholder:text-textSecondary/60 focus:outline-none focus:border-accent transition-colors w-36"
               />
             </div>
 
@@ -393,6 +377,31 @@ export default function Discover() {
             <span className="ml-auto text-xs text-textSecondary/60 shrink-0">
               {loading ? "Searching..." : `Showing ${displayedJobs.length} jobs`}
             </span>
+          </div>
+
+          {/* Category Chips */}
+          <div className="flex flex-wrap gap-2 pt-2">
+            {[
+              { id: 'software engineer India', label: '💻 Software' },
+              { id: 'marketing manager India', label: '📊 Marketing' },
+              { id: 'finance analyst India', label: '💰 Finance' },
+              { id: 'UI UX designer India', label: '🎨 Design' },
+              { id: 'mechanical engineer India', label: '⚙️ Engineering' },
+              { id: 'product manager India', label: '🚀 Product' },
+              { id: 'data scientist India', label: '📉 Data' }
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => handleSearch(cat.id)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                  searchQuery === cat.id 
+                    ? 'bg-[#4F8EF7]/10 border-[#4F8EF7] text-[#4F8EF7]' 
+                    : 'bg-[#161B22] border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#4F8EF7]/50'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -421,7 +430,7 @@ export default function Discover() {
             </div>
 
             {/* Load More Button */}
-            {hasAPIKey && displayedJobs.length > 0 && !isDiverseLoad && (
+            {hasAPIKey && displayedJobs.length > 0 && (
               <div className="flex justify-center pt-8">
                 <button
                   onClick={() => runSearch(true)}
