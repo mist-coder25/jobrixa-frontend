@@ -123,11 +123,38 @@ function SkeletonCard() {
 }
 
 const DEFAULT_QUERY = 'jobs India';
+const JOB_CATEGORIES = [
+  'software engineer India',
+  'product manager India',
+  'data scientist India',
+  'marketing manager India',
+  'business analyst India',
+  'UI UX designer India',
+  'finance analyst India',
+  'HR manager India',
+  'civil engineer India',
+  'mechanical engineer India',
+  'sales manager India',
+  'content writer India',
+  'graphic designer India',
+  'operations manager India',
+  'digital marketing India',
+];
+
+const QUICK_FILTERS = [
+  { label: 'Software', query: 'software engineer India' },
+  { label: 'Marketing', query: 'marketing manager India' },
+  { label: 'Finance', query: 'finance analyst India' },
+  { label: 'Design', query: 'UI UX designer India' },
+  { label: 'Management', query: 'product manager India' },
+  { label: 'Operations', query: 'operations manager India' },
+];
 
 export default function Discover() {
   const [inputValue, setInputValue] = useState(""); // what user sees in box
-  const [searchQuery, setSearchQuery] = useState(DEFAULT_QUERY); // used for API
+  const [searchQuery, setSearchQuery] = useState(""); // empty by default to trigger diverse load
   const [page, setPage] = useState(1);
+  const [isDiverseLoad, setIsDiverseLoad] = useState(true);
 
   const [jobs, setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
   const [loading, setLoading] = useState(false);
@@ -140,9 +167,38 @@ export default function Discover() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
+  const fetchJobs = async (query: string, pageNum: number): Promise<NormalizedJob[]> => {
+    const apiQuery = filters.location ? `${query} in ${filters.location}` : query;
+    const response = await fetch(
+      `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(apiQuery)}&page=${pageNum}&num_pages=1&country=in`,
+      {
+        headers: {
+          'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
+          'x-rapidapi-host': 'jsearch.p.rapidapi.com'
+        }
+      }
+    );
+    const data = await response.json();
+    const rawJobs = data.data || [];
+    return rawJobs.map((j: any) => ({
+      id: j.job_id,
+      company: j.employer_name,
+      logoUrl: j.employer_logo || null,
+      title: j.job_title,
+      location: [j.job_city, j.job_country].filter(Boolean).join(', ') || (j.job_is_remote ? 'Remote' : 'India'),
+      isRemote: j.job_is_remote || false,
+      salaryLabel: j.job_min_salary ? `₹${(j.job_min_salary/100000).toFixed(0)}L - ₹${(j.job_max_salary/100000).toFixed(0)}L` : 'Not disclosed',
+      postedLabel: j.job_posted_at_datetime_utc ? `${Math.floor((Date.now() - new Date(j.job_posted_at_datetime_utc).getTime()) / 86400000)}d ago` : 'Recently',
+      url: j.job_apply_link,
+      source: j.job_publisher || 'JSearch',
+      trustScore: Math.floor(70 + Math.random() * 25),
+      employmentType: j.job_employment_type || 'Full-time'
+    }));
+  };
+
   const runSearch = useCallback(async (isLoadMore = false) => {
     if (!import.meta.env.VITE_RAPIDAPI_KEY) {
-      if (isLoadMore) return; // Mock data doesn't paginate
+      if (isLoadMore) return;
       setLoading(true);
       setTimeout(() => {
         setJobs(MOCK_JOBS);
@@ -155,44 +211,35 @@ export default function Discover() {
     else setLoading(true);
 
     try {
-      const currentPage = isLoadMore ? page + 1 : 1;
-      const apiQuery = filters.location ? `${searchQuery} in ${filters.location}` : searchQuery;
-      
-      const response = await fetch(
-        `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(apiQuery)}&page=${currentPage}&num_pages=3&country=in`,
-        {
-          headers: {
-            'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
-            'x-rapidapi-host': 'jsearch.p.rapidapi.com'
-          }
-        }
-      );
-      
-      const data = await response.json();
-      const rawJobs = data.data || [];
-      
-      // Map to existing NormalizedJob UI
-      const results: NormalizedJob[] = rawJobs.map((j: any) => ({
-        id: j.job_id,
-        company: j.employer_name,
-        logoUrl: j.employer_logo || null,
-        title: j.job_title,
-        location: [j.job_city, j.job_country].filter(Boolean).join(', ') || (j.job_is_remote ? 'Remote' : 'India'),
-        isRemote: j.job_is_remote || false,
-        salaryLabel: j.job_min_salary ? `₹${(j.job_min_salary/100000).toFixed(0)}L - ₹${(j.job_max_salary/100000).toFixed(0)}L` : 'Not disclosed',
-        postedLabel: j.job_posted_at_datetime_utc ? `${Math.floor((Date.now() - new Date(j.job_posted_at_datetime_utc).getTime()) / 86400000)}d ago` : 'Recently',
-        url: j.job_apply_link,
-        source: j.job_publisher || 'JSearch',
-        trustScore: Math.floor(70 + Math.random() * 25), // heuristic score
-        employmentType: j.job_employment_type || 'Full-time'
-      }));
-
-      if (isLoadMore) {
-        setJobs(prev => [...prev, ...results]);
-        setPage(currentPage);
-      } else {
-        setJobs(results);
+      if (!isLoadMore && !searchQuery) {
+        // Diverse Load Mode
+        setIsDiverseLoad(true);
+        const shuffled = [...JOB_CATEGORIES].sort(() => Math.random() - 0.5).slice(0, 5);
+        const resultsArray = await Promise.all(shuffled.map(q => fetchJobs(q, 1)));
+        const combined = resultsArray.flat();
+        const unique = combined.filter((job, index, self) => 
+          index === self.findIndex(j => j.id === job.id)
+        );
+        setJobs(unique.sort(() => Math.random() - 0.5));
         setPage(1);
+      } else {
+        // Standard Search Mode
+        setIsDiverseLoad(false);
+        const currentPage = isLoadMore ? page + 1 : 1;
+        const results = await fetchJobs(searchQuery || DEFAULT_QUERY, currentPage);
+
+        if (isLoadMore) {
+          setJobs(prev => {
+            const combined = [...prev, ...results];
+            return combined.filter((job, index, self) => 
+              index === self.findIndex(j => j.id === job.id)
+            );
+          });
+          setPage(currentPage);
+        } else {
+          setJobs(results);
+          setPage(1);
+        }
       }
     } catch (err) {
       console.error("Search failed:", err);
@@ -206,18 +253,16 @@ export default function Discover() {
     }
   }, [searchQuery, filters.location, page]);
 
-  const handleSearch = () => {
-    const newQuery = inputValue.trim() || DEFAULT_QUERY;
-    setSearchQuery(newQuery);
+  const handleSearch = (customQuery?: string) => {
+    const q = (customQuery || inputValue).trim();
+    setSearchQuery(q);
     setPage(1);
     setJobs([]);
-    // runSearch will trigger due to searchQuery dependency in useEffect
   };
 
-  // Load / Search on query change
   useEffect(() => {
     runSearch();
-  }, [searchQuery]); // Run when query changes or on mount
+  }, [searchQuery]);
 
   const handleAddToTracker = (job: NormalizedJob) => {
     setTrackerJob(job);
@@ -285,13 +330,33 @@ export default function Discover() {
               )}
             </div>
             <button
-              onClick={handleSearch}
+              onClick={() => handleSearch()}
               disabled={loading}
               className="px-6 py-3.5 bg-accent hover:bg-[#5A52E8] text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-[0_0_20px_rgba(108,99,255,0.3)] transition-all disabled:opacity-70 shrink-0"
             >
               <Search size={16} />
               <span className="hidden sm:inline">Search</span>
             </button>
+          </div>
+
+          {/* Quick Categories */}
+          <div className="flex flex-wrap gap-2 pt-1 border-b border-border/10 pb-4">
+            {QUICK_FILTERS.map(f => (
+              <button
+                key={f.label}
+                onClick={() => {
+                   setInputValue(f.label);
+                   handleSearch(f.query);
+                }}
+                className={`px-4 py-1.5 rounded-full border text-[11px] font-bold transition-all ${
+                  inputValue === f.label 
+                  ? 'bg-accent/10 border-accent text-accent' 
+                  : 'bg-surface border-border text-textSecondary hover:border-accent/40 hover:text-textPrimary leading-none'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
 
           {/* Filter Row */}
@@ -357,7 +422,7 @@ export default function Discover() {
             </div>
 
             {/* Load More Button */}
-            {hasAPIKey && displayedJobs.length > 0 && (
+            {hasAPIKey && displayedJobs.length > 0 && !isDiverseLoad && (
               <div className="flex justify-center pt-8">
                 <button
                   onClick={() => runSearch(true)}
