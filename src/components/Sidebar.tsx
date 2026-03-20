@@ -18,7 +18,7 @@ export default function Sidebar() {
   ];
 
   const [missedCount, setMissedCount] = useState(0);
-  const [appCount, setAppCount] = useState<number | null>(null);
+  const [totalAppsCreated, setTotalAppsCreated] = useState<number | null>(null);
   const [plan, setPlan] = useState<string>(localStorage.getItem("jobrixa_plan") || "FREE");
 
   const handleLogout = () => {
@@ -37,10 +37,10 @@ export default function Sidebar() {
         .then((r: any) => setMissedCount(r.data.missedCount))
         .catch(() => {});
 
-      api.get('/applications/analytics')
+        api.get('/applications/analytics')
         .then((r: any) => {
           const count = r.data.totalEverCreated ?? r.data.totalApplications ?? 0;
-          setAppCount(count);
+          setTotalAppsCreated(count);
         })
         .catch(() => {});
 
@@ -151,30 +151,25 @@ export default function Sidebar() {
         </nav>
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">
-          {/* Upgrade warnings based on appCount */}
-          {!isPro && appCount !== null && (
-            <>
-              {appCount >= 25 && appCount < 30 && (
-                <div className="mx-3 mb-2 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                  <p className="text-yellow-400 text-xs font-medium">
-                    ⚠️ {30 - appCount} applications left!
-                  </p>
-                  <p className="text-yellow-400/70 text-[10px] mt-0.5">
-                    Upgrade to Pro for unlimited apps
-                  </p>
-                </div>
-              )}
-              {appCount >= 30 && (
-                <div className="mx-3 mb-2 px-3 py-2 bg-red-500/10 border border-red-500/30 rounded-lg">
-                  <p className="text-red-400 text-xs font-medium">
-                    🚫 Application limit reached!
-                  </p>
-                  <p className="text-red-400/70 text-[10px] mt-0.5">
-                    Upgrade to Pro to continue
-                  </p>
-                </div>
-              )}
-            </>
+          {/* Upgrade warning at 25/30 apps */}
+          {!isPro && totalAppsCreated !== null && totalAppsCreated >= 25 && (
+            <div style={{
+              background: '#422006',
+              border: '1px solid #D29922',
+              borderRadius: '6px',
+              padding: '8px 10px',
+              marginTop: '8px',
+              fontSize: '11px',
+              color: '#D29922'
+            }}>
+              ⚠️ {30 - totalAppsCreated} applications left. 
+              <span 
+                onClick={() => navigate('/pricing')}
+                style={{cursor:'pointer', textDecoration:'underline', marginLeft:'4px'}}
+              >
+                Upgrade now
+              </span>
+            </div>
           )}
 
           {/* Upgrade banner — only show if NOT pro */}
@@ -192,11 +187,11 @@ export default function Sidebar() {
               <div className="mt-1.5 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-[#4F8EF7] rounded-full transition-all duration-1000" 
-                  style={{ width: `${Math.min(((appCount || 0) / 30) * 100, 100)}%` }}
+                  style={{ width: `${Math.min(((totalAppsCreated || 0) / 30) * 100, 100)}%` }}
                 />
               </div>
               <span className="text-[10px] text-[#7D8590] mt-1.5 block">
-                {appCount ?? 0}/30 applications used
+                {totalAppsCreated ?? 0}/30 applications used
               </span>
             </div>
           )}
