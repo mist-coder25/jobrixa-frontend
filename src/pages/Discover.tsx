@@ -52,7 +52,7 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
       {/* Meta Pills */}
       <div className="flex flex-wrap gap-1.5">
         <span className="flex items-center gap-1 px-2.5 py-1 bg-primary border border-border rounded-full text-xs text-textSecondary">
-          <MapPin size={10} /> {job.location}
+          <MapPin size={12} /> {job.location}
         </span>
         {job.isRemote && (
           <span className="flex items-center gap-1 px-2.5 py-1 bg-accent/10 border border-accent/20 rounded-full text-xs text-accent font-medium">
@@ -364,14 +364,14 @@ export default function Discover() {
             <SlidersHorizontal size={14} className="text-textSecondary shrink-0" />
             
             <div className="relative">
-              <MapPin size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-textSecondary pointer-events-none" />
+              <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-textSecondary pointer-events-none" />
               <input
                 type="text"
                 value={filters.location}
                 onChange={e => setFilters({ ...filters, location: e.target.value })}
                 onKeyDown={e => e.key === "Enter" && runSearch()}
                 placeholder="Location"
-                className="pl-8 pr-3 py-2 bg-surface border border-border rounded-lg text-xs text-textPrimary placeholder:text-textSecondary/60 focus:outline-none focus:border-accent transition-colors w-36"
+                className="pl-9 pr-3 py-2 bg-surface border border-border rounded-lg text-xs text-textPrimary placeholder:text-textSecondary/60 focus:outline-none focus:border-accent transition-colors w-36"
               />
             </div>
 
