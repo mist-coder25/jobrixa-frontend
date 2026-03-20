@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState, useRef } from "react";
 import CompanyLogo from "../components/CompanyLogo";
-import { Search, Briefcase, Clock, ExternalLink, Plus, SlidersHorizontal, Wifi, X } from "lucide-react";
+import { Search, Briefcase, Clock, ExternalLink, Plus, Wifi, X } from "lucide-react";
 import TopBar from "../components/TopBar";
 import AddApplicationModal from "../components/AddApplicationModal";
 import FilterPanel, { DEFAULT_FILTERS } from "../components/FilterPanel";
@@ -122,23 +122,6 @@ function SkeletonCard() {
   );
 }
 
-const JOB_CATEGORIES = [
-  'software engineer India',
-  'product manager India',
-  'data scientist India',
-  'marketing manager India',
-  'business analyst India',
-  'UI UX designer India',
-  'finance analyst India',
-  'HR manager India',
-  'civil engineer India',
-  'mechanical engineer India',
-  'sales manager India',
-  'content writer India',
-  'graphic designer India',
-  'operations manager India',
-  'digital marketing India',
-];
 
 const DEFAULT_QUERY = 'jobs India';
 
@@ -187,31 +170,6 @@ export default function Discover() {
     }));
   };
 
-  const loadDiverseJobs = async () => {
-    if (!import.meta.env.VITE_RAPIDAPI_KEY) {
-      setLoading(true);
-      setTimeout(() => { setJobs(MOCK_JOBS); setLoading(false); }, 800);
-      return;
-    }
-
-    console.log("Discover: Fetching diverse jobs...");
-    setLoading(true);
-    try {
-      const shuffled = [...JOB_CATEGORIES].sort(() => Math.random() - 0.5).slice(0, 5);
-      const results = await Promise.all(shuffled.map(q => fetchJobs(q, 1)));
-      const combined = results.flat();
-      const unique = combined.filter((job, index, self) => 
-        index === self.findIndex(j => j.id === job.id)
-      );
-      console.log(`Discover: Diverse load complete. Found ${unique.length} unique jobs.`);
-      setJobs(unique.sort(() => Math.random() - 0.5));
-    } catch (err) {
-      console.error("Diverse load failed:", err);
-      setJobs(MOCK_JOBS);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const runSearch = useCallback(async (isLoadMore = false) => {
     if (!import.meta.env.VITE_RAPIDAPI_KEY) {
@@ -260,11 +218,49 @@ export default function Discover() {
 
   const isFirstRender = useRef(true);
 
-  // Load diverse jobs on mount
   useEffect(() => {
-    console.log("Discover Component Mounted - starting diverse parallel load");
-    loadDiverseJobs();
-  }, []); 
+    const load = async () => {
+      setLoading(true);
+      try {
+        console.log("Discover: Starting initial simplified load for India...");
+        const response = await fetch(
+          'https://jsearch.p.rapidapi.com/search?query=software+engineer+India&page=1&num_pages=1&country=in',
+          {
+            headers: {
+              'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY!,
+              'x-rapidapi-host': 'jsearch.p.rapidapi.com'
+            }
+          }
+        );
+        const data = await response.json();
+        console.log('API full response:', data);
+        
+        const rawJobs = data.data || [];
+        const results = rawJobs.map((j: any) => ({
+          id: j.job_id,
+          company: j.employer_name,
+          logoUrl: j.employer_logo || null,
+          title: j.job_title,
+          location: [j.job_city, j.job_country].filter(Boolean).join(', ') || (j.job_is_remote ? 'Remote' : 'India'),
+          isRemote: j.job_is_remote || false,
+          salaryLabel: j.job_min_salary ? `₹${(j.job_min_salary/100000).toFixed(0)}L - ₹${(j.job_max_salary/100000).toFixed(0)}L` : 'Not disclosed',
+          postedLabel: j.job_posted_at_datetime_utc ? `${Math.floor((Date.now() - new Date(j.job_posted_at_datetime_utc).getTime()) / 86400000)}d ago` : 'Recently',
+          url: j.job_apply_link,
+          source: j.job_publisher || 'JSearch',
+          trustScore: Math.floor(70 + Math.random() * 25),
+          employmentType: j.job_employment_type || 'Full-time'
+        }));
+        
+        setJobs(results);
+      } catch (err) {
+        console.error('Fetch failed:', err);
+        setJobs(MOCK_JOBS);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []); // Run once on mount
 
   // Search on query/filter changes (skipping mount)
   useEffect(() => {
@@ -272,7 +268,7 @@ export default function Discover() {
       isFirstRender.current = false;
       return;
     }
-    console.log("Search triggered by query/filter update:", searchQuery);
+    console.log("Deep search triggered:", searchQuery, filters.location);
     runSearch();
   }, [searchQuery, page, filters.location]); 
 
@@ -353,7 +349,6 @@ export default function Discover() {
 
           {/* Filter Row */}
           <div className="flex flex-wrap items-center gap-2">
-            <SlidersHorizontal size={14} className="text-textSecondary shrink-0" />
             
             <div className="relative">
               <input
@@ -370,7 +365,7 @@ export default function Discover() {
                onClick={() => setFilterOpen(true)}
                className="flex items-center gap-1.5 px-3 py-2 bg-[#161B22] border border-[#30363D] rounded-lg text-xs font-semibold text-[#7D8590] hover:text-[#E6EDF3] hover:border-[#4F8EF7]/50 transition-all"
             >
-              <SlidersHorizontal size={12} /> More Filters
+               More Filters
             </button>
 
             {(filters.roleType || filters.experience || filters.dateRange !== 'all' || filters.location) && (
