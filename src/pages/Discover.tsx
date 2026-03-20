@@ -6,7 +6,7 @@ import AddApplicationModal from "../components/AddApplicationModal";
 import FilterPanel, { DEFAULT_FILTERS } from "../components/FilterPanel";
 import type { FilterState } from "../components/FilterPanel";
 import { toast } from "../components/Toast";
-import { searchJobs, MOCK_JOBS } from "../api/jobSearch";
+import { MOCK_JOBS } from "../api/jobSearch";
 import type { NormalizedJob } from "../api/jobSearch";
 
 const SOURCE_COLORS: Record<string, string> = {
@@ -122,11 +122,15 @@ function SkeletonCard() {
   );
 }
 
+const DEFAULT_QUERY = 'software engineer India';
+
 export default function Discover() {
-  const [query, setQuery] = useState("Software Engineer");
+  const [query, setQuery] = useState(DEFAULT_QUERY);
+  const [page, setPage] = useState(1);
 
   const [jobs, setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const [trackerJob, setTrackerJob] = useState<NormalizedJob | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -135,8 +139,9 @@ export default function Discover() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
-  const runSearch = useCallback(async () => {
+  const runSearch = useCallback(async (isLoadMore = false) => {
     if (!import.meta.env.VITE_RAPIDAPI_KEY) {
+      if (isLoadMore) return; // Mock data doesn't paginate
       setLoading(true);
       setTimeout(() => {
         setJobs(MOCK_JOBS);
@@ -145,11 +150,15 @@ export default function Discover() {
       return;
     }
 
-    setLoading(true);
+    if (isLoadMore) setLoadingMore(true);
+    else setLoading(true);
+
     try {
+      const currentPage = isLoadMore ? page + 1 : 1;
       const searchQuery = filters.location ? `${query} in ${filters.location}` : query;
+      
       const response = await fetch(
-        `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery || 'software engineer india')}&page=1&num_pages=1&country=in`,
+        `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery || DEFAULT_QUERY)}&page=${currentPage}&num_pages=3&country=in`,
         {
           headers: {
             'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
@@ -177,15 +186,24 @@ export default function Discover() {
         employmentType: j.job_employment_type || 'Full-time'
       }));
 
-      setJobs(results);
+      if (isLoadMore) {
+        setJobs(prev => [...prev, ...results]);
+        setPage(currentPage);
+      } else {
+        setJobs(results);
+        setPage(1);
+      }
     } catch (err) {
       console.error("Search failed:", err);
-      toast.error("Search failed. Showing demo data.");
-      setJobs(MOCK_JOBS);
+      if (!isLoadMore) {
+        toast.error("Search failed. Showing demo data.");
+        setJobs(MOCK_JOBS);
+      }
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
-  }, [query, filters.location]);
+  }, [query, filters.location, page]);
 
   // Load defaults on mount
   useEffect(() => {
@@ -258,7 +276,7 @@ export default function Discover() {
               )}
             </div>
             <button
-              onClick={runSearch}
+              onClick={() => runSearch()}
               disabled={loading}
               className="px-6 py-3.5 bg-accent hover:bg-[#5A52E8] text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-[0_0_20px_rgba(108,99,255,0.3)] transition-all disabled:opacity-70 shrink-0"
             >
@@ -300,7 +318,7 @@ export default function Discover() {
             )}
 
             <span className="ml-auto text-xs text-textSecondary/60 shrink-0">
-              {loading ? "Searching..." : `${displayedJobs.length} jobs found`}
+              {loading ? "Searching..." : `Showing ${displayedJobs.length} jobs`}
             </span>
           </div>
         </div>
@@ -328,6 +346,28 @@ export default function Discover() {
                 <JobCard key={job.id} job={job} onAddToTracker={handleAddToTracker} />
               ))}
             </div>
+
+            {/* Load More Button */}
+            {hasAPIKey && displayedJobs.length > 0 && (
+              <div className="flex justify-center pt-8">
+                <button
+                  onClick={() => runSearch(true)}
+                  disabled={loadingMore}
+                  className="px-8 py-3 bg-[#1C2128] border border-[#30363D] text-textPrimary rounded-xl text-sm font-semibold hover:border-accent/50 hover:bg-accent/5 transition-all disabled:opacity-50 flex items-center gap-2"
+                >
+                  {loadingMore ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                      Loading more...
+                    </>
+                  ) : (
+                    <>
+                      <Plus size={16} /> Load More Jobs
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
