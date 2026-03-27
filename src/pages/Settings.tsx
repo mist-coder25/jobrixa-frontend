@@ -9,6 +9,7 @@ import TopBar from "../components/TopBar";
 import api from "../api/axios";
 import { toast } from "../components/Toast";
 import AvatarSelector from "../components/AvatarSelector";
+import { trackEvent } from "../utils/analytics";
 
 type Tab = "profile" | "notifications" | "account" | "billing" | "integrations";
 
@@ -48,6 +49,10 @@ export default function Settings() {
       window.history.replaceState({}, "", "/settings");
     }
   }, [location.search]);
+
+  useEffect(() => {
+    trackEvent('settings_tab_viewed', { tab: activeTab });
+  }, [activeTab]);
 
   const fetchGmailStatus = async () => {
     try {

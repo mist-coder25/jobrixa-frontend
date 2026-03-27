@@ -4,6 +4,7 @@ import TopBar from "../components/TopBar";
 import api from "../api/axios";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { TrendingUp, Users, Target, CheckCircle2 } from "lucide-react";
+import { trackEvent } from "../utils/analytics";
 
 /** Counts up from 0 to value over ~1.2s at 60fps */
 function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
@@ -38,6 +39,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    trackEvent('dashboard_viewed');
     // Fetch raw applications — handles both array and paginated response
     api.get('/applications')
       .then(r => {

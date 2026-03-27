@@ -4,6 +4,7 @@ import CompanyLogo from "./CompanyLogo";
 import { X, Building2, Briefcase, Link, MapPin, DollarSign, Calendar, Tags, CheckCircle2, Loader2, Globe, AlertTriangle } from "lucide-react";
 import api from "../api/axios";
 import { toast } from "./Toast";
+import { trackEvent } from "../utils/analytics";
 
 interface PrefillData {
   companyName?: string;
@@ -76,6 +77,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
       await api.post("/applications", payload);
       toast.success(`✅ Application added to ${formData.status}`);
       onAdded();
+      trackEvent('application_added', { source: formData.source });
       onClose();
       // Reset form could go here
     } catch (err) {

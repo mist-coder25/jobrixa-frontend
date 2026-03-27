@@ -12,6 +12,7 @@ import type { JobApplication } from "../components/ApplicationCard";
 import { Zap, X, Link2 } from "lucide-react";
 import FilterPanel, { DEFAULT_FILTERS } from '../components/FilterPanel';
 import type { FilterState } from '../components/FilterPanel';
+import { trackEvent } from "../utils/analytics";
 
 export default function Pipeline() {
   const location = useLocation();
@@ -89,6 +90,7 @@ export default function Pipeline() {
     try {
       await api.patch(`/applications/${draggableId}/status`, { status: newStatus });
       toast.success(`✅ Moved to ${newStatus}`);
+      trackEvent('card_dragged', { from: source.droppableId, to: destination.droppableId });
     } catch (error) {
       toast.error("Failed to update status. Reverting...");
       setApplications(originalApps);

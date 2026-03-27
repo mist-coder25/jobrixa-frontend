@@ -3,6 +3,7 @@ import TopBar from "../components/TopBar";
 import api from "../api/axios";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Lightbulb, Info } from "lucide-react";
+import { trackEvent } from "../utils/analytics";
 
 export default function Analytics() {
   const [stats, setStats] = useState<any>(null);
@@ -23,6 +24,7 @@ export default function Analytics() {
   } | null>(null);
 
   useEffect(() => {
+    trackEvent('analytics_viewed');
     const fetchData = async () => {
       try {
         const res = await api.get("/applications/analytics");

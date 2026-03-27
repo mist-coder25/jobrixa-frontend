@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Check, Zap, Sparkles, ArrowRight } from "lucide-react";
 import { usePayment } from "../api/usePayment";
+import { trackEvent } from "../utils/analytics";
 
 const FREE_FEATURES = [
   "Track up to 30 applications",
@@ -52,6 +53,7 @@ export default function Pricing() {
     }
     const amount = billing === "monthly" ? 14900 : 99900;
     const planType = billing === "monthly" ? "PRO_MONTHLY" : "PRO_YEARLY";
+    trackEvent('upgrade_clicked', { plan: planType });
     initiatePayment(planType, amount);
   };
 

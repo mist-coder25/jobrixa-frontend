@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Trello, Compass, PieChart, Settings, LogOut, Zap } from "lucide-react";
+import { LayoutDashboard, Trello, Compass, PieChart, Settings, LogOut, Zap, MessageSquare } from "lucide-react";
 import api from "../api/axios";
 
 export default function Sidebar() {
@@ -148,6 +148,17 @@ export default function Sidebar() {
               </NavLink>
             </motion.div>
           ))}
+          
+          <div className="mx-2">
+            <button
+               data-tally-open="YOUR_TALLY_ID"
+               data-tally-layout="modal"
+               className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm text-[#7D8590] hover:text-[#C9D1D9] hover:bg-[#161B22] transition-all w-full mt-4 border border-[#30363D]"
+            >
+               <MessageSquare size={20} />
+               <span>Send Feedback</span>
+            </button>
+          </div>
         </nav>
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">

@@ -8,6 +8,7 @@ import type { FilterState } from "../components/FilterPanel";
 import { toast } from "../components/Toast";
 import { MOCK_JOBS } from "../api/jobSearch";
 import type { NormalizedJob } from "../api/jobSearch";
+import { trackEvent } from "../utils/analytics";
 
 const SOURCE_COLORS: Record<string, string> = {
   LinkedIn: "bg-blue-500/15 text-blue-400 border-blue-500/25",
@@ -81,12 +82,16 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
           href={job.url}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackEvent('job_viewed', { source: job.source })}
           className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-border text-textSecondary hover:text-textPrimary hover:border-accent/40 text-xs font-medium transition-all"
         >
           <ExternalLink size={12} /> View Job
         </a>
         <button
-          onClick={() => onAddToTracker(job)}
+          onClick={() => {
+            onAddToTracker(job);
+            trackEvent('job_added_from_discover');
+          }}
           className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-sm font-medium rounded-lg transition-colors"
         >
           <Plus size={12} /> Add to Tracker
