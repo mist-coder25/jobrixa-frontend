@@ -41,6 +41,29 @@ export default function Landing() {
         </div>
       </nav>
 
+      {/* BETA LAUNCH BANNER */}
+      <div style={{
+        background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
+        borderBottom: '1px solid #2ea043',
+        padding: '10px 24px',
+        textAlign: 'center' as const,
+        fontSize: '14px',
+        color: '#3fb950',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        marginTop: '56px'
+      }}>
+        <span>🎉</span>
+        <span>
+          <strong>Beta Launch:</strong> All Pro features are completely free for the first 1,000 students.
+          <a href="/register" style={{ color: '#58a6ff', marginLeft: '6px', textDecoration: 'underline' }}>
+            Register now to lock in your early access →
+          </a>
+        </span>
+      </div>
+
       {/* HERO */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden">
         {/* Background glow */}

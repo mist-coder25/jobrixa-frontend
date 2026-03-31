@@ -37,6 +37,8 @@ export default function Dashboard() {
   const [missedData, setMissedData] = useState<any>(null);
   const [hasAnyApp, setHasAnyApp] = useState<boolean | null>(null); // null = loading
   const [loading, setLoading] = useState(true);
+  const [isEarlyAdopter, setIsEarlyAdopter] = useState(false);
+  const [earlyAdopterExpiresDate, setEarlyAdopterExpiresDate] = useState('');
 
   useEffect(() => {
     trackEvent('dashboard_viewed');
@@ -70,6 +72,21 @@ export default function Dashboard() {
       .then(r => setMissedData(r.data))
       .catch(() => {})
       .finally(() => setLoading(false));
+
+    // Early adopter status
+    api.get('/users/me')
+      .then(r => {
+        if (r.data.isEarlyAdopter || r.data.earlyAdopter) {
+          setIsEarlyAdopter(true);
+          const expiresAt = r.data.earlyAdopterExpiresAt;
+          if (expiresAt) {
+            setEarlyAdopterExpiresDate(
+              new Date(expiresAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
+            );
+          }
+        }
+      })
+      .catch(() => {});
   }, []);
 
   if (loading) {
@@ -135,6 +152,27 @@ export default function Dashboard() {
       <TopBar title="Dashboard" subtitle="Here's how your search is going" showSearch />
       
       <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
+        {/* Early Adopter Banner */}
+        {isEarlyAdopter && (
+          <div style={{
+            background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
+            border: '1px solid #2ea043',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            marginBottom: '20px',
+            fontSize: '13px',
+            color: '#3fb950',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <span>🎉</span>
+            <span>
+              You're an early adopter! All Pro features are <strong>free until {earlyAdopterExpiresDate}</strong>.
+              Enjoy Jobrixa with zero limits.
+            </span>
+          </div>
+        )}
         {/* Only render when we KNOW it's empty — null means still loading */}
         {hasAnyApp === false && (
           <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-6 mb-6 flex items-center justify-between">
