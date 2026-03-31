@@ -41,7 +41,7 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* BETA LAUNCH BANNER */}
+      {/* BETA BANNER */}
       <div style={{
         background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
         borderBottom: '1px solid #2ea043',
@@ -53,11 +53,11 @@ export default function Landing() {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
-        marginTop: '56px'
+        marginTop: '56px' // offset for fixed nav
       }}>
         <span>🎉</span>
         <span>
-          <strong>Beta Launch:</strong> All Pro features are completely free for the first 1,000 students.
+          <strong>Beta Launch:</strong> All Pro features are completely free for the first 1,000 students. 
           <a href="/register" style={{ color: '#58a6ff', marginLeft: '6px', textDecoration: 'underline' }}>
             Register now to lock in your early access →
           </a>

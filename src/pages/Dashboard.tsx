@@ -38,7 +38,7 @@ export default function Dashboard() {
   const [hasAnyApp, setHasAnyApp] = useState<boolean | null>(null); // null = loading
   const [loading, setLoading] = useState(true);
   const [isEarlyAdopter, setIsEarlyAdopter] = useState(false);
-  const [earlyAdopterExpiresDate, setEarlyAdopterExpiresDate] = useState('');
+  const [earlyAdopterExpiresDate, setEarlyAdopterExpiresDate] = useState("");
 
   useEffect(() => {
     trackEvent('dashboard_viewed');
@@ -211,6 +211,8 @@ export default function Dashboard() {
             <span className="text-6xl">👋</span>
           </div>
         )}
+
+
 
         {/* Missed Opportunities Tracker */}
         <MissedTracker data={missedData} />
