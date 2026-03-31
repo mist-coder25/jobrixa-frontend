@@ -127,3 +127,9 @@
   background-image: radial-gradient(#21262D 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+

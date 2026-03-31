@@ -31,6 +31,10 @@ export default function Pipeline() {
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const [quickAddInitialUrl, setQuickAddInitialUrl] = useState("");
   
+  // Feedback popup states
+  const [showRejectedFeedback, setShowRejectedFeedback] = useState(false);
+  const [rejectedCompany, setRejectedCompany] = useState('');
+  
   // Filter state
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
@@ -91,6 +95,15 @@ export default function Pipeline() {
       await api.patch(`/applications/${draggableId}/status`, { status: newStatus });
       toast.success(`✅ Moved to ${newStatus}`);
       trackEvent('card_dragged', { from: source.droppableId, to: destination.droppableId });
+      
+      // Show feedback popup if rejected
+      if (newStatus === 'REJECTED') {
+        const app = applications.find(a => a.id === draggableId);
+        if (app) {
+          setRejectedCompany(app.companyName);
+          setTimeout(() => setShowRejectedFeedback(true), 1000);
+        }
+      }
     } catch (error) {
       toast.error("Failed to update status. Reverting...");
       setApplications(originalApps);
@@ -262,7 +275,11 @@ export default function Pipeline() {
         app={selectedApp} 
         isOpen={!!selectedApp} 
         onClose={() => setSelectedApp(null)} 
-        onUpdate={() => {
+        onUpdate={(newStatus) => {
+          if (newStatus === 'REJECTED' && selectedApp) {
+            setRejectedCompany(selectedApp.companyName);
+            setTimeout(() => setShowRejectedFeedback(true), 1000);
+          }
           fetchApplications();
           setSelectedApp(null);
         }}
@@ -292,6 +309,69 @@ export default function Pipeline() {
       >
         <Link2 className="w-5 h-5" />
       </button>
+
+      {/* Rejected Feedback Popup */}
+      {showRejectedFeedback && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          background: '#161B22',
+          border: '1px solid #30363D',
+          borderRadius: '12px',
+          padding: '20px',
+          maxWidth: '320px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          zIndex: 1000,
+          animation: 'slideIn 0.3s ease'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+            <span style={{ fontSize: '16px' }}>😔 That's tough</span>
+            <button 
+              onClick={() => setShowRejectedFeedback(false)}
+              style={{ background: 'none', border: 'none', color: '#7D8590', cursor: 'pointer', fontSize: '18px' }}
+            >×</button>
+          </div>
+          <p style={{ color: '#C9D1D9', fontSize: '13px', marginBottom: '14px', lineHeight: '1.5' }}>
+            Sorry about {rejectedCompany}. Got 30 seconds to help us improve Jobrixa?
+          </p>
+          
+          <a 
+            href="https://tally.so/r/YOUR_TALLY_FORM_ID"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              background: '#21262D',
+              border: '1px solid #30363D',
+              borderRadius: '6px',
+              padding: '8px 12px',
+              color: '#58a6ff',
+              textDecoration: 'none',
+              fontSize: '13px',
+              textAlign: 'center',
+              marginBottom: '8px'
+            }}
+          >
+            Share quick feedback →
+          </a>
+          <button
+            onClick={() => setShowRejectedFeedback(false)}
+            style={{
+              display: 'block',
+              width: '100%',
+              background: 'none',
+              border: 'none',
+              color: '#7D8590',
+              fontSize: '12px',
+              cursor: 'pointer',
+              padding: '4px'
+            }}
+          >
+            No thanks
+          </button>
+        </div>
+      )}
     </div>
   );
 }

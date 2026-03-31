@@ -11,7 +11,7 @@ interface DetailPanelProps {
   app: JobApplication | null;
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: () => void;
+  onUpdate: (newStatus?: string) => void;
 }
 
 export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate }: DetailPanelProps) {
@@ -78,7 +78,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
         isRemote
       });
       toast.success("Application updated");
-      onUpdate();
+      onUpdate(status);
     } catch (err) {
       toast.error("Failed to save changes");
     }
