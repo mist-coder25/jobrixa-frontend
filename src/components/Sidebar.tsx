@@ -20,6 +20,8 @@ export default function Sidebar() {
   const [missedCount, setMissedCount] = useState(0);
   const [totalAppsCreated, setTotalAppsCreated] = useState<number | null>(null);
   const [plan, setPlan] = useState<string>(localStorage.getItem("jobrixa_plan") || "FREE");
+  const [isBeta, setIsBeta] = useState(false);
+  const [betaDaysLeft, setBetaDaysLeft] = useState<number | null>(null);
 
   const handleLogout = () => {
     localStorage.removeItem("jobrixa_token");
@@ -50,6 +52,10 @@ export default function Sidebar() {
           if (freshPlan) {
             setPlan(freshPlan);
             localStorage.setItem("jobrixa_plan", freshPlan);
+          }
+          if (r.data.isBetaTester) {
+            setIsBeta(true);
+            setBetaDaysLeft(r.data.betaDaysLeft);
           }
         })
         .catch(() => {});
@@ -162,8 +168,25 @@ export default function Sidebar() {
         </nav>
 
         <div className="mt-auto border-t border-[#21262D] p-3 space-y-2">
+          {/* Beta Access Banner */}
+          {isBeta && !isPro && (
+            <div className="bg-[#D29922]/10 border border-[#D29922]/30 rounded-lg px-3 py-2 mb-2">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[11px] font-bold text-[#D29922] tracking-wider uppercase">Beta User</span>
+                {betaDaysLeft !== null && (
+                  <span className="text-[9px] text-[#D29922] font-semibold bg-[#D29922]/20 px-1.5 py-0.5 rounded">
+                    {betaDaysLeft} days left
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] text-[#D29922]/80 leading-tight block">
+                Unlimited applications for 90 days!
+              </span>
+            </div>
+          )}
+
           {/* Upgrade warning at 25/30 apps */}
-          {!isPro && totalAppsCreated !== null && totalAppsCreated >= 25 && (
+          {!isPro && totalAppsCreated !== null && totalAppsCreated >= 25 && !isBeta && (
             <div style={{
               background: '#422006',
               border: '1px solid #D29922',
@@ -173,7 +196,7 @@ export default function Sidebar() {
               fontSize: '11px',
               color: '#D29922'
             }}>
-              ⚠️ {30 - totalAppsCreated} applications left. 
+              ⚠️ {Math.max(0, 30 - totalAppsCreated)} applications left. 
               <span 
                 onClick={() => navigate('/pricing')}
                 style={{cursor:'pointer', textDecoration:'underline', marginLeft:'4px'}}

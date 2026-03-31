@@ -77,9 +77,20 @@ interface KanbanBoardProps {
 export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAddClick, loading }: KanbanBoardProps) {
   const getAppsForStatus = (status: string) => applications.filter(app => app.status === status);
 
+  const handleDragEndWrapper = (result: DropResult) => {
+    onDragEnd(result);
+    if (result.destination?.droppableId === "REJECTED" && result.source.droppableId !== "REJECTED") {
+      // @ts-ignore
+      if (window.Tally) {
+        // @ts-ignore
+        window.Tally.openPopup("YOUR_TALLY_ID");
+      }
+    }
+  };
+
   return (
     <div className="flex-1 overflow-x-auto overflow-y-hidden kanban-scroll h-full pl-4 md:pl-8 pr-4 pb-6 pt-6 snap-x md:snap-none scroll-smooth">
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={handleDragEndWrapper}>
         {/* Columns stagger in on load */}
         <motion.div
           className="flex gap-4 p-4 md:p-6 h-[calc(100vh-150px)] items-start"
