@@ -6,6 +6,7 @@ import type { JobApplication } from "./ApplicationCard";
 import api from "../api/axios";
 import { toast } from "./Toast";
 import { format, parseISO } from "date-fns";
+import { trackEvent } from "../utils/analytics";
 
 interface DetailPanelProps {
   app: JobApplication | null;
@@ -107,6 +108,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
         notes: notes 
       });
       toast.success("Notes saved!");
+      trackEvent('notes_saved');
       onUpdate();
     } catch (err) {
       toast.error("Failed to save notes.");

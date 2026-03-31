@@ -177,6 +177,7 @@ export default function Settings() {
       // Update stored name too
       localStorage.setItem("jobrixa_user", name);
       toast.success("✅ Profile updated successfully");
+      trackEvent('profile_updated');
     } catch {
       toast.error("Failed to save profile");
     } finally {

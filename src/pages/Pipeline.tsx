@@ -258,7 +258,10 @@ export default function Pipeline() {
           return true;
         })} 
         onDragEnd={onDragEnd} 
-        onCardClick={setSelectedApp} 
+        onCardClick={(app) => {
+          setSelectedApp(app);
+          trackEvent('card_opened', { company: app.companyName, status: app.status });
+        }} 
         onAddClick={handleAddClick} 
         loading={loading}
       />

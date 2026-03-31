@@ -4,7 +4,7 @@ import TopBar from "../components/TopBar";
 import api from "../api/axios";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { TrendingUp, Users, Target, CheckCircle2 } from "lucide-react";
-import { trackEvent } from "../utils/analytics";
+import { trackEvent, identifyUser } from "../utils/analytics";
 
 /** Counts up from 0 to value over ~1.2s at 60fps */
 function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
@@ -42,6 +42,16 @@ export default function Dashboard() {
 
   useEffect(() => {
     trackEvent('dashboard_viewed');
+    
+    // Track time spent on dashboard
+    const start = Date.now();
+    return () => {
+      const seconds = Math.round((Date.now() - start) / 1000);
+      trackEvent('dashboard_time_spent', { seconds });
+    };
+  }, []);
+
+  useEffect(() => {
     // Fetch raw applications — handles both array and paginated response
     api.get('/applications')
       .then(r => {
@@ -76,9 +86,17 @@ export default function Dashboard() {
     // Early adopter status
     api.get('/users/me')
       .then(r => {
-        if (r.data.isEarlyAdopter || r.data.earlyAdopter) {
+        const user = r.data;
+        identifyUser(user.id.toString(), {
+          email: user.email,
+          name: user.name,
+          plan: user.plan,
+          isEarlyAdopter: user.isEarlyAdopter || user.earlyAdopter,
+        });
+
+        if (user.isEarlyAdopter || user.earlyAdopter) {
           setIsEarlyAdopter(true);
-          const expiresAt = r.data.earlyAdopterExpiresAt;
+          const expiresAt = user.earlyAdopterExpiresAt;
           if (expiresAt) {
             setEarlyAdopterExpiresDate(
               new Date(expiresAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })

@@ -275,6 +275,7 @@ export default function Discover() {
     const newQuery = q || inputValue.trim() || DEFAULT_QUERY;
     setSearchQuery(newQuery);
     setPage(1);
+    trackEvent('job_searched', { query: newQuery });
   };
 
   const isFirstRender = useRef(true);
