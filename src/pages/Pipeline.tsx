@@ -144,7 +144,7 @@ export default function Pipeline() {
     APPLIED: '#4F8EF7',
     OA: '#9a6700',
     INTERVIEW: '#A371F7',
-    OFFER: '#2da44e',
+    OFFER: '#3B7DE8',
     GHOSTED: '#8c959f'
   };
 
@@ -202,7 +202,7 @@ export default function Pipeline() {
             <span className="text-[#1c2128]">{totalApps}</span> total
           </span>
           <span className="text-[#57606a]">
-            <span className="text-[#2da44e]">{activeApps}</span> active
+            <span className="text-[#3B7DE8]">{activeApps}</span> active
           </span>
           <span className="text-[#57606a]">
             <span className="text-[#9a6700]">{interviewCount}</span> interviews
@@ -240,7 +240,7 @@ export default function Pipeline() {
       {applications.length === 0 && !loading ? (
         <div className="flex-1 flex flex-col items-center justify-center p-20 text-center animate-in fade-in zoom-in duration-500">
           <div className="relative mb-8">
-            <div className="absolute -inset-10 bg-[#1a7f37]/5 rounded-full blur-3xl" />
+            <div className="absolute -inset-10 bg-[#4F8EF7]/5 rounded-full blur-3xl" />
             <img 
               src="https://illustrations.popsy.co/amber/waiting.svg" 
               alt="Empty pipeline" 
@@ -253,7 +253,7 @@ export default function Pipeline() {
           </p>
           <button
             onClick={() => handleAddClick("APPLIED")}
-            className="bg-[#1a7f37] hover:bg-[#2da44e] text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-[#1a7f37]/20 transition-all hover:scale-105 active:scale-95"
+            className="bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-[#4F8EF7]/20 transition-all hover:scale-105 active:scale-95"
           >
             + Add Application
           </button>

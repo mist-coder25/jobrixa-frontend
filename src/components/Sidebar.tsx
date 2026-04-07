@@ -94,7 +94,7 @@ export default function Sidebar() {
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 h-screen bg-white border-r border-[#d0d7de] fixed left-0 top-0">
         <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#1a7f37] flex items-center justify-center shadow-lg shadow-[#1a7f37]/20">
+          <div className="w-8 h-8 rounded-lg bg-[#4F8EF7] flex items-center justify-center shadow-lg shadow-[#4F8EF7]/20">
             <span className="text-white font-black text-sm">J</span>
           </div>
           <span className="font-bold text-[#1c2128] text-lg tracking-tight">Jobrixa</span>
@@ -114,10 +114,10 @@ export default function Sidebar() {
                 }`}
               >
                 {isActive && (
-                  <div className="absolute left-0 w-1 h-6 bg-[#1a7f37] rounded-r-full" />
+                  <div className="absolute left-0 w-1 h-6 bg-[#4F8EF7] rounded-r-full" />
                 )}
                 <span className={`transition-colors duration-200 ${
-                  isActive ? "text-[#1a7f37]" : "text-[#57606a] group-hover:text-[#1c2128]"
+                  isActive ? "text-[#4F8EF7]" : "text-[#57606a] group-hover:text-[#1c2128]"
                 }`}>
                   {item.icon}
                 </span>
@@ -153,7 +153,7 @@ export default function Sidebar() {
               <p className="text-xs text-[#57606a] mb-4">{totalAppsCreated ?? 0}/30 apps used</p>
               <button 
                 onClick={() => navigate('/pricing')}
-                className="w-full py-2 bg-[#1a7f37] hover:bg-[#2da44e] text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
+                className="w-full py-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
               >
                 Upgrade Now
               </button>
@@ -165,7 +165,7 @@ export default function Sidebar() {
           <div className="flex items-center justify-between px-2 py-2 group">
             <div className="flex items-center gap-3 min-w-0">
               <img
-                src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userName)}&backgroundColor=1a7f37&fontFamily=Inter`}
+                src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userName)}&backgroundColor=4F8EF7&fontFamily=Inter`}
                 alt={userName}
                 className={`w-9 h-9 rounded-full shrink-0 object-cover border-2 ${isPro ? 'border-[#0969da]' : 'border-[#d0d7de]'}`}
               />

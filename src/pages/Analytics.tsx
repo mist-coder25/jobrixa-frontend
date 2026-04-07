@@ -76,7 +76,7 @@ export default function Analytics() {
     return intensity;
   });
 
-  const HEAT_COLORS = ['#f6f8fa', '#e6ffed', '#a1ebb1', '#39d353', '#26a641'];
+  const HEAT_COLORS = ['#f6f8fa', '#e6f4ff', '#91caff', '#40a9ff', '#0969da'];
 
   return (
     <div className="h-full flex flex-col bg-[#ffffff] overflow-y-auto custom-scrollbar text-[#1c2128]">
@@ -85,9 +85,9 @@ export default function Analytics() {
       <div className="p-8 space-y-10 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
         
         {/* Smart Insights */}
-        <div className="bg-gradient-to-r from-[#1a7f3710] to-white border border-[#1a7f3730] rounded-xl p-6 relative overflow-hidden flex items-start gap-4 shadow-sm">
-           <div className="w-12 h-12 bg-[#1a7f3715] rounded-full flex items-center justify-center shrink-0">
-             <Lightbulb className="w-6 h-6 text-[#1a7f37]" />
+        <div className="bg-gradient-to-r from-[#4F8EF710] to-white border border-[#4F8EF730] rounded-xl p-6 relative overflow-hidden flex items-start gap-4 shadow-sm">
+           <div className="w-12 h-12 bg-[#4F8EF715] rounded-full flex items-center justify-center shrink-0">
+             <Lightbulb className="w-6 h-6 text-[#4F8EF7]" />
            </div>
            <div>
              <h3 className="text-lg font-display font-semibold mb-1">Smart Insights & Suggestions</h3>
@@ -137,7 +137,7 @@ export default function Analytics() {
                   />
                   <Bar dataKey="rate" radius={[4, 4, 0, 0]} barSize={40}>
                     {sourceData.map((_, i) => (
-                      <Cell key={i} fill={['#4F8EF7','#2da44e','#9a6700','#A371F7'][i % 4]} />
+                      <Cell key={i} fill={['#4F8EF7','#3B7DE8','#9a6700','#A371F7'][i % 4]} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -191,7 +191,7 @@ export default function Analytics() {
               <div className="flex items-center gap-6">
                 <div className="text-right">
                   <div className="text-2xl font-bold"
-                    style={{ color: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#1a7f37' }}>
+                    style={{ color: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#4F8EF7' }}>
                     {missedData.missedPercent}%
                   </div>
                   <div className="text-xs text-[#57606a]">miss rate</div>
@@ -234,7 +234,7 @@ export default function Analytics() {
                       <div className="h-full rounded-full transition-all"
                         style={{
                           width: `${missedData.missedPercent}%`,
-                          background: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#1a7f37'
+                          background: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#4F8EF7'
                         }} />
                     </div>
                     <span className="text-xs text-[#57606a]">{missedData.missedPercent}% miss rate</span>

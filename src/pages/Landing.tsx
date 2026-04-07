@@ -15,7 +15,7 @@ export default function Landing() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#ffffff]/80 backdrop-blur-md border-b border-[#f6f8fa] shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#1a7f37] to-[#2da44e] flex items-center justify-center shadow-lg shadow-[#1a7f37]/20">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#4F8EF7] to-[#3B7DE8] flex items-center justify-center shadow-lg shadow-[#4F8EF7]/20">
               <span className="text-[#f6f8fa] font-black text-base">J</span>
             </div>
             <span className="font-bold text-[#1c2128] text-lg tracking-tight">Jobrixa</span>
@@ -34,7 +34,7 @@ export default function Landing() {
               Sign in
             </button>
             <button onClick={() => navigate('/register')}
-              className="text-sm bg-[#1a7f37] hover:bg-[#2da44e] text-[#f6f8fa] font-medium px-4 py-1.5 rounded-lg transition-colors">
+              className="text-sm bg-[#4F8EF7] hover:bg-[#3B7DE8] text-[#f6f8fa] font-medium px-4 py-1.5 rounded-lg transition-colors">
               Get started free
             </button>
           </div>
@@ -43,12 +43,12 @@ export default function Landing() {
 
       {/* BETA BANNER */}
       <div style={{
-        background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
-        borderBottom: '1px solid #1a7f37',
+        background: 'linear-gradient(90deg, #1e293b, #0f172a)',
+        borderBottom: '1px solid #4F8EF7',
         padding: '10px 24px',
         textAlign: 'center' as const,
         fontSize: '14px',
-        color: '#2da44e',
+        color: '#3B7DE8',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -67,7 +67,7 @@ export default function Landing() {
       {/* HERO */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden" style={{
         backgroundColor: '#ffffff',
-        backgroundImage: 'radial-gradient(circle, #1a7f3720 1px, transparent 1px)',
+        backgroundImage: 'radial-gradient(circle, #4F8EF720 1px, transparent 1px)',
         backgroundSize: '28px 28px',
         position: 'relative'
       }}>
@@ -76,7 +76,7 @@ export default function Landing() {
           position: 'absolute',
           width: '400px',
           height: '400px',
-          background: 'radial-gradient(circle, #1a7f3718 0%, transparent 70%)',
+          background: 'radial-gradient(circle, #4F8EF718 0%, transparent 70%)',
           borderRadius: '50%',
           right: '-50px',
           top: '50%',
@@ -93,7 +93,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 bg-[#1a7f3715] border border-[#1a7f3730] rounded-full px-4 py-1.5 text-xs text-[#2da44e] font-medium mb-6"
+              className="inline-flex items-center gap-2 bg-[#4F8EF715] border border-[#4F8EF730] rounded-full px-4 py-1.5 text-xs text-[#3B7DE8] font-medium mb-6"
             >
               <Zap size={11} />
               Built for Indian students & fresh graduates
@@ -108,7 +108,7 @@ export default function Landing() {
                 fontSize: '52px',
                 fontWeight: 700,
                 lineHeight: 1.2,
-                background: 'linear-gradient(135deg, #f6f8fa 0%, #1a7f37 100%)',
+                background: 'linear-gradient(135deg, #f6f8fa 0%, #4F8EF7 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 marginBottom: '24px'
@@ -138,7 +138,7 @@ export default function Landing() {
               className="flex items-center gap-4 flex-wrap"
             >
               <button onClick={() => navigate('/register')}
-                className="flex items-center gap-2 bg-[#1a7f37] hover:bg-[#2da44e] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-105 shadow-sm">
+                className="flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-105 shadow-sm">
                 Start tracking for free
                 <ArrowRight size={16} />
               </button>
@@ -198,7 +198,7 @@ export default function Landing() {
           </div>
           {/* Right Column - Text */}
           <div className="flex-1">
-            <p style={{ color: '#1a7f37', fontSize: '13px', fontWeight: 600, 
+            <p style={{ color: '#4F8EF7', fontSize: '13px', fontWeight: 600, 
               letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>
               Sound familiar?
             </p>
@@ -267,7 +267,7 @@ export default function Landing() {
                   padding: '24px',
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
                 }}
-                className="hover:translate-y-[-4px] hover:shadow-[0_8px_24px_rgba(140,149,159,0.15)] hover:border-[#2da44e40] cursor-default overflow-hidden shadow-sm"
+                className="hover:translate-y-[-4px] hover:shadow-[0_8px_24px_rgba(140,149,159,0.15)] hover:border-[#3B7DE840] cursor-default overflow-hidden shadow-sm"
               >
                 {('image' in f) && (
                   <img
@@ -391,7 +391,7 @@ export default function Landing() {
               <div className="space-y-2 mb-6">
                 {['Up to 30 applications', 'Kanban pipeline', 'Basic analytics', 'Chrome extension'].map(f => (
                   <div key={f} className="flex items-center gap-2 text-sm text-[#57606a]">
-                    <Check size={14} className="text-[#2da44e]" />
+                    <Check size={14} className="text-[#3B7DE8]" />
                     {f}
                   </div>
                 ))}
@@ -450,9 +450,9 @@ export default function Landing() {
                 objectFit: 'cover',
                 objectPosition: 'top',
                 borderRadius: '50%',
-                border: '3px solid #1a7f37',
+                border: '3px solid #4F8EF7',
                 marginBottom: '24px',
-                boxShadow: '0 8px 32px rgba(46,160,67,0.3)'
+                boxShadow: '0 8px 32px rgba(79,142,247,0.3)'
               }}
             />
           </div>
@@ -465,7 +465,7 @@ export default function Landing() {
           </p>
           <button onClick={() => navigate('/register')}
             style={{
-              background: '#1a7f37',
+              background: '#4F8EF7',
               color: 'white',
               padding: '14px 32px',
               borderRadius: '8px',
@@ -473,7 +473,7 @@ export default function Landing() {
               fontWeight: 600,
               transition: 'all 0.2s ease'
             }}
-            className="hover:bg-[#2da44e] hover:scale-[1.02] shadow-lg shadow-[#1a7f3720]">
+            className="hover:bg-[#3B7DE8] hover:scale-[1.02] shadow-lg shadow-[#4F8EF720]">
             Get Started Now
           </button>
         </div>
@@ -483,7 +483,7 @@ export default function Landing() {
       <footer className="border-t border-[#f6f8fa] py-8 px-6">
         <div className="max-w-5xl mx-auto flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-[#1a7f37] flex items-center justify-center">
+            <div className="w-6 h-6 rounded-md bg-[#4F8EF7] flex items-center justify-center">
               <span className="text-[#f6f8fa] font-black text-xs">J</span>
             </div>
             <span className="text-sm font-bold text-[#1c2128]">Jobrixa</span>

@@ -19,9 +19,9 @@
     --accent-hover: #085cc1;
     --accent-subtle: rgba(9, 105, 218, 0.1);
     
-    /* Success — GitHub Green */
-    --accent-teal: #1a7f37;
-    --accent-teal-subtle: rgba(26, 127, 55, 0.1);
+    /* Success — GitHub Green -> Now Blue */
+    --accent-teal: #4F8EF7;
+    --accent-teal-subtle: rgba(79, 142, 247, 0.1);
     
     /* Warning/Danger */
     --warning: #9a6700;
@@ -79,8 +79,8 @@
 
 /* Glow pulse on primary CTA buttons — adjusted for light mode */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(26, 127, 55, 0.2); }
-  50%       { box-shadow: 0 0 20px rgba(26, 127, 55, 0.4), 0 0 30px rgba(26, 127, 55, 0.1); }
+  0%, 100% { box-shadow: 0 0 8px rgba(79, 142, 247, 0.2); }
+  50%       { box-shadow: 0 0 20px rgba(79, 142, 247, 0.4), 0 0 30px rgba(79, 142, 247, 0.1); }
 }
 .btn-glow {
   animation: glow-pulse 2.5s ease-in-out infinite;
@@ -97,7 +97,7 @@
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #1a7f37, #0969da);
+  background: linear-gradient(135deg, #4F8EF7, #3B7DE8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

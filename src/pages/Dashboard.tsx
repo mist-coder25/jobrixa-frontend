@@ -125,7 +125,7 @@ export default function Dashboard() {
       suffix: "%",
       icon: <Users className="w-4 h-4" />,
       trend: null,
-      borderColor: "border-l-[#2da44e]"
+      borderColor: "border-l-[#4F8EF7]"
     },
     {
       label: "Interview Rate",
@@ -153,8 +153,8 @@ export default function Dashboard() {
         {/* Early Adopter Banner */}
         {isEarlyAdopter && (
           <div style={{
-            background: '#1a7f3715',
-            border: '1px solid #1a7f3730',
+            background: '#4F8EF715',
+            border: '1px solid #4F8EF730',
             borderRadius: '8px',
             padding: '12px 16px',
             marginBottom: '20px',
@@ -163,7 +163,7 @@ export default function Dashboard() {
             alignItems: 'center',
             gap: '8px'
           }}>
-            <span className="text-[#1a7f37]">🎉</span>
+            <span className="text-[#4F8EF7]">🎉</span>
             <span className="text-[#1c2128]">
               You're an early adopter! All Pro features are <strong>free until {earlyAdopterExpiresDate}</strong>.
               Enjoy Jobrixa with zero limits.
@@ -219,7 +219,7 @@ export default function Dashboard() {
                 <AnimatedCounter value={card.value} suffix={card.suffix} />
               </div>
               {card.trend && (
-                <div className="text-xs text-[#2da44e] mt-1 flex items-center">
+                <div className="text-xs text-[#4F8EF7] mt-1 flex items-center">
                   {card.trend}
                 </div>
               )}
@@ -271,7 +271,7 @@ export default function Dashboard() {
                     />
                     <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={24}>
                       {sourceData.map((_, i) => (
-                        <Cell key={i} fill={['#4F8EF7','#2da44e','#9a6700','#A371F7'][i % 4]} />
+                        <Cell key={i} fill={['#4F8EF7','#3B7DE8','#9a6700','#A371F7'][i % 4]} />
                       ))}
                     </Bar>
                   </BarChart>
