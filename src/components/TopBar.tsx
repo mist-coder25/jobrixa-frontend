@@ -58,6 +58,15 @@ export default function TopBar({
 
         {/* Page-specific action buttons */}
         {children}
+
+        {/* User Avatar */}
+        <div className="hidden md:flex items-center gap-4 ml-2 pl-4 border-l border-[#21262D]">
+          <img
+            src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(localStorage.getItem("jobrixa_user") || "User")}&backgroundColor=2ea043&fontFamily=Inter`}
+            alt="User"
+            className="w-8 h-8 rounded-full border border-[#2ea043] shadow-sm shadow-[#2ea043]/20"
+          />
+        </div>
       </div>
     </header>
   );

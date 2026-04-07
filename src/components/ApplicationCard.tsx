@@ -3,6 +3,7 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 export interface JobApplication {
   id: string;
   companyName: string;
+  companyDomain?: string;
   jobTitle: string;
   status: string;
   jobUrl?: string;
@@ -50,13 +51,27 @@ export default function ApplicationCard({ app, onClick, innerRef, draggableProps
       {/* Top row — company + source */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          {/* Company logo circle */}
-          <div className="w-6 h-6 rounded-md bg-[#4F8EF7]/10 border border-[#4F8EF7]/20 flex items-center justify-center text-[10px] font-bold text-[#4F8EF7]">
-            {app.companyName.charAt(0).toUpperCase()}
+          {/* Company logo */}
+          <div className="w-8 h-8 rounded-lg bg-[#21262D] border border-[#30363D] overflow-hidden flex items-center justify-center shrink-0">
+            {app.companyDomain ? (
+              <img 
+                src={`https://logo.clearbit.com/${app.companyDomain}`} 
+                alt={app.companyName}
+                className="w-full h-full object-contain p-1"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-bold text-[#4F8EF7]">${app.companyName.charAt(0).toUpperCase()}</span>`;
+                }}
+              />
+            ) : (
+              <span className="text-xs font-bold text-[#4F8EF7]">{app.companyName.charAt(0).toUpperCase()}</span>
+            )}
           </div>
-          <span className="text-xs font-semibold text-[#E6EDF3]">{app.companyName}</span>
+          <div className="min-w-0">
+            <span className="text-xs font-semibold text-[#E6EDF3] block truncate">{app.companyName}</span>
+            <span className="text-[10px] text-[#484F58]">{daysAppliedText}</span>
+          </div>
         </div>
-        <span className="text-[10px] text-[#484F58]">{daysAppliedText}</span>
       </div>
 
       {/* Job title */}

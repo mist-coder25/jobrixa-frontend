@@ -2,6 +2,7 @@ import { useState } from "react";
 
 interface CompanyLogoProps {
   companyName: string;
+  companyDomain?: string;
   size?: number;
   className?: string;
   /** Extra padding inside the avatar image container (default: "p-1") */
@@ -19,47 +20,45 @@ function getColor(name: string): string {
 }
 
 /**
- * CompanyLogo — uses UI Avatars API (free, no signup, no CORS issues).
- * Falls back to a coloured initial block if the image errors.
- * Replaces Clearbit logo.clearbit.com which was shut down.
+ * CompanyLogo — uses Clearbit Logo API if domain is provided.
+ * Falls back to UI Avatars (free, no signup, no CORS issues).
  */
 export default function CompanyLogo({
   companyName,
+  companyDomain,
   size = 36,
   className = "",
   containerPadding = "p-1",
 }: CompanyLogoProps) {
-  const [imgError, setImgError] = useState(false);
+  const [errorStep, setErrorStep] = useState(0);
 
   const name = companyName || "?";
-  const initial = name.charAt(0).toUpperCase();
   const bgColor = getColor(name);
   const bgHex = bgColor.replace("#", "");
 
-  // UI Avatars: free, no auth, no CORS, always resolves
-  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${bgHex}&color=fff&size=${size * 2}&bold=true&length=1&format=png`;
+  // Fallback chain: Clearbit -> Google Favicon -> UI Avatars
+  let logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${bgHex}&color=fff&size=${size * 2}&bold=true&length=1&format=png`;
 
-  if (imgError) {
-    return (
-      <div
-        className={`flex items-center justify-center font-bold text-white rounded-lg flex-shrink-0 ${className}`}
-        style={{ width: size, height: size, background: bgColor, fontSize: size * 0.42 }}
-        aria-label={name}
-      >
-        {initial}
-      </div>
-    );
+  if (companyDomain) {
+    if (errorStep === 0) {
+      logoUrl = `https://logo.clearbit.com/${companyDomain}`;
+    } else if (errorStep === 1) {
+      logoUrl = `https://www.google.com/s2/favicons?domain=${companyDomain}&sz=128`;
+    }
   }
 
   return (
-    <img
-      src={avatarUrl}
-      alt={name}
-      width={size}
-      height={size}
-      className={`rounded-lg flex-shrink-0 object-cover ${containerPadding} ${className}`}
-      onError={() => setImgError(true)}
-      loading="lazy"
-    />
+    <div 
+      className={`rounded-lg overflow-hidden flex-shrink-0 bg-[#21262D] border border-[#30363D] flex items-center justify-center ${className}`}
+      style={{ width: size, height: size }}
+    >
+      <img
+        src={logoUrl}
+        alt={name}
+        className={`w-full h-full object-contain ${containerPadding}`}
+        onError={() => setErrorStep(prev => prev + 1)}
+        loading="lazy"
+      />
+    </div>
   );
 }

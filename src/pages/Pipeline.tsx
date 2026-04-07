@@ -237,34 +237,57 @@ export default function Pipeline() {
         </div>
       )}
       
-      <KanbanBoard 
-        applications={applications.filter(app => {
-          if (filters.status.length > 0 && !filters.status.includes(app.status)) return false;
-          if (filters.source.length > 0 && (!app.source || !filters.source.includes(app.source))) return false;
-          if (filters.dateRange === '7days' && app.appliedAt) {
-            const d = new Date(); d.setDate(d.getDate() - 7);
-            if (new Date(app.appliedAt!) < d) return false;
-          }
-          if (filters.dateRange === '30days' && app.appliedAt) {
-            const d = new Date(); d.setDate(d.getDate() - 30);
-            if (new Date(app.appliedAt!) < d) return false;
-          }
-          if (filters.dateRange === '3months' && app.appliedAt) {
-            const d = new Date(); d.setMonth(d.getMonth() - 3);
-            if (new Date(app.appliedAt!) < d) return false;
-          }
-          if (filters.hasOffer && app.status !== 'OFFER') return false;
-          if (filters.hasInterview && app.status !== 'INTERVIEW') return false;
-          return true;
-        })} 
-        onDragEnd={onDragEnd} 
-        onCardClick={(app) => {
-          setSelectedApp(app);
-          trackEvent('card_opened', { company: app.companyName, status: app.status });
-        }} 
-        onAddClick={handleAddClick} 
-        loading={loading}
-      />
+      {applications.length === 0 && !loading ? (
+        <div className="flex-1 flex flex-col items-center justify-center p-20 text-center animate-in fade-in zoom-in duration-500">
+          <div className="relative mb-8">
+            <div className="absolute -inset-10 bg-[#2ea043]/5 rounded-full blur-3xl" />
+            <img 
+              src="https://illustrations.popsy.co/amber/waiting.svg" 
+              alt="Empty pipeline" 
+              className="w-64 h-64 relative z-10"
+            />
+          </div>
+          <h2 className="text-2xl font-bold text-[#E6EDF3] mb-3">No applications yet</h2>
+          <p className="text-[#7D8590] max-w-sm mb-8 leading-relaxed">
+            Your placement journey starts with the first application. Add a job to see it appear in your pipeline.
+          </p>
+          <button
+            onClick={() => handleAddClick("APPLIED")}
+            className="bg-[#2ea043] hover:bg-[#3fb950] text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-[#2ea043]/20 transition-all hover:scale-105 active:scale-95"
+          >
+            + Add Application
+          </button>
+        </div>
+      ) : (
+        <KanbanBoard 
+          applications={applications.filter(app => {
+            if (filters.status.length > 0 && !filters.status.includes(app.status)) return false;
+            if (filters.source.length > 0 && (!app.source || !filters.source.includes(app.source))) return false;
+            if (filters.dateRange === '7days' && app.appliedAt) {
+              const d = new Date(); d.setDate(d.getDate() - 7);
+              if (new Date(app.appliedAt!) < d) return false;
+            }
+            if (filters.dateRange === '30days' && app.appliedAt) {
+              const d = new Date(); d.setDate(d.getDate() - 30);
+              if (new Date(app.appliedAt!) < d) return false;
+            }
+            if (filters.dateRange === '3months' && app.appliedAt) {
+              const d = new Date(); d.setMonth(d.getMonth() - 3);
+              if (new Date(app.appliedAt!) < d) return false;
+            }
+            if (filters.hasOffer && app.status !== 'OFFER') return false;
+            if (filters.hasInterview && app.status !== 'INTERVIEW') return false;
+            return true;
+          })} 
+          onDragEnd={onDragEnd} 
+          onCardClick={(app) => {
+            setSelectedApp(app);
+            trackEvent('card_opened', { company: app.companyName, status: app.status });
+          }} 
+          onAddClick={handleAddClick} 
+          loading={loading}
+        />
+      )}
 
       <FilterPanel
         open={filterOpen}

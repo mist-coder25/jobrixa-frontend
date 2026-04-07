@@ -214,9 +214,11 @@ export default function Sidebar() {
           {/* User Row - Enhanced for Pro */}
           <div className={`mt-2 flex items-center justify-between p-2 rounded-xl transition-colors group ${isPro ? 'bg-accent/5 border border-accent/20' : 'hover:bg-[#161B22]'}`}>
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center font-bold text-xs ring-2 ${isPro ? 'bg-accent text-white ring-accent/30 shadow-[0_0_10px_rgba(108,99,255,0.3)]' : 'bg-[#21262D] text-[#7D8590] ring-transparent'}`}>
-                {userName.charAt(0).toUpperCase()}
-              </div>
+              <img
+                src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userName)}&backgroundColor=2ea043&fontFamily=Inter`}
+                alt={userName}
+                className={`w-9 h-9 rounded-full shrink-0 object-cover border-2 ${isPro ? 'border-accent shadow-[0_0_10px_rgba(108,99,255,0.3)]' : 'border-[#2ea043]'}`}
+              />
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-semibold text-[#E6EDF3] truncate max-w-[90px]">{userName}</span>

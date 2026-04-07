@@ -25,6 +25,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     companyName: "",
+    companyDomain: "",
     jobTitle: "",
     jobUrl: "",
     source: "LinkedIn",
@@ -46,6 +47,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
         ...prev,
         status: initialStatus || "APPLIED",
         companyName: prefill?.companyName ?? "",
+        companyDomain: prefill?.jobUrl ? (new URL(prefill.jobUrl)).hostname.replace('www.', '') : "",
         jobTitle: prefill?.jobTitle ?? "",
         jobUrl: prefill?.jobUrl ?? "",
         source: prefill?.source ?? "LinkedIn",
@@ -119,7 +121,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center border border-accent/30 text-accent relative overflow-hidden">
                  {formData.companyName ? (
-                   <CompanyLogo companyName={formData.companyName} size={40} containerPadding="p-0" />
+                   <CompanyLogo companyName={formData.companyName} companyDomain={formData.companyDomain} size={40} containerPadding="p-0" />
                  ) : (
                      <Building2 className="w-5 h-5" />
                  )}
@@ -148,6 +150,19 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
                     value={formData.companyName} onChange={e => handleChange("companyName", e.target.value)}
                     className="w-full bg-primary border border-border rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-textPrimary placeholder:text-textSecondary/50"
                     placeholder="e.g. Google"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs uppercase tracking-wider font-medium text-textSecondary block">Company Domain (Optional)</label>
+                <div className="relative">
+                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-textSecondary" />
+                  <input 
+                    type="text"
+                    value={formData.companyDomain} onChange={e => handleChange("companyDomain", e.target.value)}
+                    className="w-full bg-primary border border-border rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-textPrimary placeholder:text-textSecondary/50"
+                    placeholder="e.g. google.com"
                   />
                 </div>
               </div>

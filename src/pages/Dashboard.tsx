@@ -5,31 +5,11 @@ import api from "../api/axios";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { TrendingUp, Users, Target, CheckCircle2 } from "lucide-react";
 import { trackEvent, identifyUser } from "../utils/analytics";
-
-/** Counts up from 0 to value over ~1.2s at 60fps */
-function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!value) return;
-    let start = 0;
-    const duration = 1200;
-    const step = value / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= value) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [value]);
-  return <span>{count}{suffix}</span>;
-}
+import AnimatedCounter from "../components/AnimatedCounter";
 
 import { useNavigate } from "react-router-dom";
 import MissedTracker from "../components/MissedTracker";
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
