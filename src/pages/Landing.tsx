@@ -178,6 +178,51 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* PROBLEM SECTION */}
+      <section className="py-20 px-10 border-t border-[#21262D]">
+        <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center gap-[60px]">
+          {/* Left Column - Image */}
+          <div className="flex-1 flex justify-center">
+            <img
+              src="/images/stressed-student.jpg"
+              alt="Stressed student during placement season"
+              style={{
+                width: '100%',
+                maxWidth: '440px',
+                height: '360px',
+                objectFit: 'cover',
+                borderRadius: '16px',
+                boxShadow: '0 16px 48px rgba(0,0,0,0.5)'
+              }}
+            />
+          </div>
+          {/* Right Column - Text */}
+          <div className="flex-1">
+            <p style={{ color: '#2ea043', fontSize: '13px', fontWeight: 600, 
+              letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>
+              Sound familiar?
+            </p>
+            <h2 style={{ color: '#fff', fontSize: '36px', fontWeight: 700, 
+              lineHeight: 1.3, marginBottom: '20px' }}>
+              Placement season is overwhelming
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {[
+                '😓 Tracking 40+ applications in a messy Excel sheet',
+                '⏰ Missing OA deadlines because you forgot to check',
+                '👻 No idea which companies are ghosting you',
+                '📊 Zero visibility into your own job search progress'
+              ].map((pain, i) => (
+                <p key={i} style={{ color: '#8B949E', fontSize: '15px', 
+                  display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  {pain}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FEATURES */}
       <section id="features" className="py-24 px-6 border-t border-[#21262D]">
         <div className="max-w-6xl mx-auto">
