@@ -237,8 +237,18 @@ export default function Landing() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: '📋', title: 'Never Miss a Deadline', desc: 'Track every OA and interview date in one place.' },
-              { icon: '📊', title: 'See Your Patterns', desc: 'Know your response rate, ghosting rate, and what\'s working.' },
+              { 
+                icon: '📋', 
+                title: 'Never Miss a Deadline', 
+                desc: 'Track every OA and interview date in one place.',
+                image: '/images/job-application.jpg'
+              },
+              { 
+                icon: '📊', 
+                title: 'Track Every Interview', 
+                desc: 'Organize your prep and feedback for every round and stage.',
+                image: '/images/interview-table.jpg'
+              },
               { icon: '🏢', title: 'Real Company Logos', desc: 'Every card shows the company logo automatically.' },
               { icon: '🔍', title: 'Discover Jobs', desc: 'Find openings from real sources, built for Indian students.' },
               { icon: '😔', title: 'Track Rejections Too', desc: 'Rejections are data. Learn from every one.' },
@@ -257,8 +267,21 @@ export default function Landing() {
                   padding: '24px',
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
                 }}
-                className="hover:translate-y-[-4px] hover:shadow-[0_8px_24px_rgba(46,160,67,0.12)] hover:border-[#2ea04340] cursor-default"
+                className="hover:translate-y-[-4px] hover:shadow-[0_8px_24px_rgba(46,160,67,0.12)] hover:border-[#2ea04340] cursor-default overflow-hidden"
               >
+                {('image' in f) && (
+                  <img
+                    src={f.image as string}
+                    alt={f.title}
+                    style={{
+                      width: '100%',
+                      height: '140px',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      marginBottom: '16px'
+                    }}
+                  />
+                )}
                 <div className="text-4xl mb-4">{f.icon}</div>
                 <h3 className="text-lg font-bold text-[#E6EDF3] mb-2">{f.title}</h3>
                 <p className="text-sm text-[#7D8590] leading-relaxed">{f.desc}</p>
