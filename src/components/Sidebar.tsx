@@ -132,14 +132,15 @@ export default function Sidebar() {
           })}
           
           <div className="px-4 mt-4">
-            <button
-               data-tally-open="YOUR_TALLY_ID"
-               data-tally-layout="modal"
+            <a
+               href="https://tally.so/r/zxJP1k"
+               target="_blank"
+               rel="noopener noreferrer"
                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-[#8B949E] hover:bg-[#161B22] hover:text-[#C9D1D9] transition-all w-full border border-[#30363D]"
             >
                <MessageSquare size={20} />
                <span>Send Feedback</span>
-            </button>
+            </a>
           </div>
         </div>
 
