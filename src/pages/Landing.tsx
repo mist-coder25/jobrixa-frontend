@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import {
   ArrowRight, Check, Zap,
 } from 'lucide-react';
-import AnimatedCounter from '../components/AnimatedCounter';
+
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -438,6 +438,22 @@ export default function Landing() {
           position: 'relative',
           overflow: 'hidden'
         }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img
+              src="/images/interview-success.jpg"
+              alt="Confident student at interview"
+              style={{
+                width: '200px',
+                height: '200px',
+                objectFit: 'cover',
+                objectPosition: 'top',
+                borderRadius: '50%',
+                border: '3px solid #2ea043',
+                marginBottom: '24px',
+                boxShadow: '0 8px 32px rgba(46,160,67,0.3)'
+              }}
+            />
+          </div>
           <div className="text-5xl mb-6">🚀</div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Your placement season starts now
@@ -458,9 +474,6 @@ export default function Landing() {
             className="hover:bg-[#3fb950] hover:scale-[1.02] shadow-lg shadow-[#2ea04340]">
             Get Started Now
           </button>
-          <p className="mt-6 text-[#7D8590] text-sm">
-            🎓 Already tracking <AnimatedCounter value={12482} suffix="+" className="text-[#3fb950] font-bold" /> applications across India
-          </p>
         </div>
       </section>
 
