@@ -20,7 +20,7 @@ const SOURCE_COLORS: Record<string, string> = {
 };
 
 function TrustBadge({ score }: { score: number }) {
-  const trustColor = score > 80 ? '#2da44e' : score > 60 ? '#9a6700' : '#cf222e';
+  const trustColor = score > 80 ? '#4F8EF7' : score > 60 ? '#9a6700' : '#cf222e';
   return (
     <span style={{ color: trustColor, borderColor: `${trustColor}30`, backgroundColor: `${trustColor}10` }}
       className="text-xs px-2 py-0.5 rounded-full border font-medium shrink-0">
@@ -67,7 +67,7 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
 
       {/* Salary + Meta Row */}
       <div className="flex items-center justify-between text-xs">
-        <span className="text-[#2da44e] font-semibold text-sm">{job.salaryLabel}</span>
+        <span className="text-[#4F8EF7] font-semibold text-sm">{job.salaryLabel}</span>
         <div className="flex items-center gap-2">
           <span className={`px-2 py-0.5 rounded-full border text-[10px] font-medium ${srcColor}`}>{job.source}</span>
           <span className="flex items-center gap-1 text-[#57606a]/60">
