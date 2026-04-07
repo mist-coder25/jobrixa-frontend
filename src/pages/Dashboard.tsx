@@ -89,10 +89,10 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="h-full flex flex-col bg-primary">
+      <div className="h-full flex flex-col bg-[#ffffff]">
         <TopBar title="Dashboard" subtitle="Here's how your search is going" showSearch />
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"></div>
+          <div className="w-8 h-8 rounded-full border-[#d0d7de] border-accent border-t-transparent animate-spin"></div>
         </div>
       </div>
     );
@@ -125,7 +125,7 @@ export default function Dashboard() {
       suffix: "%",
       icon: <Users className="w-4 h-4" />,
       trend: null,
-      borderColor: "border-l-[#3FB950]"
+      borderColor: "border-l-[#2da44e]"
     },
     {
       label: "Interview Rate",
@@ -133,39 +133,38 @@ export default function Dashboard() {
       suffix: "%",
       icon: <TrendingUp className="w-4 h-4" />,
       trend: null,
-      borderColor: "border-l-[#D29922]"
+      borderColor: "border-l-[#9a6700]"
     },
     {
       label: "Offer Rate",
       value: stats?.offerRate || 0,
       suffix: "%",
       icon: <CheckCircle2 className="w-4 h-4" />,
-      trend: <span className="text-xs text-[#7D8590] font-medium">of applied</span>,
+      trend: <span className="text-xs text-[#57606a] font-medium">of applied</span>,
       borderColor: "border-l-[#A371F7]"
     },
   ];
 
   return (
-    <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
+    <div className="h-full flex flex-col bg-[#ffffff] overflow-y-auto custom-scrollbar">
       <TopBar title="Dashboard" subtitle="Here's how your search is going" showSearch />
       
       <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
         {/* Early Adopter Banner */}
         {isEarlyAdopter && (
           <div style={{
-            background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
-            border: '1px solid #2ea043',
+            background: '#1a7f3715',
+            border: '1px solid #1a7f3730',
             borderRadius: '8px',
             padding: '12px 16px',
             marginBottom: '20px',
             fontSize: '13px',
-            color: '#3fb950',
             display: 'flex',
             alignItems: 'center',
             gap: '8px'
           }}>
-            <span>🎉</span>
-            <span>
+            <span className="text-[#1a7f37]">🎉</span>
+            <span className="text-[#1c2128]">
               You're an early adopter! All Pro features are <strong>free until {earlyAdopterExpiresDate}</strong>.
               Enjoy Jobrixa with zero limits.
             </span>
@@ -173,17 +172,17 @@ export default function Dashboard() {
         )}
         {/* Only render when we KNOW it's empty — null means still loading */}
         {hasAnyApp === false && (
-          <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-6 mb-6 flex items-center justify-between">
+          <div className="bg-[#ffffff] border border-[#d0d7de] rounded-xl p-6 mb-6 flex items-center justify-between shadow-sm">
             <div>
-              <h2 className="text-base font-semibold text-[#E6EDF3] mb-1">
+              <h2 className="text-base font-semibold text-[#1c2128] mb-1">
                 Welcome to Jobrixa! 👋
               </h2>
-              <p className="text-sm text-[#7D8590] mb-4">
+              <p className="text-sm text-[#57606a] mb-4">
                 Start tracking your applications and never miss an opportunity again.
               </p>
               <button
                 onClick={() => navigate('/pipeline')}
-                className="bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                className="bg-[#4F8EF7] hover:bg-[#3B7DE8] text-[#f6f8fa] text-sm font-medium px-4 py-2 rounded-lg transition-colors"
               >
                 + Add First Application
               </button>
@@ -206,21 +205,21 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15, duration: 0.5, ease: "easeOut" }}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className={`bg-[#161B22] border border-[#30363D] rounded-xl p-5 border-l-2 ${card.borderColor} hover:border-[#4F8EF7]/30 transition-colors cursor-default`}
+              className={`bg-[#ffffff] border border-[#d0d7de] rounded-xl p-5 border-l-2 ${card.borderColor} hover:border-[#4F8EF7]/30 transition-colors cursor-default`}
             >
               <div className="flex items-center justify-between mb-3">
-                <div className="text-[11px] font-semibold text-[#7D8590] uppercase tracking-wider">
+                <div className="text-[11px] font-semibold text-[#57606a] uppercase tracking-wider">
                   {card.label}
                 </div>
-                <div className="w-8 h-8 rounded-lg bg-[#1C2128] flex items-center justify-center text-[#7D8590]">
+                <div className="w-8 h-8 rounded-lg bg-[#f6f8fa] flex items-center justify-center text-[#57606a]">
                   {card.icon}
                 </div>
               </div>
-              <div className="text-3xl font-bold text-[#E6EDF3] mt-2">
+              <div className="text-3xl font-bold text-[#1c2128] mt-2">
                 <AnimatedCounter value={card.value} suffix={card.suffix} />
               </div>
               {card.trend && (
-                <div className="text-xs text-[#3FB950] mt-1 flex items-center">
+                <div className="text-xs text-[#2da44e] mt-1 flex items-center">
                   {card.trend}
                 </div>
               )}
@@ -230,15 +229,15 @@ export default function Dashboard() {
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-surface border border-border rounded-xl p-6">
-            <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Application Activity</h3>
+          <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6">
+            <h3 className="text-lg font-display font-semibold text-[#1c2128] mb-6">Application Activity</h3>
             <div className="h-[300px] w-full flex items-center justify-center">
               {hasAnyApp ? (
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={weeklyData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
-                    <XAxis dataKey="name" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
-                    <YAxis tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f6f8fa" vertical={false} />
+                    <XAxis dataKey="name" tick={{ fill: '#57606a', fontSize: 11 }} axisLine={{ stroke: '#d0d7de' }} tickLine={false} />
+                    <YAxis tick={{ fill: '#57606a', fontSize: 11 }} axisLine={{ stroke: '#d0d7de' }} tickLine={false} />
                     <Tooltip 
                       contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                       itemStyle={{ color: '#F0F0FF' }}
@@ -248,41 +247,41 @@ export default function Dashboard() {
                 </ResponsiveContainer>
               ) : (
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-[#1C2128] flex items-center justify-center mx-auto mb-3 text-[#586069]">
+                  <div className="w-12 h-12 rounded-full bg-[#f6f8fa] flex items-center justify-center mx-auto mb-3 text-[#586069]">
                     <Target size={20} />
                   </div>
-                  <p className="text-sm text-[#7D8590]">No activity data yet</p>
+                  <p className="text-sm text-[#57606a]">No activity data yet</p>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="bg-surface border border-border rounded-xl p-6">
-            <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Applications by Source</h3>
+          <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6">
+            <h3 className="text-lg font-display font-semibold text-[#1c2128] mb-6">Applications by Source</h3>
             <div className="h-[300px] w-full flex items-center justify-center">
               {hasAnyApp ? (
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={sourceData} layout="vertical" margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#21262D" horizontal={false} />
-                    <XAxis type="number" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
-                    <YAxis dataKey="name" type="category" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} width={80} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f6f8fa" horizontal={false} />
+                    <XAxis type="number" tick={{ fill: '#57606a', fontSize: 11 }} axisLine={{ stroke: '#d0d7de' }} tickLine={false} />
+                    <YAxis dataKey="name" type="category" tick={{ fill: '#57606a', fontSize: 11 }} axisLine={{ stroke: '#d0d7de' }} tickLine={false} width={80} />
                     <Tooltip 
                       cursor={{fill: '#2A2A38', opacity: 0.4}}
                       contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                     />
                     <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={24}>
                       {sourceData.map((_, i) => (
-                        <Cell key={i} fill={['#4F8EF7','#3FB950','#D29922','#A371F7'][i % 4]} />
+                        <Cell key={i} fill={['#4F8EF7','#2da44e','#9a6700','#A371F7'][i % 4]} />
                       ))}
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-[#1C2128] flex items-center justify-center mx-auto mb-3 text-[#586069]">
+                  <div className="w-12 h-12 rounded-full bg-[#f6f8fa] flex items-center justify-center mx-auto mb-3 text-[#586069]">
                     <Users size={20} />
                   </div>
-                  <p className="text-sm text-[#7D8590]">No source data yet</p>
+                  <p className="text-sm text-[#57606a]">No source data yet</p>
                 </div>
               )}
             </div>

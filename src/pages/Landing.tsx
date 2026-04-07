@@ -9,32 +9,32 @@ export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3] overflow-x-hidden">
+    <div className="min-h-screen bg-[#ffffff] text-[#1c2128] overflow-x-hidden">
 
       {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0D1117]/80 backdrop-blur-md border-b border-[#21262D]">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#ffffff]/80 backdrop-blur-md border-b border-[#f6f8fa] shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#2ea043] to-[#3fb950] flex items-center justify-center shadow-lg shadow-[#2ea043]/20">
-              <span className="text-white font-black text-base">J</span>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#1a7f37] to-[#2da44e] flex items-center justify-center shadow-lg shadow-[#1a7f37]/20">
+              <span className="text-[#f6f8fa] font-black text-base">J</span>
             </div>
-            <span className="font-bold text-[#E6EDF3] text-lg tracking-tight">Jobrixa</span>
+            <span className="font-bold text-[#1c2128] text-lg tracking-tight">Jobrixa</span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-sm text-[#7D8590]">
+          <div className="hidden md:flex items-center gap-6 text-sm text-[#57606a]">
             <span onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">Features</span>
+              className="hover:text-[#1c2128] cursor-pointer transition-colors">Features</span>
             <span onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}
-              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">How it works</span>
+              className="hover:text-[#1c2128] cursor-pointer transition-colors">How it works</span>
             <span onClick={() => navigate('/pricing')}
-              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">Pricing</span>
+              className="hover:text-[#1c2128] cursor-pointer transition-colors">Pricing</span>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => navigate('/login')}
-              className="text-sm text-[#7D8590] hover:text-[#E6EDF3] transition-colors px-3 py-1.5">
+              className="text-sm text-[#57606a] hover:text-[#1c2128] transition-colors px-3 py-1.5">
               Sign in
             </button>
             <button onClick={() => navigate('/register')}
-              className="text-sm bg-[#2ea043] hover:bg-[#3fb950] text-white font-medium px-4 py-1.5 rounded-lg transition-colors">
+              className="text-sm bg-[#1a7f37] hover:bg-[#2da44e] text-[#f6f8fa] font-medium px-4 py-1.5 rounded-lg transition-colors">
               Get started free
             </button>
           </div>
@@ -44,11 +44,11 @@ export default function Landing() {
       {/* BETA BANNER */}
       <div style={{
         background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
-        borderBottom: '1px solid #2ea043',
+        borderBottom: '1px solid #1a7f37',
         padding: '10px 24px',
         textAlign: 'center' as const,
         fontSize: '14px',
-        color: '#3fb950',
+        color: '#2da44e',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -58,7 +58,7 @@ export default function Landing() {
         <span>🎉</span>
         <span>
           <strong>Beta Launch:</strong> All Pro features are completely free for the first 1,000 students. 
-          <a href="/register" style={{ color: '#58a6ff', marginLeft: '6px', textDecoration: 'underline' }}>
+          <a href="/register" style={{ color: '#0969da', marginLeft: '6px', textDecoration: 'underline' }}>
             Register now to lock in your early access →
           </a>
         </span>
@@ -66,8 +66,8 @@ export default function Landing() {
 
       {/* HERO */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden" style={{
-        backgroundColor: '#0d1117',
-        backgroundImage: 'radial-gradient(circle, #2ea04320 1px, transparent 1px)',
+        backgroundColor: '#ffffff',
+        backgroundImage: 'radial-gradient(circle, #1a7f3720 1px, transparent 1px)',
         backgroundSize: '28px 28px',
         position: 'relative'
       }}>
@@ -76,7 +76,7 @@ export default function Landing() {
           position: 'absolute',
           width: '400px',
           height: '400px',
-          background: 'radial-gradient(circle, #2ea04318 0%, transparent 70%)',
+          background: 'radial-gradient(circle, #1a7f3718 0%, transparent 70%)',
           borderRadius: '50%',
           right: '-50px',
           top: '50%',
@@ -93,7 +93,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 bg-[#2ea04315] border border-[#2ea04330] rounded-full px-4 py-1.5 text-xs text-[#3fb950] font-medium mb-6"
+              className="inline-flex items-center gap-2 bg-[#1a7f3715] border border-[#1a7f3730] rounded-full px-4 py-1.5 text-xs text-[#2da44e] font-medium mb-6"
             >
               <Zap size={11} />
               Built for Indian students & fresh graduates
@@ -108,7 +108,7 @@ export default function Landing() {
                 fontSize: '52px',
                 fontWeight: 700,
                 lineHeight: 1.2,
-                background: 'linear-gradient(135deg, #ffffff 0%, #3fb950 100%)',
+                background: 'linear-gradient(135deg, #f6f8fa 0%, #1a7f37 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 marginBottom: '24px'
@@ -123,7 +123,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg text-[#7D8590] mb-8 leading-relaxed max-w-lg"
+              className="text-lg text-[#57606a] mb-8 leading-relaxed max-w-lg"
             >
               Jobrixa tracks every application, reminds you about OAs and interviews,
               and shows you exactly why you're not getting responses.
@@ -138,18 +138,18 @@ export default function Landing() {
               className="flex items-center gap-4 flex-wrap"
             >
               <button onClick={() => navigate('/register')}
-                className="flex items-center gap-2 bg-[#2ea043] hover:bg-[#3fb950] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-105">
+                className="flex items-center gap-2 bg-[#1a7f37] hover:bg-[#2da44e] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-105 shadow-sm">
                 Start tracking for free
                 <ArrowRight size={16} />
               </button>
               <button onClick={() => navigate('/login')}
-                className="flex items-center gap-2 bg-[#161B22] hover:bg-[#1C2128] border border-[#30363D] text-[#E6EDF3] font-medium px-6 py-3 rounded-xl text-sm transition-colors">
+                className="flex items-center gap-2 bg-white hover:bg-[#f6f8fa] border border-[#d0d7de] text-[#f6f8fa] font-medium px-6 py-3 rounded-xl text-sm transition-colors shadow-sm">
                 Sign in
               </button>
             </motion.div>
 
             {/* Social Proof Line */}
-            <p style={{ color: '#7D8590', fontSize: '13px', marginTop: '16px' }}>
+            <p style={{ color: '#57606a', fontSize: '13px', marginTop: '16px' }}>
               🎓 Built for Indian placement season · Free for students
             </p>
           </div>
@@ -171,7 +171,7 @@ export default function Landing() {
                 objectFit: 'cover',
                 borderRadius: '20px',
                 boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
-                border: '1px solid #21262D'
+                border: '1px solid #f6f8fa'
               }}
             />
           </motion.div>
@@ -179,7 +179,7 @@ export default function Landing() {
       </section>
 
       {/* PROBLEM SECTION */}
-      <section className="py-20 px-10 border-t border-[#21262D]">
+      <section className="py-20 px-10 border-t border-[#f6f8fa]">
         <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center gap-[60px]">
           {/* Left Column - Image */}
           <div className="flex-1 flex justify-center">
@@ -198,7 +198,7 @@ export default function Landing() {
           </div>
           {/* Right Column - Text */}
           <div className="flex-1">
-            <p style={{ color: '#2ea043', fontSize: '13px', fontWeight: 600, 
+            <p style={{ color: '#1a7f37', fontSize: '13px', fontWeight: 600, 
               letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>
               Sound familiar?
             </p>
@@ -213,7 +213,7 @@ export default function Landing() {
                 '👻 No idea which companies are ghosting you',
                 '📊 Zero visibility into your own job search progress'
               ].map((pain, i) => (
-                <p key={i} style={{ color: '#8B949E', fontSize: '15px', 
+                <p key={i} style={{ color: '#57606a', fontSize: '15px', 
                   display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                   {pain}
                 </p>
@@ -224,13 +224,13 @@ export default function Landing() {
       </section>
 
       {/* FEATURES */}
-      <section id="features" className="py-24 px-6 border-t border-[#21262D]">
+      <section id="features" className="py-24 px-6 border-t border-[#f6f8fa]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-4">
+            <h2 className="text-3xl font-bold text-[#1c2128] mb-4">
               Everything you need to land the job
             </h2>
-            <p className="text-[#7D8590] max-w-xl mx-auto">
+            <p className="text-[#57606a] max-w-xl mx-auto">
               Built specifically for placement season — not a generic todo app repurposed for job hunting.
             </p>
           </div>
@@ -261,13 +261,13 @@ export default function Landing() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4 }}
                 style={{
-                  background: '#161B22',
-                  border: '1px solid #21262D',
+                  background: '#ffffff',
+                  border: '1px solid #d0d7de',
                   borderRadius: '12px',
                   padding: '24px',
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
                 }}
-                className="hover:translate-y-[-4px] hover:shadow-[0_8px_24px_rgba(46,160,67,0.12)] hover:border-[#2ea04340] cursor-default overflow-hidden"
+                className="hover:translate-y-[-4px] hover:shadow-[0_8px_24px_rgba(140,149,159,0.15)] hover:border-[#2da44e40] cursor-default overflow-hidden shadow-sm"
               >
                 {('image' in f) && (
                   <img
@@ -283,8 +283,8 @@ export default function Landing() {
                   />
                 )}
                 <div className="text-4xl mb-4">{f.icon}</div>
-                <h3 className="text-lg font-bold text-[#E6EDF3] mb-2">{f.title}</h3>
-                <p className="text-sm text-[#7D8590] leading-relaxed">{f.desc}</p>
+                <h3 className="text-lg font-bold text-[#f6f8fa] mb-2">{f.title}</h3>
+                <p className="text-sm text-[#57606a] leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -292,9 +292,9 @@ export default function Landing() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 px-6 border-t border-[#21262D] bg-[#0D1117]">
+      <section className="py-24 px-6 border-t border-[#f6f8fa] bg-[#f6f8fa]">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-[#f6f8fa] mb-12">
             What students are saying 💬
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -319,10 +319,11 @@ export default function Landing() {
               }
             ].map(t => (
               <div key={t.name} style={{
-                background: '#161B22',
-                border: '1px solid #21262D',
+                background: '#ffffff',
+                border: '1px solid #d0d7de',
                 borderRadius: '12px',
-                padding: '20px'
+                padding: '20px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
               }}>
                 <div className="flex items-center gap-3 mb-4">
                   <img
@@ -331,11 +332,11 @@ export default function Landing() {
                     style={{ width: '44px', height: '44px', borderRadius: '50%' }}
                   />
                   <div>
-                    <p className="text-white font-bold text-sm">{t.name}</p>
-                    <p className="text-[#7D8590] text-xs">{t.college}</p>
+                    <p className="text-[#f6f8fa] font-bold text-sm">{t.name}</p>
+                    <p className="text-[#57606a] text-xs">{t.college}</p>
                   </div>
                 </div>
-                <p style={{ color: '#C9D1D9', fontStyle: 'italic', fontSize: '14px', lineHeight: '1.6' }}>
+                <p style={{ color: '#f6f8fa', fontStyle: 'italic', fontSize: '14px', lineHeight: '1.6' }}>
                   "{t.text}"
                 </p>
               </div>
@@ -345,11 +346,11 @@ export default function Landing() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" className="py-20 px-6 border-t border-[#21262D]">
+      <section id="how" className="py-20 px-6 border-t border-[#f6f8fa]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">How it works</h2>
-            <p className="text-[#7D8590]">Three steps to a organised job hunt</p>
+            <h2 className="text-3xl font-bold text-[#f6f8fa] mb-3">How it works</h2>
+            <p className="text-[#57606a]">Three steps to a organised job hunt</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -365,9 +366,9 @@ export default function Landing() {
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 className="relative"
               >
-                <div className="text-5xl font-black text-[#21262D] mb-4">{s.step}</div>
-                <h3 className="text-base font-semibold text-[#E6EDF3] mb-2">{s.title}</h3>
-                <p className="text-sm text-[#7D8590] leading-relaxed">{s.desc}</p>
+                <div className="text-5xl font-black text-[#f6f8fa] mb-4">{s.step}</div>
+                <h3 className="text-base font-semibold text-[#f6f8fa] mb-2">{s.title}</h3>
+                <p className="text-sm text-[#57606a] leading-relaxed">{s.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -375,49 +376,49 @@ export default function Landing() {
       </section>
 
       {/* PRICING TEASER */}
-      <section className="py-20 px-6 border-t border-[#21262D]">
+      <section className="py-20 px-6 border-t border-[#f6f8fa]">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">Simple pricing</h2>
-            <p className="text-[#7D8590]">Start free. Upgrade when you need more.</p>
+            <h2 className="text-3xl font-bold text-[#f6f8fa] mb-3">Simple pricing</h2>
+            <p className="text-[#57606a]">Start free. Upgrade when you need more.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Free */}
-            <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6">
-              <p className="text-xs font-semibold text-[#7D8590] uppercase tracking-wider mb-2">Free</p>
-              <div className="text-3xl font-bold text-[#E6EDF3] mb-1">₹0</div>
-              <p className="text-xs text-[#7D8590] mb-6">Forever free</p>
+            <div className="bg-[#ffffff] border border-[#d0d7de] rounded-2xl p-6 shadow-sm">
+              <p className="text-xs font-semibold text-[#57606a] uppercase tracking-wider mb-2">Free</p>
+              <div className="text-3xl font-bold text-[#f6f8fa] mb-1">₹0</div>
+              <p className="text-xs text-[#57606a] mb-6">Forever free</p>
               <div className="space-y-2 mb-6">
                 {['Up to 30 applications', 'Kanban pipeline', 'Basic analytics', 'Chrome extension'].map(f => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-[#7D8590]">
-                    <Check size={14} className="text-[#3FB950]" />
+                  <div key={f} className="flex items-center gap-2 text-sm text-[#57606a]">
+                    <Check size={14} className="text-[#2da44e]" />
                     {f}
                   </div>
                 ))}
               </div>
               <button onClick={() => navigate('/register')}
-                className="w-full py-2.5 border border-[#30363D] text-[#E6EDF3] rounded-lg text-sm hover:bg-[#1C2128] transition-colors">
+                className="w-full py-2.5 border border-[#d0d7de] text-[#f6f8fa] font-semibold rounded-lg text-sm hover:bg-[#f6f8fa] transition-colors">
                 Get started free
               </button>
             </div>
             {/* Pro */}
-            <div className="bg-[#161B22] border-2 border-[#4F8EF7]/50 rounded-2xl p-6 relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#4F8EF7] text-white text-xs font-bold px-3 py-1 rounded-full">
+            <div className="bg-[#ffffff] border-[#d0d7de] border-[#4F8EF7]/50 rounded-2xl p-6 relative shadow-sm">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#4F8EF7] text-[#1c2128] text-xs font-bold px-3 py-1 rounded-full">
                 MOST POPULAR
               </div>
               <p className="text-xs font-semibold text-[#4F8EF7] uppercase tracking-wider mb-2">Pro</p>
-              <div className="text-3xl font-bold text-[#E6EDF3] mb-1">₹149<span className="text-base font-normal text-[#7D8590]">/month</span></div>
-              <p className="text-xs text-[#7D8590] mb-6">For serious job hunters</p>
+              <div className="text-3xl font-bold text-[#f6f8fa] mb-1">₹149<span className="text-base font-normal text-[#57606a]">/month</span></div>
+              <p className="text-xs text-[#57606a] mb-6">For serious job hunters</p>
               <div className="space-y-2 mb-6">
                 {['Unlimited applications', 'Full analytics & insights', 'Gmail auto-detection', 'Missed & ghosted tracker', 'Priority support'].map(f => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-[#E6EDF3]">
+                  <div key={f} className="flex items-center gap-2 text-sm text-[#f6f8fa]">
                     <Check size={14} className="text-[#4F8EF7]" />
                     {f}
                   </div>
                 ))}
               </div>
               <button onClick={() => navigate('/pricing')}
-                className="w-full py-2.5 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold rounded-lg text-sm transition-colors">
+                className="w-full py-2.5 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-[#1c2128] font-semibold rounded-lg text-sm transition-colors">
                 Upgrade to Pro
               </button>
             </div>
@@ -426,17 +427,18 @@ export default function Landing() {
       </section>
 
       {/* BOTTOM CTA */}
-      <section className="py-20 px-6 border-t border-[#21262D]">
+      <section className="py-20 px-6 border-t border-[#d0d7de]">
         <div style={{
-          background: 'linear-gradient(135deg, #161B22 0%, #1a3a2a 100%)',
-          border: '1px solid #2ea043',
+          background: '#ffffff',
+          border: '1px solid #d0d7de',
           borderRadius: '16px',
           padding: '60px 40px',
           textAlign: 'center',
           margin: '60px auto',
           maxWidth: '700px',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.05)'
         }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <img
@@ -448,22 +450,22 @@ export default function Landing() {
                 objectFit: 'cover',
                 objectPosition: 'top',
                 borderRadius: '50%',
-                border: '3px solid #2ea043',
+                border: '3px solid #1a7f37',
                 marginBottom: '24px',
                 boxShadow: '0 8px 32px rgba(46,160,67,0.3)'
               }}
             />
           </div>
           <div className="text-5xl mb-6">🚀</div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#f6f8fa] mb-4">
             Your placement season starts now
           </h2>
-          <p className="text-[#7D8590] mb-10 max-w-md mx-auto">
+          <p className="text-[#57606a] mb-10 max-w-md mx-auto">
             Free for the first 1,000 students. No credit card. No catch.
           </p>
           <button onClick={() => navigate('/register')}
             style={{
-              background: '#2ea043',
+              background: '#1a7f37',
               color: 'white',
               padding: '14px 32px',
               borderRadius: '8px',
@@ -471,27 +473,27 @@ export default function Landing() {
               fontWeight: 600,
               transition: 'all 0.2s ease'
             }}
-            className="hover:bg-[#3fb950] hover:scale-[1.02] shadow-lg shadow-[#2ea04340]">
+            className="hover:bg-[#2da44e] hover:scale-[1.02] shadow-lg shadow-[#1a7f3720]">
             Get Started Now
           </button>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-[#21262D] py-8 px-6">
+      <footer className="border-t border-[#f6f8fa] py-8 px-6">
         <div className="max-w-5xl mx-auto flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-[#2ea043] flex items-center justify-center">
-              <span className="text-white font-black text-xs">J</span>
+            <div className="w-6 h-6 rounded-md bg-[#1a7f37] flex items-center justify-center">
+              <span className="text-[#f6f8fa] font-black text-xs">J</span>
             </div>
-            <span className="text-sm font-bold text-[#E6EDF3]">Jobrixa</span>
-            <span className="text-xs text-[#484F58] ml-2">© 2026</span>
+            <span className="text-sm font-bold text-[#1c2128]">Jobrixa</span>
+            <span className="text-xs text-[#8c959f] ml-2">© 2026</span>
           </div>
-          <div className="flex items-center gap-6 text-xs text-[#484F58]">
-            <span className="hover:text-[#7D8590] cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-[#7D8590] cursor-pointer">Terms</span>
-            <span className="hover:text-[#7D8590] cursor-pointer">Contact</span>
-            <span className="text-[#484F58]">support@jobrixa.app</span>
+          <div className="flex items-center gap-6 text-xs text-[#8c959f]">
+            <span className="hover:text-[#57606a] cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-[#57606a] cursor-pointer">Terms</span>
+            <span className="hover:text-[#57606a] cursor-pointer">Contact</span>
+            <span className="text-[#8c959f]">support@jobrixa.app</span>
           </div>
         </div>
       </footer>

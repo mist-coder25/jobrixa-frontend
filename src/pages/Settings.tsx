@@ -215,21 +215,21 @@ export default function Settings() {
   ];
 
   return (
-    <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
+    <div className="h-full flex flex-col bg-[#ffffff] overflow-y-auto custom-scrollbar">
       <TopBar title="Settings" />
 
       <div className="p-8 max-w-4xl mx-auto w-full">
 
         {/* Tab Navigation */}
-        <div className="flex gap-1 bg-surface border border-border rounded-xl p-1 mt-2 mb-6">
+        <div className="flex gap-1 bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-1 mt-2 mb-6">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
                 activeTab === tab.id
-                  ? "bg-accent text-white shadow-[0_2px_8px_rgba(108,99,255,0.35)]"
-                  : "text-textSecondary hover:text-textPrimary hover:bg-white/5"
+                  ? "bg-accent text-[#f6f8fa] shadow-[0_2px_8px_rgba(108,99,255,0.35)]"
+                  : "text-[#57606a] hover:text-[#1c2128] hover:bg-white/5"
               }`}
             >
               {tab.icon}
@@ -260,61 +260,61 @@ export default function Settings() {
                 </div>
 
                 {/* Fields */}
-                <div className="bg-surface border border-border rounded-xl p-6 space-y-5">
-                  <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider border-b border-border pb-3">Personal Info</h3>
+                <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6 space-y-5">
+                  <h3 className="text-sm font-semibold text-[#1c2128] uppercase tracking-wider border-b border-[#d0d7de] pb-3">Personal Info</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
-                      <label className="text-xs uppercase tracking-wider font-medium text-textSecondary">Full Name</label>
+                      <label className="text-xs uppercase tracking-wider font-medium text-[#57606a]">Full Name</label>
                       <input
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary focus:outline-none focus:border-accent transition-colors"
+                        className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm text-[#1c2128] focus:outline-none focus:border-accent transition-colors"
                         placeholder="Your full name"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs uppercase tracking-wider font-medium text-textSecondary">Email (read-only)</label>
+                      <label className="text-xs uppercase tracking-wider font-medium text-[#57606a]">Email (read-only)</label>
                       <input
                         value={profile?.email ?? ""}
                         readOnly
-                        className="w-full bg-primary/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-textSecondary cursor-not-allowed"
+                        className="w-full bg-[#ffffff]/50 border border-[#d0d7de]/50 rounded-lg px-3 py-2.5 text-sm text-[#57606a] cursor-not-allowed"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs uppercase tracking-wider font-medium text-textSecondary flex items-center gap-1.5">
+                      <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] flex items-center gap-1.5">
                         <GraduationCap size={12} /> College / University
                       </label>
                       <input
                         value={college}
                         onChange={e => setCollege(e.target.value)}
-                        className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary focus:outline-none focus:border-accent transition-colors"
+                        className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm text-[#1c2128] focus:outline-none focus:border-accent transition-colors"
                         placeholder="e.g. IIT Bombay"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs uppercase tracking-wider font-medium text-textSecondary">Graduation Year</label>
+                      <label className="text-xs uppercase tracking-wider font-medium text-[#57606a]">Graduation Year</label>
                       <input
                         type="number"
                         value={graduationYear}
                         onChange={e => setGraduationYear(e.target.value)}
                         min="2000" max="2035"
-                        className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary focus:outline-none focus:border-accent transition-colors"
+                        className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm text-[#1c2128] focus:outline-none focus:border-accent transition-colors"
                         placeholder="e.g. 2025"
                       />
                     </div>
 
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-xs uppercase tracking-wider font-medium text-textSecondary flex items-center gap-1.5">
+                      <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] flex items-center gap-1.5">
                         <Linkedin size={12} /> LinkedIn URL
                       </label>
                       <input
                         value={linkedinUrl}
                         onChange={e => setLinkedinUrl(e.target.value)}
-                        className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary focus:outline-none focus:border-accent transition-colors"
+                        className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm text-[#1c2128] focus:outline-none focus:border-accent transition-colors"
                         placeholder="https://linkedin.com/in/yourname"
                       />
                     </div>
@@ -322,30 +322,30 @@ export default function Settings() {
                 </div>
 
                 {/* Target CTC */}
-                <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
-                  <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider border-b border-border pb-3 flex items-center gap-2">
+                <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6 space-y-4">
+                  <h3 className="text-sm font-semibold text-[#1c2128] uppercase tracking-wider border-b border-[#d0d7de] pb-3 flex items-center gap-2">
                     <IndianRupee size={14} className="text-accent" /> Target CTC
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs uppercase tracking-wider font-medium text-textSecondary">Min LPA (₹)</label>
+                      <label className="text-xs uppercase tracking-wider font-medium text-[#57606a]">Min LPA (₹)</label>
                       <input
                         type="number"
                         value={targetCtcMin}
                         onChange={e => setTargetCtcMin(e.target.value)}
                         min="0"
-                        className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary focus:outline-none focus:border-accent transition-colors"
+                        className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm text-[#1c2128] focus:outline-none focus:border-accent transition-colors"
                         placeholder="e.g. 10"
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs uppercase tracking-wider font-medium text-textSecondary">Max LPA (₹)</label>
+                      <label className="text-xs uppercase tracking-wider font-medium text-[#57606a]">Max LPA (₹)</label>
                       <input
                         type="number"
                         value={targetCtcMax}
                         onChange={e => setTargetCtcMax(e.target.value)}
                         min="0"
-                        className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary focus:outline-none focus:border-accent transition-colors"
+                        className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm text-[#1c2128] focus:outline-none focus:border-accent transition-colors"
                         placeholder="e.g. 20"
                       />
                     </div>
@@ -353,16 +353,16 @@ export default function Settings() {
                 </div>
 
                 {/* Skills */}
-                <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
-                  <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider border-b border-border pb-3">Skills</h3>
+                <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6 space-y-4">
+                  <h3 className="text-sm font-semibold text-[#1c2128] uppercase tracking-wider border-b border-[#d0d7de] pb-3">Skills</h3>
                   <div
-                    className="flex flex-wrap gap-2 min-h-[44px] bg-primary border border-border rounded-lg p-2 cursor-text focus-within:border-accent transition-colors"
+                    className="flex flex-wrap gap-2 min-h-[44px] bg-[#ffffff] border border-[#d0d7de] rounded-lg p-2 cursor-text focus-within:border-accent transition-colors"
                     onClick={() => skillInputRef.current?.focus()}
                   >
                     {skills.map(skill => (
                       <span key={skill} className="flex items-center gap-1.5 px-3 py-1 bg-accent/15 border border-accent/25 text-accent text-xs font-medium rounded-full">
                         {skill}
-                        <button onClick={() => removeSkill(skill)} className="hover:text-white transition-colors">
+                        <button onClick={() => removeSkill(skill)} className="hover:text-[#f6f8fa] transition-colors">
                           <X size={10} />
                         </button>
                       </span>
@@ -372,7 +372,7 @@ export default function Settings() {
                       value={skillInput}
                       onChange={e => setSkillInput(e.target.value)}
                       onKeyDown={handleSkillKeyDown}
-                      className="bg-transparent border-none outline-none text-sm text-textPrimary placeholder:text-textSecondary/40 min-w-[120px] flex-1"
+                      className="bg-transparent border-none outline-none text-sm text-[#1c2128] placeholder:text-[#57606a]/40 min-w-[120px] flex-1"
                       placeholder={skills.length === 0 ? "Type a skill and press Enter..." : "Add more..."}
                     />
                   </div>
@@ -381,7 +381,7 @@ export default function Settings() {
                       <button
                         key={s}
                         onClick={() => addSkill(s)}
-                        className="px-2.5 py-1 bg-surface border border-border rounded-full text-xs text-textSecondary hover:border-accent hover:text-accent transition-colors flex items-center gap-1"
+                        className="px-2.5 py-1 bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-full text-xs text-[#57606a] hover:border-accent hover:text-accent transition-colors flex items-center gap-1"
                       >
                         <Plus size={10} /> {s}
                       </button>
@@ -392,7 +392,7 @@ export default function Settings() {
                 <button
                   onClick={handleSaveProfile}
                   disabled={savingProfile}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-accent hover:bg-[#5A52E8] text-white rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(108,99,255,0.25)] disabled:opacity-70"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(108,99,255,0.25)] disabled:opacity-70"
                 >
                   {savingProfile ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                   {savingProfile ? "Saving..." : "Save Changes"}
@@ -405,7 +405,7 @@ export default function Settings() {
         {/* ── NOTIFICATIONS TAB ── */}
         {activeTab === "notifications" && (
           <div className="space-y-4 animate-in fade-in duration-200">
-            <div className="bg-surface border border-border rounded-xl divide-y divide-border overflow-hidden">
+            <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl divide-y divide-border overflow-hidden">
               {([
                 {
                   key: "emailDigest",
@@ -430,8 +430,8 @@ export default function Settings() {
               ] as const).map(item => (
                 <div key={item.key} className="flex items-center justify-between p-5 hover:bg-white/[0.02] transition-colors">
                   <div>
-                    <p className="text-sm font-medium text-textPrimary">{item.label}</p>
-                    <p className="text-xs text-textSecondary mt-0.5">{item.desc}</p>
+                    <p className="text-sm font-medium text-[#1c2128]">{item.label}</p>
+                    <p className="text-xs text-[#57606a] mt-0.5">{item.desc}</p>
                   </div>
                   <button
                     onClick={() => setNotifs(prev => ({ ...prev, [item.key]: !prev[item.key] }))}
@@ -451,7 +451,7 @@ export default function Settings() {
 
             <button
               onClick={() => toast.success("✅ Notification preferences saved")}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-accent hover:bg-[#5A52E8] text-white rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(108,99,255,0.25)]"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(108,99,255,0.25)]"
             >
               <Check size={16} /> Save Preferences
             </button>
@@ -466,13 +466,13 @@ export default function Settings() {
             <div className={`rounded-2xl p-6 border ${
               (billingStatus?.plan?.toUpperCase().startsWith("PRO") || billingStatus?.plan?.toUpperCase() === "CAMPUS") && billingStatus.isActive
                 ? "bg-accent/10 border-accent/30 shadow-[0_0_20px_rgba(108,99,255,0.1)]"
-                : "bg-surface border-border"
+                : "bg-[#ffffff] shadow-sm border-[#d0d7de]"
             }`}>
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-wider font-medium text-textSecondary mb-1">Current Plan</p>
+                  <p className="text-xs uppercase tracking-wider font-medium text-[#57606a] mb-1">Current Plan</p>
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl font-display font-bold text-textPrimary">
+                    <span className="text-2xl font-display font-bold text-[#1c2128]">
                       {billingStatus?.plan?.toUpperCase() ?? "FREE"}
                     </span>
                     {billingStatus?.plan?.toUpperCase() !== "FREE" && billingStatus?.isActive && (
@@ -480,18 +480,18 @@ export default function Settings() {
                     )}
                   </div>
                   {billingStatus?.planExpiresAt && billingStatus.isActive && (
-                    <p className="text-xs text-textSecondary mt-1">
+                    <p className="text-xs text-[#57606a] mt-1">
                       Expires: {new Date(billingStatus.planExpiresAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
                     </p>
                   )}
                   {billingStatus?.plan?.toUpperCase() === "FREE" && (
-                    <p className="text-xs text-textSecondary mt-1">30 application limit</p>
+                    <p className="text-xs text-[#57606a] mt-1">30 application limit</p>
                   )}
                 </div>
                 {(billingStatus?.plan?.toUpperCase() === "FREE" || !billingStatus?.isActive) && (
                   <Link
                     to="/pricing"
-                    className="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-sm font-semibold transition-all shadow-[0_0_16px_rgba(108,99,255,0.3)]"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] rounded-lg text-sm font-semibold transition-all shadow-[0_0_16px_rgba(108,99,255,0.3)]"
                   >
                     <Zap size={14} /> Upgrade Plan
                   </Link>
@@ -500,9 +500,9 @@ export default function Settings() {
             </div>
 
             {/* Payment History */}
-            <div className="bg-surface border border-border rounded-xl overflow-hidden">
-              <div className="px-6 py-4 border-b border-border">
-                <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider">Payment History</h3>
+            <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#d0d7de]">
+                <h3 className="text-sm font-semibold text-[#1c2128] uppercase tracking-wider">Payment History</h3>
               </div>
               {(() => {
                 const successfulPayments = billingStatus?.payments?.filter(p => 
@@ -512,8 +512,8 @@ export default function Settings() {
                 if (successfulPayments.length === 0) {
                   return (
                     <div className="px-6 py-8 text-center">
-                      <CreditCard size={28} className="text-textSecondary/30 mx-auto mb-2" />
-                      <p className="text-textSecondary text-sm">No payments yet</p>
+                      <CreditCard size={28} className="text-[#57606a]/30 mx-auto mb-2" />
+                      <p className="text-[#57606a] text-sm">No payments yet</p>
                       <Link to="/pricing" className="text-accent text-sm hover:underline mt-1 inline-block">View pricing plans →</Link>
                     </div>
                   );
@@ -524,11 +524,11 @@ export default function Settings() {
                     {successfulPayments.map(p => (
                       <div key={p.id} className="px-6 py-4 flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-textPrimary">{p.plan} Plan</p>
-                          <p className="text-xs text-textSecondary">{new Date(p.createdAt).toLocaleDateString("en-IN")}</p>
+                          <p className="text-sm font-medium text-[#1c2128]">{p.plan} Plan</p>
+                          <p className="text-xs text-[#57606a]">{new Date(p.createdAt).toLocaleDateString("en-IN")}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm font-semibold text-textPrimary">₹{(p.amount / 100).toFixed(0)}</span>
+                          <span className="text-sm font-semibold text-[#1c2128]">₹{(p.amount / 100).toFixed(0)}</span>
                           <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-500/15 text-emerald-400">
                             SUCCESS
                           </span>
@@ -540,7 +540,7 @@ export default function Settings() {
               })()}
             </div>
 
-            <p className="text-xs text-textSecondary/60 text-center">
+            <p className="text-xs text-[#57606a]/60 text-center">
               Need help? Email{" "}
               <a href="mailto:support@jobrixa.app" className="text-accent hover:underline">support@jobrixa.app</a>
             </p>
@@ -551,14 +551,14 @@ export default function Settings() {
         {activeTab === "integrations" && (
           <div className="space-y-6 animate-in fade-in duration-200">
             {/* Gmail Integration Card */}
-            <div className="bg-surface border border-border rounded-xl overflow-hidden">
-              <div className="px-6 py-5 border-b border-border flex items-center gap-4">
+            <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl overflow-hidden">
+              <div className="px-6 py-5 border-b border-[#d0d7de] flex items-center gap-4">
                 <div className="w-11 h-11 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-center shrink-0">
                   <Mail className="text-red-400" size={22} />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-display font-semibold text-textPrimary">Gmail Integration</h3>
-                  <p className="text-sm text-textSecondary mt-0.5">Auto-detect job emails and sync your pipeline</p>
+                  <h3 className="font-display font-semibold text-[#1c2128]">Gmail Integration</h3>
+                  <p className="text-sm text-[#57606a] mt-0.5">Auto-detect job emails and sync your pipeline</p>
                 </div>
                 {gmailStatus?.connected && (
                   <span className="flex items-center gap-1.5 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-medium">
@@ -571,9 +571,9 @@ export default function Settings() {
               <div className="p-6 space-y-4">
                 {gmailStatus?.connected ? (
                   <>
-                    <div className="flex items-center gap-2 text-sm text-textSecondary">
+                    <div className="flex items-center gap-2 text-sm text-[#57606a]">
                       <RefreshCw size={13} className="shrink-0" />
-                      Last scanned: <span className="text-textPrimary font-medium">
+                      Last scanned: <span className="text-[#1c2128] font-medium">
                         {gmailStatus.lastScanned === "Never" ? "Never" :
                           new Date(gmailStatus.lastScanned).toLocaleString("en-IN", {
                             day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"
@@ -584,7 +584,7 @@ export default function Settings() {
                     <button
                       onClick={scanNow}
                       disabled={scanning}
-                      className="w-full flex items-center justify-center gap-2 py-3 bg-accent hover:bg-[#5A52E8] text-white rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(108,99,255,0.2)] disabled:opacity-70"
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(108,99,255,0.2)] disabled:opacity-70"
                     >
                       {scanning
                         ? <><Loader2 size={16} className="animate-spin" /> Scanning inbox...</>
@@ -599,7 +599,7 @@ export default function Settings() {
                     <button
                       onClick={disconnectGmail}
                       disabled={disconnecting}
-                      className="flex items-center gap-2 text-sm text-textSecondary hover:text-danger transition-colors"
+                      className="flex items-center gap-2 text-sm text-[#57606a] hover:text-danger transition-colors"
                     >
                       <Unlink size={13} />
                       {disconnecting ? "Disconnecting..." : "Disconnect Gmail"}
@@ -607,7 +607,7 @@ export default function Settings() {
                   </>
                 ) : (
                   <>
-                    <p className="text-sm text-textSecondary leading-relaxed">
+                    <p className="text-sm text-[#57606a] leading-relaxed">
                       Connect Gmail to automatically detect application confirmations, interview invites, OA links, and rejections — and have them update your pipeline instantly.
                     </p>
 
@@ -618,7 +618,7 @@ export default function Settings() {
                         { icon: "🗓️", text: "Interview invites" },
                         { icon: "❌", text: "Rejection emails" },
                       ].map(item => (
-                        <div key={item.text} className="flex items-center gap-2 px-3 py-2 bg-primary border border-border rounded-lg text-textSecondary">
+                        <div key={item.text} className="flex items-center gap-2 px-3 py-2 bg-[#ffffff] border border-[#d0d7de] rounded-lg text-[#57606a]">
                           <span>{item.icon}</span>
                           <span>{item.text}</span>
                         </div>
@@ -627,12 +627,12 @@ export default function Settings() {
 
                     <button
                       onClick={connectGmail}
-                      className="w-full flex items-center justify-center gap-2 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-red-500 hover:bg-red-600 text-[#f6f8fa] rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(239,68,68,0.2)]"
                     >
                       <Mail size={16} /> Connect Gmail
                     </button>
 
-                    <p className="text-xs text-textSecondary/60 text-center">
+                    <p className="text-xs text-[#57606a]/60 text-center">
                       Requires Gmail read access. We only read subject lines — not email body content.
                     </p>
                   </>
@@ -641,12 +641,12 @@ export default function Settings() {
             </div>
 
             {/* Future integrations placeholder */}
-            <div className="bg-surface/50 border border-border/50 rounded-xl p-6 opacity-50">
+            <div className="bg-[#ffffff] shadow-sm/50 border border-[#d0d7de]/50 rounded-xl p-6 opacity-50">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-border/30 rounded-xl" />
                 <div>
-                  <p className="text-sm font-medium text-textSecondary">More integrations coming soon</p>
-                  <p className="text-xs text-textSecondary/60">Outlook, Notion, Slack...</p>
+                  <p className="text-sm font-medium text-[#57606a]">More integrations coming soon</p>
+                  <p className="text-xs text-[#57606a]/60">Outlook, Notion, Slack...</p>
                 </div>
               </div>
             </div>
@@ -657,15 +657,15 @@ export default function Settings() {
         {activeTab === "account" && (
           <div className="space-y-6 animate-in fade-in duration-200">
             {/* Current Email */}
-            <div className="bg-surface border border-border rounded-xl p-6 space-y-2">
-              <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider border-b border-border pb-3">Account Email</h3>
-              <p className="text-textSecondary text-sm">Your account is registered with:</p>
-              <p className="text-textPrimary font-medium">{profile?.email ?? "—"}</p>
+            <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6 space-y-2">
+              <h3 className="text-sm font-semibold text-[#1c2128] uppercase tracking-wider border-b border-[#d0d7de] pb-3">Account Email</h3>
+              <p className="text-[#57606a] text-sm">Your account is registered with:</p>
+              <p className="text-[#1c2128] font-medium">{profile?.email ?? "—"}</p>
             </div>
 
             {/* Change Password */}
-            <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
-              <h3 className="text-sm font-semibold text-textPrimary uppercase tracking-wider border-b border-border pb-3">Change Password</h3>
+            <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6 space-y-4">
+              <h3 className="text-sm font-semibold text-[#1c2128] uppercase tracking-wider border-b border-[#d0d7de] pb-3">Change Password</h3>
 
               {[
                 { label: "Current Password", value: currentPassword, setter: setCurrentPassword },
@@ -673,19 +673,19 @@ export default function Settings() {
                 { label: "Confirm New Password", value: confirmPassword, setter: setConfirmPassword },
               ].map(field => (
                 <div key={field.label} className="space-y-1.5">
-                  <label className="text-xs uppercase tracking-wider font-medium text-textSecondary">{field.label}</label>
+                  <label className="text-xs uppercase tracking-wider font-medium text-[#57606a]">{field.label}</label>
                   <div className="relative">
                     <input
                       type={showPass ? "text" : "password"}
                       value={field.value}
                       onChange={e => field.setter(e.target.value)}
-                      className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 pr-10 text-sm text-textPrimary focus:outline-none focus:border-accent transition-colors"
+                      className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 pr-10 text-sm text-[#1c2128] focus:outline-none focus:border-accent transition-colors"
                       placeholder="••••••••"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPass(p => !p)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-textSecondary hover:text-textPrimary"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#57606a] hover:text-[#1c2128]"
                     >
                       {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -710,23 +710,23 @@ export default function Settings() {
                   toast.success("✅ Password updated");
                   setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
                 }}
-                className="w-full py-2.5 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-sm font-medium transition-all"
+                className="w-full py-2.5 bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] rounded-lg text-sm font-medium transition-all"
               >
                 Update Password
               </button>
             </div>
 
             {/* Danger Zone */}
-            <div className="bg-danger/5 border border-danger/30 rounded-xl p-6 space-y-4">
+            <div className="bg-[#f6f8fa]anger/5 border border-[#d0d7de]anger/30 rounded-xl p-6 space-y-4">
               <h3 className="text-danger font-display font-bold flex items-center gap-2">
                 <AlertTriangle size={16} /> Danger Zone
               </h3>
-              <p className="text-sm text-textSecondary">
-                This will permanently delete your account and <strong className="text-textPrimary">all your data</strong>. This cannot be undone.
+              <p className="text-sm text-[#57606a]">
+                This will permanently delete your account and <strong className="text-[#1c2128]">all your data</strong>. This cannot be undone.
               </p>
               <button
                 onClick={() => setShowDeleteModal(true)}
-                className="flex items-center gap-2 px-4 py-2 border border-danger/50 text-danger rounded-lg text-sm font-medium hover:bg-danger hover:text-white hover:border-danger transition-all"
+                className="flex items-center gap-2 px-4 py-2 border border-[#d0d7de]anger/50 text-danger rounded-lg text-sm font-medium hover:bg-[#f6f8fa]anger hover:text-[#f6f8fa] hover:border-[#d0d7de]anger transition-all"
               >
                 <Trash2 size={14} /> Delete Account
               </button>
@@ -737,33 +737,33 @@ export default function Settings() {
 
       {/* Delete Account Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="bg-surface border border-danger/30 rounded-2xl w-full max-w-sm p-6 shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="w-12 h-12 rounded-full bg-danger/10 border border-danger/30 flex items-center justify-center mx-auto mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/70 backdrop-blur-sm">
+          <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de]anger/30 rounded-2xl w-full max-w-sm p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="w-12 h-12 rounded-full bg-[#f6f8fa]anger/10 border border-[#d0d7de]anger/30 flex items-center justify-center mx-auto mb-4">
               <AlertTriangle size={22} className="text-danger" />
             </div>
-            <h3 className="font-display font-bold text-lg text-center text-textPrimary mb-1">Delete Account</h3>
-            <p className="text-sm text-textSecondary text-center mb-4">
+            <h3 className="font-display font-bold text-lg text-center text-[#1c2128] mb-1">Delete Account</h3>
+            <p className="text-sm text-[#57606a] text-center mb-4">
               Type <strong className="text-danger font-mono">DELETE</strong> to confirm permanent deletion.
             </p>
             <input
               type="text"
               value={deleteConfirmText}
               onChange={e => setDeleteConfirmText(e.target.value)}
-              className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary focus:outline-none focus:border-danger mb-4 font-mono text-center"
+              className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm text-[#1c2128] focus:outline-none focus:border-[#d0d7de]anger mb-4 font-mono text-center"
               placeholder="Type DELETE"
             />
             <div className="flex gap-3">
               <button
                 onClick={() => { setShowDeleteModal(false); setDeleteConfirmText(""); }}
-                className="flex-1 py-2.5 border border-border rounded-lg text-sm font-medium text-textSecondary hover:text-textPrimary transition-colors"
+                className="flex-1 py-2.5 border border-[#d0d7de] rounded-lg text-sm font-medium text-[#57606a] hover:text-[#1c2128] transition-colors"
               >
                 Cancel
               </button>
               <button
                 disabled={deleteConfirmText !== "DELETE"}
                 onClick={() => toast.error("Account deletion is disabled in demo mode")}
-                className="flex-1 py-2.5 bg-danger hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-all"
+                className="flex-1 py-2.5 bg-[#f6f8fa]anger hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-[#f6f8fa] rounded-lg text-sm font-medium transition-all"
               >
                 Delete Forever
               </button>

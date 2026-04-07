@@ -140,16 +140,16 @@ export default function Pipeline() {
   applications.forEach(a => { counts[a.status] = (counts[a.status] || 0) + 1; });
 
   const COLUMN_COLORS: Record<string, string> = {
-    SAVED: '#7D8590',
+    SAVED: '#57606a',
     APPLIED: '#4F8EF7',
-    OA: '#D29922',
+    OA: '#9a6700',
     INTERVIEW: '#A371F7',
-    OFFER: '#3FB950',
-    GHOSTED: '#484F58'
+    OFFER: '#2da44e',
+    GHOSTED: '#8c959f'
   };
 
   return (
-    <div className="h-full flex flex-col relative w-full overflow-hidden bg-primary">
+    <div className="h-full flex flex-col relative w-full overflow-hidden bg-[#ffffff]">
       <TopBar
         title="My Pipeline"
         subtitle="Your job hunt, organized"
@@ -160,7 +160,7 @@ export default function Pipeline() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
-            className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-[#161B22] border border-[#30363D] rounded-lg text-sm font-medium text-[#7D8590] hover:text-[#4F8EF7] hover:border-[#4F8EF7]/50 transition-all"
+            className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-[#ffffff] border border-[#d0d7de] rounded-lg text-sm font-medium text-[#57606a] hover:text-[#4F8EF7] hover:border-[#4F8EF7]/50 transition-all shadow-sm"
             title="Quick Add from URL"
           >
             <Link2 className="w-4 h-4" />
@@ -171,7 +171,7 @@ export default function Pipeline() {
             <div className="absolute -inset-0.5 bg-[#4F8EF7] rounded-lg blur opacity-40 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse" />
             <button
               onClick={() => handleAddClick("APPLIED")}
-              className="relative bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-[0_0_15px_rgba(79,142,247,0.4)] transition-all"
+              className="relative bg-[#4F8EF7] hover:bg-[#3B7DE8] text-[#f6f8fa] px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-[0_0_15px_rgba(79,142,247,0.4)] transition-all"
             >
               <Zap className="w-4 h-4" />
               <span className="hidden md:inline">Add Application</span>
@@ -181,7 +181,7 @@ export default function Pipeline() {
       </TopBar>
 
       {/* Application progress bar — shows how active the job hunt is */}
-      <div className="px-6 py-3 border-b border-[#21262D] flex flex-col md:flex-row md:items-center gap-4 md:gap-6 bg-[#0D1117]">
+      <div className="px-6 py-3 border-b border-[#f6f8fa] flex flex-col md:flex-row md:items-center gap-4 md:gap-6 bg-[#ffffff]">
         {/* Stage progress */}
         <div className="flex items-center gap-1.5 flex-1 w-full max-w-xl">
           {['SAVED','APPLIED','OA','INTERVIEW','OFFER'].map((stage, i) => (
@@ -189,23 +189,23 @@ export default function Pipeline() {
               <div 
                 className="h-1.5 flex-1 rounded-full transition-all"
                 style={{ 
-                  background: counts[stage] > 0 ? COLUMN_COLORS[stage] : '#21262D'
+                  background: counts[stage] > 0 ? COLUMN_COLORS[stage] : '#f6f8fa'
                 }} 
               />
-              {i < 4 && <div className="w-1 h-1 rounded-full bg-[#30363D]" />}
+              {i < 4 && <div className="w-1 h-1 rounded-full bg-[#d0d7de]" />}
             </div>
           ))}
         </div>
         {/* Quick stats */}
         <div className="flex items-center justify-between md:justify-start gap-4 text-xs font-medium">
-          <span className="text-[#7D8590]">
-            <span className="text-[#E6EDF3]">{totalApps}</span> total
+          <span className="text-[#57606a]">
+            <span className="text-[#1c2128]">{totalApps}</span> total
           </span>
-          <span className="text-[#7D8590]">
-            <span className="text-[#3FB950]">{activeApps}</span> active
+          <span className="text-[#57606a]">
+            <span className="text-[#2da44e]">{activeApps}</span> active
           </span>
-          <span className="text-[#7D8590]">
-            <span className="text-[#D29922]">{interviewCount}</span> interviews
+          <span className="text-[#57606a]">
+            <span className="text-[#9a6700]">{interviewCount}</span> interviews
           </span>
         </div>
       </div>
@@ -223,7 +223,7 @@ export default function Pipeline() {
           <div className="flex items-center gap-2 shrink-0">
             <Link
               to="/pricing"
-              className="flex items-center gap-1 px-3 py-1.5 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-xs font-semibold transition-all"
+              className="flex items-center gap-1 px-3 py-1.5 bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] rounded-lg text-xs font-semibold transition-all"
             >
               <Zap size={11} /> Upgrade Now
             </Link>
@@ -240,20 +240,20 @@ export default function Pipeline() {
       {applications.length === 0 && !loading ? (
         <div className="flex-1 flex flex-col items-center justify-center p-20 text-center animate-in fade-in zoom-in duration-500">
           <div className="relative mb-8">
-            <div className="absolute -inset-10 bg-[#2ea043]/5 rounded-full blur-3xl" />
+            <div className="absolute -inset-10 bg-[#1a7f37]/5 rounded-full blur-3xl" />
             <img 
               src="https://illustrations.popsy.co/amber/waiting.svg" 
               alt="Empty pipeline" 
               className="w-64 h-64 relative z-10"
             />
           </div>
-          <h2 className="text-2xl font-bold text-[#E6EDF3] mb-3">No applications yet</h2>
-          <p className="text-[#7D8590] max-w-sm mb-8 leading-relaxed">
+          <h2 className="text-2xl font-bold text-[#1c2128] mb-3">No applications yet</h2>
+          <p className="text-[#57606a] max-w-sm mb-8 leading-relaxed">
             Your placement journey starts with the first application. Add a job to see it appear in your pipeline.
           </p>
           <button
             onClick={() => handleAddClick("APPLIED")}
-            className="bg-[#2ea043] hover:bg-[#3fb950] text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-[#2ea043]/20 transition-all hover:scale-105 active:scale-95"
+            className="bg-[#1a7f37] hover:bg-[#2da44e] text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-[#1a7f37]/20 transition-all hover:scale-105 active:scale-95"
           >
             + Add Application
           </button>
@@ -330,7 +330,7 @@ export default function Pipeline() {
       {/* Floating Quick Add button for mobile */}
       <button
         onClick={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
-        className="md:hidden fixed bottom-32 right-4 w-12 h-12 bg-surface border border-border text-accent rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform z-40"
+        className="md:hidden fixed bottom-32 right-4 w-12 h-12 bg-[#ffffff] shadow-sm border border-[#d0d7de] text-accent rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform z-40"
         title="Quick Add from URL"
       >
         <Link2 className="w-5 h-5" />
@@ -342,8 +342,8 @@ export default function Pipeline() {
           position: 'fixed',
           bottom: '24px',
           right: '24px',
-          background: '#161B22',
-          border: '1px solid #30363D',
+          background: '#ffffff',
+          border: '1px solid #d0d7de',
           borderRadius: '12px',
           padding: '20px',
           maxWidth: '320px',
@@ -355,10 +355,10 @@ export default function Pipeline() {
             <span style={{ fontSize: '16px' }}>😔 That's tough</span>
             <button 
               onClick={() => setShowRejectedFeedback(false)}
-              style={{ background: 'none', border: 'none', color: '#7D8590', cursor: 'pointer', fontSize: '18px' }}
+              style={{ background: 'none', border: 'none', color: '#57606a', cursor: 'pointer', fontSize: '18px' }}
             >×</button>
           </div>
-          <p style={{ color: '#C9D1D9', fontSize: '13px', marginBottom: '14px', lineHeight: '1.5' }}>
+          <p style={{ color: '#f6f8fa', fontSize: '13px', marginBottom: '14px', lineHeight: '1.5' }}>
             Sorry about {rejectedCompany}. Got 30 seconds to help us improve Jobrixa?
           </p>
           
@@ -368,11 +368,11 @@ export default function Pipeline() {
             rel="noopener noreferrer"
             style={{
               display: 'block',
-              background: '#21262D',
-              border: '1px solid #30363D',
+              background: '#f6f8fa',
+              border: '1px solid #d0d7de',
               borderRadius: '6px',
               padding: '8px 12px',
-              color: '#58a6ff',
+              color: '#0969da',
               textDecoration: 'none',
               fontSize: '13px',
               textAlign: 'center',
@@ -388,7 +388,7 @@ export default function Pipeline() {
               width: '100%',
               background: 'none',
               border: 'none',
-              color: '#7D8590',
+              color: '#57606a',
               fontSize: '12px',
               cursor: 'pointer',
               padding: '4px'
