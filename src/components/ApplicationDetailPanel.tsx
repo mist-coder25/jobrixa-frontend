@@ -147,17 +147,17 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: "100%", opacity: 0 }}
         transition={{ type: "spring", damping: 28, stiffness: 300 }}
-        className="fixed top-0 right-0 z-50 h-full w-full md:w-[450px] bg-surface shadow-[-10px_0_30px_rgba(0,0,0,0.5)] flex flex-col border-l border-border"
+        className="fixed top-0 right-0 z-50 h-full w-full md:w-[450px] bg-surface  flex flex-col border-l border-border"
       >
         
         {/* Header */}
         <div className="p-6 border-b border-border relative">
-          <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 text-textSecondary transition-colors">
+          <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full hover:bg-[#0d1117]/10 text-textSecondary transition-colors">
             <X className="w-5 h-5" />
           </button>
 
           <div className="flex gap-4 mt-2">
-            <CompanyLogo companyName={companyName} size={64} className="border border-border/50 shadow-sm" containerPadding="p-2" />
+            <CompanyLogo companyName={companyName} size={64} className="border border-border/50 " containerPadding="p-2" />
             <div className="flex-1 pr-6 space-y-2">
               <input 
                 value={companyName}

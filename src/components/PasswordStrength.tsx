@@ -13,7 +13,7 @@ export default function PasswordStrength({ password = '' }: Props) {
 
   const score = checks.filter(c => c.pass).length;
   const strength = score <= 1 ? 'Weak' : score <= 3 ? 'Fair' : score === 4 ? 'Good' : 'Strong';
-  const colors: Record<string, string> = { Weak: '#F85149', Fair: '#D29922', Good: '#4F8EF7', Strong: '#3FB950' };
+  const colors: Record<string, string> = { Weak: '#F85149', Fair: '#D29922', Good: '#58a6ff', Strong: '#3FB950' };
   const color = colors[strength];
 
   if (!password) return null;

@@ -34,7 +34,7 @@ export default function MissedTracker({ data }: { data: MissedData }) {
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-sm font-bold text-red-100 flex items-center gap-2">
                 Missed Opportunities Detected
-                <span className="bg-red-500 text-[#1c2128] text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">
+                <span className="bg-red-500 text-[#C9D1D9] text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse">
                   {data.missedCount} MISSED
                 </span>
               </h3>

@@ -92,12 +92,12 @@ export default function Sidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 h-screen bg-white border-r border-[#d0d7de] fixed left-0 top-0">
+      <aside className="hidden md:flex flex-col w-64 h-screen bg-[#0d1117] border-r border-[#30363D] fixed left-0 top-0">
         <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#4F8EF7] flex items-center justify-center shadow-lg shadow-[#4F8EF7]/20">
+          <div className="w-8 h-8 rounded-lg bg-[#58a6ff] flex items-center justify-center  /20">
             <span className="text-white font-black text-sm">J</span>
           </div>
-          <span className="font-bold text-[#1c2128] text-lg tracking-tight">Jobrixa</span>
+          <span className="font-bold text-[#C9D1D9] text-lg tracking-tight">Jobrixa</span>
         </div>
 
         <div className="flex-1 overflow-y-auto px-3 py-6 space-y-2">
@@ -109,15 +109,15 @@ export default function Sidebar() {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative ${
                   isActive
-                    ? "bg-[#f6f8fa] text-[#1c2128] font-semibold"
-                    : "text-[#57606a] hover:bg-[#f6f8fa] hover:text-[#1c2128]"
+                    ? "bg-[#161B22] text-[#C9D1D9] font-semibold"
+                    : "text-[#8B949E] hover:bg-[#161B22] hover:text-[#C9D1D9]"
                 }`}
               >
                 {isActive && (
-                  <div className="absolute left-0 w-1 h-6 bg-[#4F8EF7] rounded-r-full" />
+                  <div className="absolute left-0 w-1 h-6 bg-[#58a6ff] rounded-r-full" />
                 )}
                 <span className={`transition-colors duration-200 ${
-                  isActive ? "text-[#4F8EF7]" : "text-[#57606a] group-hover:text-[#1c2128]"
+                  isActive ? "text-[#58a6ff]" : "text-[#8B949E] group-hover:text-[#C9D1D9]"
                 }`}>
                   {item.icon}
                 </span>
@@ -135,7 +135,7 @@ export default function Sidebar() {
             <button
                data-tally-open="YOUR_TALLY_ID"
                data-tally-layout="modal"
-               className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-[#57606a] hover:bg-[#f6f8fa] hover:text-[#1c2128] transition-all w-full border border-[#d0d7de]"
+               className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-[#8B949E] hover:bg-[#161B22] hover:text-[#C9D1D9] transition-all w-full border border-[#30363D]"
             >
                <MessageSquare size={20} />
                <span>Send Feedback</span>
@@ -145,15 +145,15 @@ export default function Sidebar() {
 
         {!isPro && !isEarlyAdopter && (
           <div className="px-4 mb-6">
-            <div className="bg-gradient-to-br from-[#f6f8fa] to-[#eaeef2] rounded-2xl p-4 border border-[#d0d7de] shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mb-3 shadow-sm">
+            <div className="bg-gradient-to-br from-[#161B22] to-[#21262D] rounded-2xl p-4 border border-[#30363D] ">
+              <div className="w-10 h-10 rounded-xl bg-[#0d1117] flex items-center justify-center mb-3 ">
                 <Zap size={20} className="text-[#9a6700]" />
               </div>
-              <h4 className="text-sm font-bold text-[#1c2128] mb-1">Upgrade to Pro</h4>
-              <p className="text-xs text-[#57606a] mb-4">{totalAppsCreated ?? 0}/30 apps used</p>
+              <h4 className="text-sm font-bold text-[#C9D1D9] mb-1">Upgrade to Pro</h4>
+              <p className="text-xs text-[#8B949E] mb-4">{totalAppsCreated ?? 0}/30 apps used</p>
               <button 
                 onClick={() => navigate('/pricing')}
-                className="w-full py-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
+                className="w-full py-2 bg-[#58a6ff] hover:bg-[#1f6feb] text-white text-xs font-bold rounded-lg transition-colors "
               >
                 Upgrade Now
               </button>
@@ -161,22 +161,22 @@ export default function Sidebar() {
           </div>
         )}
 
-        <div className="p-4 border-t border-[#d0d7de]">
+        <div className="p-4 border-t border-[#30363D]">
           <div className="flex items-center justify-between px-2 py-2 group">
             <div className="flex items-center gap-3 min-w-0">
               <img
                 src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userName)}&backgroundColor=4F8EF7&fontFamily=Inter`}
                 alt={userName}
-                className={`w-9 h-9 rounded-full shrink-0 object-cover border-2 ${isPro ? 'border-[#0969da]' : 'border-[#d0d7de]'}`}
+                className={`w-9 h-9 rounded-full shrink-0 object-cover border-2 ${isPro ? 'border-[#58a6ff]' : 'border-[#30363D]'}`}
               />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-[#1c2128] truncate">{userName}</p>
-                <p className="text-[10px] text-[#57606a] uppercase tracking-wider">{isPro ? 'Pro Member' : 'Early Adopter'}</p>
+                <p className="text-sm font-semibold text-[#C9D1D9] truncate">{userName}</p>
+                <p className="text-[10px] text-[#8B949E] uppercase tracking-wider">{isPro ? 'Pro Member' : 'Early Adopter'}</p>
               </div>
             </div>
             <button 
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-[#57606a] hover:text-[#cf222e] hover:bg-[#cf222e]/10 transition-all opacity-0 group-hover:opacity-100 shrink-0"
+              className="p-1.5 rounded-lg text-[#8B949E] hover:text-[#cf222e] hover:bg-[#cf222e]/10 transition-all opacity-0 group-hover:opacity-100 shrink-0"
               title="Logout"
             >
               <LogOut size={16} />
@@ -186,14 +186,14 @@ export default function Sidebar() {
       </aside>
 
       {/* Mobile Bottom Tab Bar — Light Mode */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-[#d0d7de] z-50 px-4 py-3 pb-safe-area flex items-center justify-between h-[max(64px,env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-[#0d1117]/95 backdrop-blur-xl border-t border-[#30363D] z-50 px-4 py-3 pb-safe-area flex items-center justify-between h-[max(64px,env(safe-area-inset-bottom))] ">
         {navItems.filter(item => ["Dashboard", "Pipeline", "Analytics", "Settings"].includes(item.label)).map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
               `flex flex-col items-center justify-center flex-1 transition-all ${
-                isActive ? "text-[#0969da] scale-110" : "text-[#57606a]"
+                isActive ? "text-[#58a6ff] scale-110" : "text-[#8B949E]"
               }`
             }
           >

@@ -102,7 +102,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 bg-white/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-[#0d1117]/60 backdrop-blur-sm"
             onClick={onClose}
           />
           {/* Modal container */}
@@ -114,10 +114,10 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
             transition={{ type: "spring", damping: 25, stiffness: 350 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
-          <div className="pointer-events-auto bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-2xl w-full max-w-2xl shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden">
+          <div className="pointer-events-auto bg-[#0d1117]  border border-[#30363D] rounded-2xl w-full max-w-2xl  relative flex flex-col max-h-[90vh] overflow-hidden">
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-[#d0d7de] flex items-center justify-between shrink-0">
+        <div className="px-6 py-4 border-b border-[#30363D] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center border border-accent/30 text-accent relative overflow-hidden">
                  {formData.companyName ? (
@@ -127,11 +127,11 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
                  )}
             </div>
             <div>
-              <h2 className="text-xl font-display font-semibold text-[#1c2128] leading-tight">Add Application</h2>
-              <p className="text-xs text-[#57606a] uppercase tracking-wider font-medium mt-0.5">Track a new opportunity</p>
+              <h2 className="text-xl font-display font-semibold text-[#C9D1D9] leading-tight">Add Application</h2>
+              <p className="text-xs text-[#8B949E] uppercase tracking-wider font-medium mt-0.5">Track a new opportunity</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-[#57606a] hover:text-danger hover:bg-[#f6f8fa]anger/10 rounded-full transition-colors">
+          <button onClick={onClose} className="p-2 text-[#8B949E] hover:text-danger hover:bg-[#161B22]anger/10 rounded-full transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -142,49 +142,49 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Company Name *</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Company Name *</label>
                 <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a]" />
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E]" />
                   <input 
                     type="text" required
                     value={formData.companyName} onChange={e => handleChange("companyName", e.target.value)}
-                    className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-[#1c2128] placeholder:text-[#57606a]/50"
+                    className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                     placeholder="e.g. Google"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Company Domain (Optional)</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Company Domain (Optional)</label>
                 <div className="relative">
-                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a]" />
+                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E]" />
                   <input 
                     type="text"
                     value={formData.companyDomain} onChange={e => handleChange("companyDomain", e.target.value)}
-                    className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-[#1c2128] placeholder:text-[#57606a]/50"
+                    className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                     placeholder="e.g. google.com"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Role / Title *</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Role / Title *</label>
                 <div className="relative">
-                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a]" />
+                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E]" />
                   <input 
                     type="text" required
                     value={formData.jobTitle} onChange={e => handleChange("jobTitle", e.target.value)}
-                    className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-[#1c2128] placeholder:text-[#57606a]/50"
+                    className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent transition-all text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                     placeholder="e.g. Frontend Engineer"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Status</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Status</label>
                 <select 
                   value={formData.status} onChange={e => handleChange("status", e.target.value)}
-                  className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#1c2128]"
+                  className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#C9D1D9]"
                 >
                   <option value="SAVED">Saved for later</option>
                   <option value="APPLIED">Applied</option>
@@ -196,13 +196,13 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Date Applied</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Date Applied</label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a] pointer-events-none" />
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E] pointer-events-none" />
                   <input 
                     type="date" 
                     value={formData.appliedAt} onChange={e => handleChange("appliedAt", e.target.value)}
-                    className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent text-[#1c2128] [color-scheme:dark]"
+                    className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent text-[#C9D1D9] [color-scheme:dark]"
                   />
                 </div>
               </div>
@@ -217,7 +217,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
                     <input 
                       type="date" 
                       value={formData.deadline} onChange={e => handleChange("deadline", e.target.value)}
-                      className="w-full bg-[#ffffff] border border-amber-500/30 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-amber-500 text-[#1c2128] [color-scheme:dark]"
+                      className="w-full bg-[#0d1117] border border-amber-500/30 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-amber-500 text-[#C9D1D9] [color-scheme:dark]"
                     />
                   </div>
                 </div>
@@ -225,31 +225,31 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Job URL (Optional)</label>
+              <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Job URL (Optional)</label>
               <div className="relative">
-                <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a]" />
+                <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E]" />
                 <input 
                   type="url" 
                   value={formData.jobUrl} onChange={e => handleChange("jobUrl", e.target.value)}
-                  className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent transition-all text-[#1c2128] placeholder:text-[#57606a]/50"
+                  className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent transition-all text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                   placeholder="https://..."
                 />
               </div>
             </div>
 
-            <hr className="border-[#d0d7de]" />
+            <hr className="border-[#30363D]" />
 
             {/* Extra Details toggleable or direct */}
-            <h3 className="text-sm font-semibold text-[#1c2128] flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-[#C9D1D9] flex items-center gap-2">
                <Globe className="w-4 h-4 text-accent" /> Opportunity Details
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Source</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Source</label>
                 <select 
                   value={formData.source} onChange={e => handleChange("source", e.target.value)}
-                  className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#1c2128]"
+                  className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#C9D1D9]"
                 >
                   <option value="LinkedIn">LinkedIn</option>
                   <option value="Internshala">Internshala</option>
@@ -263,10 +263,10 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
               </div>
 
               <div className="space-y-2">
-                 <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Priority Level</label>
+                 <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Priority Level</label>
                  <select 
                    value={formData.priority} onChange={e => handleChange("priority", e.target.value)}
-                   className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#1c2128]"
+                   className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#C9D1D9]"
                  >
                    <option value="DREAM">Dream (Top Choice)</option>
                    <option value="HIGH">High (Strong Match)</option>
@@ -276,37 +276,37 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
                </div>
 
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Location</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Location</label>
                 <div className="flex gap-2 relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a] z-10" />
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E] z-10" />
                   <input 
                     type="text" 
                     value={formData.location} onChange={e => handleChange("location", e.target.value)}
-                    className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent text-[#1c2128] placeholder:text-[#57606a]/50"
+                    className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                     placeholder="City, Country"
                   />
-                  <label className="flex items-center gap-2 shrink-0 bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 text-sm cursor-pointer hover:border-accent transition-colors">
+                  <label className="flex items-center gap-2 shrink-0 bg-[#0d1117] border border-[#30363D] rounded-lg px-3 text-sm cursor-pointer hover:border-accent transition-colors">
                      <input type="checkbox" checked={formData.isRemote} onChange={e => handleChange("isRemote", e.target.checked)} className="accent-accent" />
-                     <span className="text-[#57606a]">Remote</span>
+                     <span className="text-[#8B949E]">Remote</span>
                   </label>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Salary Range</label>
+                <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Salary Range</label>
                 <div className="flex items-center gap-2 relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a] z-10" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E] z-10" />
                   <input 
                     type="number" 
                     value={formData.salaryMin} onChange={e => handleChange("salaryMin", e.target.value)}
-                    className="w-1/2 bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-2 py-2.5 text-sm focus:border-accent text-[#1c2128] placeholder:text-[#57606a]/50"
+                    className="w-1/2 bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-2 py-2.5 text-sm focus:border-accent text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                     placeholder="Min"
                   />
-                  <span className="text-[#57606a]">-</span>
+                  <span className="text-[#8B949E]">-</span>
                   <input 
                     type="number" 
                     value={formData.salaryMax} onChange={e => handleChange("salaryMax", e.target.value)}
-                    className="w-1/2 bg-[#ffffff] border border-[#d0d7de] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#1c2128] placeholder:text-[#57606a]/50"
+                    className="w-1/2 bg-[#0d1117] border border-[#30363D] rounded-lg px-3 py-2.5 text-sm focus:border-accent text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                     placeholder="Max"
                   />
                 </div>
@@ -314,23 +314,23 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
             </div>
 
             <div className="space-y-2">
-               <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Tags</label>
+               <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Tags</label>
                <div className="relative">
-                 <Tags className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a]" />
+                 <Tags className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E]" />
                  <input 
                    type="text" 
                    value={formData.tags} onChange={e => handleChange("tags", e.target.value)}
-                   className="w-full bg-[#ffffff] border border-[#d0d7de] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent transition-all text-[#1c2128] placeholder:text-[#57606a]/50"
+                   className="w-full bg-[#0d1117] border border-[#30363D] rounded-lg pl-9 pr-3 py-2.5 text-sm focus:border-accent transition-all text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                    placeholder="React, Backend, High Salary (comma separated)"
                  />
                </div>
             </div>
 
             <div className="space-y-2">
-               <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Notes</label>
+               <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Notes</label>
                <textarea 
                   value={formData.jobDescription} onChange={e => handleChange("jobDescription", e.target.value)}
-                  className="w-full h-24 bg-[#ffffff] border border-[#d0d7de] rounded-lg p-3 text-sm focus:border-accent resize-none text-[#1c2128] placeholder:text-[#57606a]/50"
+                  className="w-full h-24 bg-[#0d1117] border border-[#30363D] rounded-lg p-3 text-sm focus:border-accent resize-none text-[#C9D1D9] placeholder:text-[#8B949E]/50"
                   placeholder="Paste job description or quick thoughts..."
                ></textarea>
             </div>
@@ -339,11 +339,11 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-[#d0d7de] bg-[#ffffff] shadow-sm flex justify-end gap-3 shrink-0">
+        <div className="p-4 border-t border-[#30363D] bg-[#0d1117]  flex justify-end gap-3 shrink-0">
           <button 
             type="button" 
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-[#57606a] hover:text-[#1c2128] hover:bg-white/5 rounded-lg transition-colors"
+            className="px-4 py-2 text-sm font-medium text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#0d1117]/5 rounded-lg transition-colors"
           >
             Cancel
           </button>
@@ -351,7 +351,7 @@ export default function AddApplicationModal({ isOpen, onClose, onAdded, initialS
             type="submit" 
             form="add-app-form"
             disabled={loading}
-            className="px-6 py-2 bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] rounded-lg text-sm font-medium flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(108,99,255,0.4)] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-sm font-medium flex items-center justify-center gap-2  transition-all disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><CheckCircle2 className="w-4 h-4" /> Save Tracking</>}
           </button>

@@ -50,7 +50,7 @@ export default function ToastContainer() {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className={`px-4 py-3 rounded-xl shadow-lg border flex items-center gap-3 w-80 animate-in slide-in-from-right-4 fade-in duration-300 ${
+          className={`px-4 py-3 rounded-xl  border flex items-center gap-3 w-80 animate-in slide-in-from-right-4 fade-in duration-300 ${
             t.type === 'success'
               ? 'bg-surface border-[#00D4AA]/30 text-textPrimary'
               : 'bg-surface border-danger/30 text-textPrimary'

@@ -75,7 +75,7 @@ export default function QuickAddModal({ isOpen, onClose, initialUrl = "", onPref
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 bg-white/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-[#0d1117]/60 backdrop-blur-sm"
             onClick={handleClose}
           />
           <motion.div
@@ -86,20 +86,20 @@ export default function QuickAddModal({ isOpen, onClose, initialUrl = "", onPref
             transition={{ type: "spring", damping: 25, stiffness: 350 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="pointer-events-auto bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+            <div className="pointer-events-auto bg-[#0d1117]  border border-[#30363D] rounded-2xl w-full max-w-lg  overflow-hidden">
               
               {/* Header */}
-              <div className="px-6 py-5 border-b border-[#d0d7de] flex items-center justify-between">
+              <div className="px-6 py-5 border-b border-[#30363D] flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-accent/20 border border-accent/30 flex items-center justify-center text-accent">
                     <Link2 className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-display font-semibold text-[#1c2128]">Quick Add from URL</h2>
-                    <p className="text-xs text-[#57606a] mt-0.5">Paste any job listing URL to auto-fill details</p>
+                    <h2 className="text-lg font-display font-semibold text-[#C9D1D9]">Quick Add from URL</h2>
+                    <p className="text-xs text-[#8B949E] mt-0.5">Paste any job listing URL to auto-fill details</p>
                   </div>
                 </div>
-                <button onClick={handleClose} className="p-2 text-[#57606a] hover:text-danger hover:bg-danger/10 rounded-full transition-colors">
+                <button onClick={handleClose} className="p-2 text-[#8B949E] hover:text-danger hover:bg-danger/10 rounded-full transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -108,16 +108,16 @@ export default function QuickAddModal({ isOpen, onClose, initialUrl = "", onPref
               <div className="p-6 space-y-5">
                 {/* URL Input */}
                 <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-wider font-medium text-[#57606a] block">Job Listing URL</label>
+                  <label className="text-xs uppercase tracking-wider font-medium text-[#8B949E] block">Job Listing URL</label>
                   <div className="flex gap-2">
                     <div className="relative flex-1">
-                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#57606a]" />
+                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8B949E]" />
                       <input
                         type="url"
                         value={url}
                         onChange={e => { setUrl(e.target.value); setError(""); setParsed(null); }}
                         onKeyDown={e => e.key === "Enter" && handleFetch()}
-                        className="w-full pl-9 pr-3 py-3 bg-[#ffffff] border border-[#d0d7de] rounded-xl text-sm text-[#1c2128] placeholder:text-[#57606a]/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                        className="w-full pl-9 pr-3 py-3 bg-[#0d1117] border border-[#30363D] rounded-xl text-sm text-[#C9D1D9] placeholder:text-[#8B949E]/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                         placeholder="https://linkedin.com/jobs/view/..."
                         autoFocus
                       />
@@ -127,7 +127,7 @@ export default function QuickAddModal({ isOpen, onClose, initialUrl = "", onPref
                       disabled={loading || !url.trim()}
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
-                      className="px-5 py-3 bg-accent hover:bg-[#5A52E8] text-[#1c2128] rounded-xl text-sm font-semibold flex items-center gap-2 shadow-[0_0_15px_rgba(108,99,255,0.3)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
+                      className="px-5 py-3 bg-accent hover:bg-[#5A52E8] text-white rounded-xl text-sm font-semibold flex items-center gap-2  transition-colors disabled:opacity-60 disabled:cursor-not-allowed shrink-0"
                     >
                       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Fetch"}
                     </motion.button>
@@ -157,39 +157,39 @@ export default function QuickAddModal({ isOpen, onClose, initialUrl = "", onPref
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-[#ffffff] border border-[#d0d7de] rounded-xl overflow-hidden"
+                      className="bg-[#0d1117] border border-[#30363D] rounded-xl overflow-hidden"
                     >
-                      <div className="px-4 py-3 bg-accent/5 border-b border-[#d0d7de] flex items-center gap-2 text-xs font-medium text-accent">
+                      <div className="px-4 py-3 bg-accent/5 border-b border-[#30363D] flex items-center gap-2 text-xs font-medium text-accent">
                         <CheckCircle2 className="w-4 h-4" />
                         Details extracted — confirm to prefill the form
                       </div>
                       <div className="p-4 space-y-3">
                         <div className="flex items-center gap-3">
-                          <Building2 className="w-4 h-4 text-[#57606a] shrink-0" />
+                          <Building2 className="w-4 h-4 text-[#8B949E] shrink-0" />
                           <div>
-                            <p className="text-[10px] text-[#57606a] uppercase tracking-wider">Company</p>
-                            <p className="text-sm font-semibold text-[#1c2128]">{parsed.companyName || <span className="text-[#57606a] italic">Not detected</span>}</p>
+                            <p className="text-[10px] text-[#8B949E] uppercase tracking-wider">Company</p>
+                            <p className="text-sm font-semibold text-[#C9D1D9]">{parsed.companyName || <span className="text-[#8B949E] italic">Not detected</span>}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
-                          <Briefcase className="w-4 h-4 text-[#57606a] shrink-0" />
+                          <Briefcase className="w-4 h-4 text-[#8B949E] shrink-0" />
                           <div>
-                            <p className="text-[10px] text-[#57606a] uppercase tracking-wider">Job Title</p>
-                            <p className="text-sm font-semibold text-[#1c2128]">{parsed.jobTitle || <span className="text-[#57606a] italic">Not detected</span>}</p>
+                            <p className="text-[10px] text-[#8B949E] uppercase tracking-wider">Job Title</p>
+                            <p className="text-sm font-semibold text-[#C9D1D9]">{parsed.jobTitle || <span className="text-[#8B949E] italic">Not detected</span>}</p>
                           </div>
                         </div>
                         {parsed.location && (
                           <div className="flex items-center gap-3">
-                            <MapPin className="w-4 h-4 text-[#57606a] shrink-0" />
+                            <MapPin className="w-4 h-4 text-[#8B949E] shrink-0" />
                             <div>
-                              <p className="text-[10px] text-[#57606a] uppercase tracking-wider">Location</p>
-                              <p className="text-sm text-[#1c2128]">{parsed.location}</p>
+                              <p className="text-[10px] text-[#8B949E] uppercase tracking-wider">Location</p>
+                              <p className="text-sm text-[#C9D1D9]">{parsed.location}</p>
                             </div>
                           </div>
                         )}
                         <div className="flex items-center gap-2 pt-1">
                           <span className="text-lg">{SOURCE_ICONS[parsed.source] || "🌐"}</span>
-                          <span className="text-xs font-medium text-[#57606a]">Source detected: <span className="text-[#1c2128]">{parsed.source}</span></span>
+                          <span className="text-xs font-medium text-[#8B949E]">Source detected: <span className="text-[#C9D1D9]">{parsed.source}</span></span>
                         </div>
                       </div>
                     </motion.div>
@@ -198,15 +198,15 @@ export default function QuickAddModal({ isOpen, onClose, initialUrl = "", onPref
 
                 {/* Supported platforms hint */}
                 {!parsed && !loading && (
-                  <p className="text-xs text-[#57606a]/60 text-center">
+                  <p className="text-xs text-[#8B949E]/60 text-center">
                     Works with LinkedIn · Naukri · Internshala · Wellfound · Indeed · and more
                   </p>
                 )}
               </div>
 
               {/* Footer */}
-              <div className="px-6 py-4 border-t border-[#d0d7de] bg-[#ffffff]/30 flex justify-end gap-3">
-                <button onClick={handleClose} className="px-4 py-2 text-sm text-[#57606a] hover:text-[#1c2128] hover:bg-white/5 rounded-lg transition-colors">
+              <div className="px-6 py-4 border-t border-[#30363D] bg-[#0d1117]/30 flex justify-end gap-3">
+                <button onClick={handleClose} className="px-4 py-2 text-sm text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#0d1117]/5 rounded-lg transition-colors">
                   Cancel
                 </button>
                 {parsed && (
@@ -216,7 +216,7 @@ export default function QuickAddModal({ isOpen, onClose, initialUrl = "", onPref
                     onClick={handleConfirm}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="px-6 py-2 bg-accent hover:bg-[#5A52E8] text-[#1c2128] rounded-lg text-sm font-semibold flex items-center gap-2 shadow-[0_0_12px_rgba(108,99,255,0.3)] transition-colors"
+                    className="px-6 py-2 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-sm font-semibold flex items-center gap-2  transition-colors"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     Add to Tracker

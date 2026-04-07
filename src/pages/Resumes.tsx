@@ -74,7 +74,7 @@ export default function Resumes() {
       >
         <button
           onClick={openModal}
-          className="flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-[0_0_15px_rgba(79,142,247,0.3)]"
+          className="flex items-center gap-2 bg-[#58a6ff] hover:bg-[#1f6feb] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all "
         >
           <Upload size={15} /> 
           <span className="hidden md:inline">Upload Resume</span>
@@ -85,7 +85,7 @@ export default function Resumes() {
         {resumes.length === 0 ? (
           /* Empty State */
           <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center">
-            <div className="w-24 h-24 rounded-2xl bg-surface border border-border flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(108,99,255,0.05)]">
+            <div className="w-24 h-24 rounded-2xl bg-surface border border-border flex items-center justify-center mb-6 ">
               <FileText size={40} className="text-textSecondary opacity-50" />
             </div>
             <h3 className="text-xl font-display font-semibold text-textPrimary mb-2">No resumes yet</h3>
@@ -94,7 +94,7 @@ export default function Resumes() {
             </p>
             <button
               onClick={openModal}
-              className="flex items-center gap-2 bg-accent hover:bg-[#5A52E8] text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-all shadow-[0_0_20px_rgba(108,99,255,0.3)]"
+              className="flex items-center gap-2 bg-accent hover:bg-[#5A52E8] text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-all "
             >
               <Upload size={16} /> Upload Resume
             </button>
@@ -108,7 +108,7 @@ export default function Resumes() {
               </div>
               <button
                 onClick={openModal}
-                className="flex items-center gap-2 bg-accent hover:bg-[#5A52E8] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-[0_0_15px_rgba(108,99,255,0.3)]"
+                className="flex items-center gap-2 bg-accent hover:bg-[#5A52E8] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all "
               >
                 <Upload size={15} /> Upload Resume
               </button>
@@ -118,7 +118,7 @@ export default function Resumes() {
               {resumes.map(resume => (
                 <div
                   key={resume.id}
-                  className="bg-surface border border-border rounded-xl p-5 flex flex-col gap-4 hover:border-accent/40 transition-all group hover:shadow-[0_4px_24px_rgba(108,99,255,0.08)]"
+                  className="bg-surface border border-border rounded-xl p-5 flex flex-col gap-4 hover:border-accent/40 transition-all group hover:"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
@@ -162,7 +162,7 @@ export default function Resumes() {
       {/* Upload Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-surface border border-border rounded-2xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200">
+          <div className="bg-surface border border-border rounded-2xl w-full max-w-md  animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between p-6 border-b border-border">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg bg-accent/15 border border-accent/25 flex items-center justify-center">
@@ -236,7 +236,7 @@ export default function Resumes() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-2.5 text-sm font-medium text-textSecondary hover:text-textPrimary hover:bg-white/5 rounded-lg transition-colors"
+                  className="flex-1 py-2.5 text-sm font-medium text-textSecondary hover:text-textPrimary hover:bg-[#0d1117]/5 rounded-lg transition-colors"
                 >
                   Cancel
                 </button>
@@ -257,7 +257,7 @@ export default function Resumes() {
       {/* Delete Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+          <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6  animate-in zoom-in-95 duration-200">
             <div className="text-center">
               <div className="w-12 h-12 rounded-full bg-danger/15 border border-danger/30 flex items-center justify-center mx-auto mb-4">
                 <Trash2 size={20} className="text-danger" />

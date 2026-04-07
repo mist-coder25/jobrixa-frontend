@@ -49,7 +49,7 @@ export default function CompanyLogo({
 
   return (
     <div 
-      className={`rounded-lg overflow-hidden flex-shrink-0 bg-[#f6f8fa] border border-[#d0d7de] flex items-center justify-center ${className}`}
+      className={`rounded-lg overflow-hidden flex-shrink-0 bg-[#161B22] border border-[#30363D] flex items-center justify-center ${className}`}
       style={{ width: size, height: size }}
     >
       <img

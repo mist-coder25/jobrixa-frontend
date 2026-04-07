@@ -56,7 +56,7 @@ const STATUS_COLUMNS = [
 
 const COLUMN_COLORS: Record<string, string> = {
   SAVED: '#7D8590',
-  APPLIED: '#4F8EF7',
+  APPLIED: '#58a6ff',
   OA: '#D29922',
   INTERVIEW: '#A371F7',
   TECHNICAL: '#3FB950',
@@ -93,8 +93,8 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
               <motion.div
                 key={col.id}
                 variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-                className="flex flex-col rounded-xl border border-[#d0d7de] bg-[#f6f8fa] min-w-[280px] md:min-w-[300px] snap-center shadow-sm"
-                style={{ borderTop: `3px solid ${COLUMN_COLORS[col.id] || '#57606a'}` }}
+                className="flex flex-col rounded-xl border border-[#30363D] bg-[#161B22] min-w-[280px] md:min-w-[300px] snap-center "
+                style={{ borderTop: `3px solid ${COLUMN_COLORS[col.id] || '#8B949E'}` }}
               >
                 {/* Column Header */}
                 <div className="px-4 pt-4 pb-3 flex items-center justify-between">
@@ -102,18 +102,18 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                     <span 
                       className="text-[11px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md"
                       style={{ 
-                        color: COLUMN_COLORS[col.id] || '#57606a', 
-                        background: `${COLUMN_COLORS[col.id] || '#57606a'}15`,
-                        border: `1px solid ${COLUMN_COLORS[col.id] || '#57606a'}30`
+                        color: COLUMN_COLORS[col.id] || '#8B949E', 
+                        background: `${COLUMN_COLORS[col.id] || '#8B949E'}15`,
+                        border: `1px solid ${COLUMN_COLORS[col.id] || '#8B949E'}30`
                       }}
                     >
                       {col.title}
                     </span>
-                    <span className="text-xs text-[#57606a] font-medium">{columnApps.length}</span>
+                    <span className="text-xs text-[#8B949E] font-medium">{columnApps.length}</span>
                   </div>
                   <button 
                     onClick={() => onAddClick(col.id)}
-                    className="w-6 h-6 rounded-md flex items-center justify-center text-[#57606a] hover:text-[#1c2128] hover:bg-[#eaeef2] transition-all"
+                    className="w-6 h-6 rounded-md flex items-center justify-center text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#21262D] transition-all"
                   >
                     <Plus size={14} />
                   </button>
@@ -126,18 +126,18 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       className={`flex-1 overflow-y-auto custom-scrollbar p-3 space-y-3 transition-colors duration-200 ${
-                        snapshot.isDraggingOver ? "bg-[#0969da]/5" : ""
+                        snapshot.isDraggingOver ? "bg-[#58a6ff]/5" : ""
                       }`}
                     >
                       {loading ? (
                         <div className="px-3 py-2 space-y-2">
-                          {[1,2,3].map(i => <div key={i} className="h-16 bg-[#eaeef2] rounded-lg animate-pulse" />)}
+                          {[1,2,3].map(i => <div key={i} className="h-16 bg-[#21262D] rounded-lg animate-pulse" />)}
                         </div>
                       ) : columnApps.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-6 px-4 text-center">
                           <span className="text-4xl mb-3 opacity-80">{EMPTY_HINTS[col.id]?.emoji}</span>
-                          <p className="text-xs font-bold text-[#1c2128] mb-1">{EMPTY_HINTS[col.id]?.text || "No applications yet"}</p>
-                          <p className="text-[10px] text-[#57606a] leading-relaxed">{EMPTY_HINTS[col.id]?.hint || "Add an application"}</p>
+                          <p className="text-xs font-bold text-[#C9D1D9] mb-1">{EMPTY_HINTS[col.id]?.text || "No applications yet"}</p>
+                          <p className="text-[10px] text-[#8B949E] leading-relaxed">{EMPTY_HINTS[col.id]?.hint || "Add an application"}</p>
                         </div>
                       ) : (
                         <AnimatePresence mode="popLayout">
@@ -172,7 +172,7 @@ export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAd
                       {/* Add Card Footer */}
                       <button
                         onClick={() => onAddClick(col.id)}
-                        className="mx-3 mb-3 py-2 w-[calc(100%-24px)] rounded-lg border border-dashed border-[#d0d7de] text-[#57606a] text-xs font-medium hover:border-[#0969da]/50 hover:text-[#0969da] hover:bg-[#0969da]/5 transition-all flex items-center justify-center gap-1.5"
+                        className="mx-3 mb-3 py-2 w-[calc(100%-24px)] rounded-lg border border-dashed border-[#30363D] text-[#8B949E] text-xs font-medium hover:border-[#58a6ff]/50 hover:text-[#58a6ff] hover:bg-[#58a6ff]/5 transition-all flex items-center justify-center gap-1.5"
                       >
                         <Plus size={12} />
                         Add card

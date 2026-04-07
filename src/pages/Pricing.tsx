@@ -61,21 +61,21 @@ export default function Pricing() {
   const proSuffix = billing === "monthly" ? "/month" : "/year";
 
   return (
-    <div className="min-h-screen bg-[#ffffff] text-[#1c2128]">
+    <div className="min-h-screen bg-[#0d1117] text-[#C9D1D9]">
 
       {/* Nav */}
-      <nav className="border-b border-[#d0d7de] px-6 py-4 flex items-center justify-between sticky top-0 bg-[#ffffff]/90 backdrop-blur-md z-30">
+      <nav className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between sticky top-0 bg-[#0d1117]/90 backdrop-blur-md z-30">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-display font-bold text-[#f6f8fa]">J</div>
-          <span className="text-xl font-display font-bold text-[#1c2128] tracking-wide">Jobrixa</span>
+          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-display font-bold text-white">J</div>
+          <span className="text-xl font-display font-bold text-[#C9D1D9] tracking-wide">Jobrixa</span>
         </Link>
         <div className="flex items-center gap-4">
           {isLoggedIn ? (
-            <Link to="/dashboard" className="text-sm text-[#57606a] hover:text-[#1c2128] transition-colors">Dashboard</Link>
+            <Link to="/dashboard" className="text-sm text-[#8B949E] hover:text-[#C9D1D9] transition-colors">Dashboard</Link>
           ) : (
             <>
-              <Link to="/login" className="text-sm text-[#57606a] hover:text-[#1c2128] transition-colors">Login</Link>
-              <Link to="/register" className="text-sm bg-accent hover:bg-[#5A52E8] text-[#f6f8fa] px-4 py-2 rounded-lg transition-all">Sign Up</Link>
+              <Link to="/login" className="text-sm text-[#8B949E] hover:text-[#C9D1D9] transition-colors">Login</Link>
+              <Link to="/register" className="text-sm bg-accent hover:bg-[#5A52E8] text-white px-4 py-2 rounded-lg transition-all">Sign Up</Link>
             </>
           )}
         </div>
@@ -88,25 +88,25 @@ export default function Pricing() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6">
             <Sparkles size={14} /> Simple, transparent pricing
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold text-[#1c2128] mb-4">
+          <h1 className="text-4xl md:text-5xl font-display font-bold text-[#C9D1D9] mb-4">
             Invest in your career,<br />
             <span className="text-accent">not your spreadsheets</span>
           </h1>
-          <p className="text-[#57606a] text-lg max-w-2xl mx-auto">
+          <p className="text-[#8B949E] text-lg max-w-2xl mx-auto">
             Start free. Upgrade when you need more. No credit card required to get started.
           </p>
         </div>
 
         {/* Billing Toggle */}
         <div className="flex items-center justify-center gap-4 mb-12">
-          <span className={`text-sm font-medium ${billing === "monthly" ? "text-[#1c2128]" : "text-[#57606a]"}`}>Monthly</span>
+          <span className={`text-sm font-medium ${billing === "monthly" ? "text-[#C9D1D9]" : "text-[#8B949E]"}`}>Monthly</span>
           <button
             onClick={() => setBilling(b => b === "monthly" ? "yearly" : "monthly")}
             className={`relative w-12 h-6 rounded-full transition-all duration-200 ${billing === "yearly" ? "bg-accent" : "bg-border"}`}
           >
-            <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${billing === "yearly" ? "left-7" : "left-1"}`} />
+            <span className={`absolute top-1 w-4 h-4 rounded-full bg-[#0d1117] shadow transition-all duration-200 ${billing === "yearly" ? "left-7" : "left-1"}`} />
           </button>
-          <span className={`text-sm font-medium ${billing === "yearly" ? "text-[#1c2128]" : "text-[#57606a]"}`}>
+          <span className={`text-sm font-medium ${billing === "yearly" ? "text-[#C9D1D9]" : "text-[#8B949E]"}`}>
             Yearly <span className="text-emerald-400 text-xs font-bold ml-1">Save ₹789</span>
           </span>
         </div>
@@ -115,20 +115,20 @@ export default function Pricing() {
         <div className="flex flex-col md:flex-row justify-center gap-8 items-stretch max-w-4xl mx-auto">
 
           {/* Free */}
-          <div className="flex-1 bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-2xl p-8 flex flex-col max-w-md">
+          <div className="flex-1 bg-[#0d1117]  border border-[#30363D] rounded-2xl p-8 flex flex-col max-w-md">
             <div className="mb-6">
-              <p className="text-[#57606a] text-sm font-medium uppercase tracking-wider mb-2">Free</p>
+              <p className="text-[#8B949E] text-sm font-medium uppercase tracking-wider mb-2">Free</p>
               <div className="flex items-end gap-2">
-                <span className="text-4xl font-display font-bold text-[#1c2128]">₹0</span>
-                <span className="text-[#57606a] text-sm mb-1">forever</span>
+                <span className="text-4xl font-display font-bold text-[#C9D1D9]">₹0</span>
+                <span className="text-[#8B949E] text-sm mb-1">forever</span>
               </div>
-              <p className="text-[#57606a] text-sm mt-2">Perfect for trying out Jobrixa</p>
+              <p className="text-[#8B949E] text-sm mt-2">Perfect for trying out Jobrixa</p>
             </div>
 
             <ul className="space-y-3 mb-8 flex-1">
               {FREE_FEATURES.map(f => (
-                <li key={f} className="flex items-start gap-2.5 text-sm text-[#57606a]">
-                  <Check size={15} className="text-[#57606a]/50 shrink-0 mt-0.5" />
+                <li key={f} className="flex items-start gap-2.5 text-sm text-[#8B949E]">
+                  <Check size={15} className="text-[#8B949E]/50 shrink-0 mt-0.5" />
                   {f}
                 </li>
               ))}
@@ -136,47 +136,47 @@ export default function Pricing() {
 
             <Link
               to={isLoggedIn ? "/dashboard" : "/register"}
-              className="w-full py-3 text-center border border-[#d0d7de] rounded-xl text-sm font-semibold text-[#57606a] hover:text-[#1c2128] hover:border-accent/40 transition-all"
+              className="w-full py-3 text-center border border-[#30363D] rounded-xl text-sm font-semibold text-[#8B949E] hover:text-[#C9D1D9] hover:border-accent/40 transition-all"
             >
               {isLoggedIn ? "Current Plan" : "Get Started Free"}
             </Link>
           </div>
 
           {/* Pro — Hero */}
-          <div className="flex-1 relative bg-accent rounded-2xl p-8 flex flex-col shadow-[0_0_60px_rgba(108,99,255,0.35)] border border-accent/50 max-w-md">
+          <div className="flex-1 relative bg-accent rounded-2xl p-8 flex flex-col  border border-accent/50 max-w-md">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="px-4 py-1 bg-white text-accent text-xs font-bold rounded-full shadow-lg">
+              <span className="px-4 py-1 bg-[#0d1117] text-accent text-xs font-bold rounded-full ">
                 ✦ MOST POPULAR
               </span>
             </div>
 
             <div className="mb-6">
-              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-                <Zap size={20} className="text-[#f6f8fa]" />
+              <div className="w-10 h-10 rounded-xl bg-[#0d1117]/20 flex items-center justify-center mb-3">
+                <Zap size={20} className="text-[#161B22]" />
               </div>
-              <p className="text-[#f6f8fa]/70 text-sm font-medium uppercase tracking-wider mb-2">Pro</p>
+              <p className="text-[#161B22]/70 text-sm font-medium uppercase tracking-wider mb-2">Pro</p>
               <div className="flex items-end gap-2">
-                <span className="text-4xl font-display font-bold text-[#f6f8fa]">₹{proPrice}</span>
-                <span className="text-[#f6f8fa]/60 text-sm mb-1">{proSuffix}</span>
+                <span className="text-4xl font-display font-bold text-[#161B22]">₹{proPrice}</span>
+                <span className="text-[#161B22]/60 text-sm mb-1">{proSuffix}</span>
               </div>
               {billing === "yearly" && (
-                <p className="text-[#f6f8fa]/60 text-xs mt-1">Billed once annually · Save ₹789</p>
+                <p className="text-[#161B22]/60 text-xs mt-1">Billed once annually · Save ₹789</p>
               )}
-              <p className="text-[#f6f8fa]/70 text-sm mt-2">For serious job hunters</p>
+              <p className="text-[#161B22]/70 text-sm mt-2">For serious job hunters</p>
             </div>
 
             <ul className="space-y-3 mb-8 flex-1">
               {billing === "monthly" ? (
                 PRO_MONTHLY_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-[#f6f8fa]/90">
-                    <Check size={15} className="text-[#f6f8fa] shrink-0 mt-0.5" />
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-[#161B22]/90">
+                    <Check size={15} className="text-[#161B22] shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))
               ) : (
                 PRO_YEARLY_FEATURES.map(f => (
-                  <li key={f.text} className="flex items-start gap-2.5 text-sm text-[#f6f8fa]/90">
-                    <Check size={15} className="text-[#f6f8fa] shrink-0 mt-0.5" />
+                  <li key={f.text} className="flex items-start gap-2.5 text-sm text-[#161B22]/90">
+                    <Check size={15} className="text-[#161B22] shrink-0 mt-0.5" />
                     <span>
                       {f.text}
                       {f.badge && (
@@ -192,7 +192,7 @@ export default function Pricing() {
 
             <button
               onClick={() => handleUpgrade()}
-              className="w-full py-3 bg-white text-accent rounded-xl text-sm font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#0d1117] text-accent rounded-xl text-sm font-bold hover:bg-[#0d1117]/90 transition-all flex items-center justify-center gap-2"
             >
               Upgrade to Pro <ArrowRight size={15} />
             </button>
@@ -203,7 +203,7 @@ export default function Pricing() {
 
         {/* FAQ strip */}
         <div className="mt-16 text-center">
-          <p className="text-[#57606a] text-sm">
+          <p className="text-[#8B949E] text-sm">
             Payments secured by Razorpay. Cancel anytime. For questions, email{" "}
             <a href="mailto:support@jobrixa.app" className="text-accent hover:underline">support@jobrixa.app</a>
           </p>

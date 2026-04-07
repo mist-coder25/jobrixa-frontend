@@ -47,7 +47,7 @@ export default function AvatarSelector({ currentInitial, currentColor = 'bg-acce
             initial={{ opacity: 0, scale: 0.9, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
-            className="absolute top-24 left-1/2 -translate-x-1/2 bg-surface border border-border rounded-2xl p-4 shadow-2xl z-50 w-64"
+            className="absolute top-24 left-1/2 -translate-x-1/2 bg-surface border border-border rounded-2xl p-4  z-50 w-64"
           >
             <p className="text-xs text-textSecondary mb-3 text-center">Choose your avatar</p>
             <div className="grid grid-cols-4 gap-2">

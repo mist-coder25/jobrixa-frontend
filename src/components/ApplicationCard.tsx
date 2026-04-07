@@ -44,15 +44,15 @@ export default function ApplicationCard({ app, onClick, innerRef, draggableProps
       {...draggableProps}
       {...dragHandleProps}
       onClick={onClick}
-      className={`mx-3 mb-2 bg-[#ffffff] border border-[#d0d7de] rounded-lg p-3 cursor-pointer hover:border-[#4F8EF7]/40 hover:shadow-md hover:shadow-black/40 transition-all group ${
-        isDragging ? "border-[#4F8EF7] shadow-[0_4px_24px_rgba(0,0,0,0.4)] scale-[1.02]" : ""
+      className={`mx-3 mb-2 bg-[#0d1117] border border-[#30363D] rounded-lg p-3 cursor-pointer hover:border-[#58a6ff]/40 hover: hover:shadow-black/40 transition-all group ${
+        isDragging ? "border-[#58a6ff]  scale-[1.02]" : ""
       }`}
     >
       {/* Top row — company + source */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           {/* Company logo */}
-          <div className="w-8 h-8 rounded-lg bg-[#f6f8fa] border border-[#d0d7de] overflow-hidden flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-[#161B22] border border-[#30363D] overflow-hidden flex items-center justify-center shrink-0">
             {app.companyDomain ? (
               <img 
                 src={`https://logo.clearbit.com/${app.companyDomain}`} 
@@ -60,26 +60,26 @@ export default function ApplicationCard({ app, onClick, innerRef, draggableProps
                 className="w-full h-full object-contain p-1"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-bold text-[#4F8EF7]">${app.companyName.charAt(0).toUpperCase()}</span>`;
+                  e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-bold text-[#58a6ff]">${app.companyName.charAt(0).toUpperCase()}</span>`;
                 }}
               />
             ) : (
-              <span className="text-xs font-bold text-[#4F8EF7]">{app.companyName.charAt(0).toUpperCase()}</span>
+              <span className="text-xs font-bold text-[#58a6ff]">{app.companyName.charAt(0).toUpperCase()}</span>
             )}
           </div>
           <div className="min-w-0">
-            <span className="text-xs font-semibold text-[#1c2128] block truncate">{app.companyName}</span>
-            <span className="text-[10px] text-[#8c959f]">{daysAppliedText}</span>
+            <span className="text-xs font-semibold text-[#C9D1D9] block truncate">{app.companyName}</span>
+            <span className="text-[10px] text-[#484F58]">{daysAppliedText}</span>
           </div>
         </div>
       </div>
 
       {/* Job title */}
-      <p className="text-xs text-[#57606a] mb-3 leading-relaxed">{app.jobTitle}</p>
+      <p className="text-xs text-[#8B949E] mb-3 leading-relaxed">{app.jobTitle}</p>
 
       {/* Bottom row — source badge + salary */}
       <div className="flex items-center justify-between">
-        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#f6f8fa] text-[#57606a] border border-[#d0d7de]">
+        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#161B22] text-[#8B949E] border border-[#30363D]">
           {app.source || "Other"}
         </span>
         {app.salaryMin && app.salaryMax && (

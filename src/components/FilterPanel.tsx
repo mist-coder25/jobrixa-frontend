@@ -63,25 +63,25 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-white/60 backdrop-blur-sm z-[60]"
+            className="fixed inset-0 bg-[#0d1117]/60 backdrop-blur-sm z-[60]"
           />
           {/* Panel */}
           <motion.div
             initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-80 bg-[#ffffff] border-l border-[#d0d7de] z-[70] flex flex-col shadow-2xl"
+            className="fixed right-0 top-0 h-full w-80 bg-[#0d1117] border-l border-[#30363D] z-[70] flex flex-col "
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-[#d0d7de]">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-[#30363D]">
               <div className="flex items-center gap-3">
-                <span className="font-bold text-[#1c2128] text-lg">Filters</span>
+                <span className="font-bold text-[#C9D1D9] text-lg">Filters</span>
                 {activeCount > 0 && (
-                  <span className="text-[10px] bg-[#4F8EF7] text-[#1c2128] px-2 py-0.5 rounded-full font-black animate-pulse">
+                  <span className="text-[10px] bg-[#58a6ff] text-[#C9D1D9] px-2 py-0.5 rounded-full font-black animate-pulse">
                     {activeCount}
                   </span>
                 )}
               </div>
-              <button onClick={onClose} className="p-2 text-[#57606a] hover:text-[#1c2128] hover:bg-white/5 rounded-full transition-colors">
+              <button onClick={onClose} className="p-2 text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#0d1117]/5 rounded-full transition-colors">
                 <X size={20} />
               </button>
             </div>
@@ -93,15 +93,15 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
                 <>
                   {/* Discover Experience */}
                   <div>
-                    <p className="text-[11px] font-black text-[#8c959f] uppercase tracking-[0.2em] mb-4">Experience Level</p>
+                    <p className="text-[11px] font-black text-[#484F58] uppercase tracking-[0.2em] mb-4">Experience Level</p>
                     <div className="flex flex-wrap gap-2">
                       {["Fresher", "0-2 years", "2-5 years", "5+ years"].map(exp => (
                         <button key={exp}
                           onClick={() => onChange({ ...filters, experience: filters.experience === exp ? '' : exp })}
                           className={`text-[11px] font-bold px-3 py-1.5 rounded-lg border transition-all ${
                             filters.experience === exp
-                              ? 'bg-[#4F8EF7]/10 border-[#4F8EF7] text-[#4F8EF7]'
-                              : 'bg-[#ffffff] border-[#d0d7de] text-[#57606a]'
+                              ? 'bg-[#58a6ff]/10 border-[#58a6ff] text-[#58a6ff]'
+                              : 'bg-[#0d1117] border-[#30363D] text-[#8B949E]'
                           }`}>
                           {exp}
                         </button>
@@ -111,7 +111,7 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
 
                   {/* Discover Role Type */}
                   <div>
-                    <p className="text-[11px] font-black text-[#8c959f] uppercase tracking-[0.2em] mb-4">Employment Type</p>
+                    <p className="text-[11px] font-black text-[#484F58] uppercase tracking-[0.2em] mb-4">Employment Type</p>
                     <div className="flex flex-wrap gap-2">
                       {["Full-time", "Internship", "Contract", "Remote"].map(type => (
                         <button key={type}
@@ -119,7 +119,7 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
                           className={`text-[11px] font-bold px-3 py-1.5 rounded-lg border transition-all ${
                             filters.roleType === type
                               ? 'bg-[#2da44e]/10 border-[#2da44e] text-[#2da44e]'
-                              : 'bg-[#ffffff] border-[#d0d7de] text-[#57606a]'
+                              : 'bg-[#0d1117] border-[#30363D] text-[#8B949E]'
                           }`}>
                           {type}
                         </button>
@@ -131,15 +131,15 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
                 <>
                   {/* Status */}
                   <div>
-                    <p className="text-[11px] font-black text-[#8c959f] uppercase tracking-[0.2em] mb-4">Pipeline Stage</p>
+                    <p className="text-[11px] font-black text-[#484F58] uppercase tracking-[0.2em] mb-4">Pipeline Stage</p>
                     <div className="flex flex-wrap gap-2">
                       {STATUSES.map(s => (
                         <button key={s}
                           onClick={() => toggle('status', s)}
                           className={`text-[11px] font-bold px-3 py-1.5 rounded-lg border transition-all ${
                             filters.status.includes(s)
-                              ? 'bg-[#4F8EF7]/10 border-[#4F8EF7] text-[#4F8EF7] shadow-[0_0_15px_rgba(79,142,247,0.1)]'
-                              : 'bg-[#ffffff] border-[#d0d7de] text-[#57606a] hover:border-[#8c959f]'
+                              ? 'bg-[#58a6ff]/10 border-[#58a6ff] text-[#58a6ff] '
+                              : 'bg-[#0d1117] border-[#30363D] text-[#8B949E] hover:border-[#484F58]'
                           }`}>
                           {s.replace('_', ' ')}
                         </button>
@@ -149,15 +149,15 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
 
                   {/* Source */}
                   <div>
-                    <p className="text-[11px] font-black text-[#8c959f] uppercase tracking-[0.2em] mb-4">Application Source</p>
+                    <p className="text-[11px] font-black text-[#484F58] uppercase tracking-[0.2em] mb-4">Application Source</p>
                     <div className="flex flex-wrap gap-2">
                       {SOURCES.map(s => (
                         <button key={s}
                           onClick={() => toggle('source', s)}
                           className={`text-[11px] font-bold px-3 py-1.5 rounded-lg border transition-all ${
                             filters.source.includes(s)
-                              ? 'bg-[#2da44e]/10 border-[#2da44e] text-[#2da44e] shadow-[0_0_15px_rgba(63,185,80,0.1)]'
-                              : 'bg-[#ffffff] border-[#d0d7de] text-[#57606a] hover:border-[#8c959f]'
+                              ? 'bg-[#2da44e]/10 border-[#2da44e] text-[#2da44e] '
+                              : 'bg-[#0d1117] border-[#30363D] text-[#8B949E] hover:border-[#484F58]'
                           }`}>
                           {s}
                         </button>
@@ -169,19 +169,19 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
 
               {/* Date range - Common */}
               <div>
-                <p className="text-[11px] font-black text-[#8c959f] uppercase tracking-[0.2em] mb-4">Time Period</p>
+                <p className="text-[11px] font-black text-[#484F58] uppercase tracking-[0.2em] mb-4">Time Period</p>
                 <div className="space-y-1.5">
                   {DATE_RANGES.map(d => (
                     <button key={d.value}
                       onClick={() => onChange({ ...filters, dateRange: d.value as any })}
                       className={`w-full text-left text-xs px-4 py-2.5 rounded-xl transition-all flex items-center justify-between group ${
                         filters.dateRange === d.value
-                          ? 'bg-[#f6f8fa] text-[#1c2128] font-bold border border-[#d0d7de]'
-                          : 'text-[#57606a] hover:bg-[#ffffff] hover:text-[#1c2128]'
+                          ? 'bg-[#161B22] text-[#C9D1D9] font-bold border border-[#30363D]'
+                          : 'text-[#8B949E] hover:bg-[#0d1117] hover:text-[#C9D1D9]'
                       }`}>
                       <span>{d.label}</span>
                       <div className={`w-1.5 h-1.5 rounded-full transition-all ${
-                        filters.dateRange === d.value ? 'bg-[#4F8EF7] shadow-[0_0_8px_#4F8EF7]' : 'bg-[#d0d7de] group-hover:bg-[#8c959f]'
+                        filters.dateRange === d.value ? 'bg-[#58a6ff] ' : 'bg-[#30363D] group-hover:bg-[#484F58]'
                       }`} />
                     </button>
                   ))}
@@ -191,7 +191,7 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
               {/* Quick toggles - Only for pipeline */}
               {mode !== 'discover' && (
                 <div>
-                  <p className="text-[11px] font-black text-[#8c959f] uppercase tracking-[0.2em] mb-4">Quick Filters</p>
+                  <p className="text-[11px] font-black text-[#484F58] uppercase tracking-[0.2em] mb-4">Quick Filters</p>
                   <div className="space-y-3">
                     {[
                       { key: 'hasInterview', label: '🎙️ Scheduled Interview' },
@@ -201,14 +201,14 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
                         onClick={() => onChange({ ...filters, [key]: !filters[key as keyof FilterState] })}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
                           filters[key as keyof FilterState]
-                            ? 'bg-[#4F8EF7]/10 border-[#4F8EF7]/40 text-[#1c2128] font-bold'
-                            : 'bg-[#ffffff] border-[#d0d7de] text-[#57606a]'
+                            ? 'bg-[#58a6ff]/10 border-[#58a6ff]/40 text-[#C9D1D9] font-bold'
+                            : 'bg-[#0d1117] border-[#30363D] text-[#8B949E]'
                         }`}>
                         <span className="text-xs">{label}</span>
                         <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                          filters[key as keyof FilterState] ? 'bg-[#4F8EF7] border-[#4F8EF7] shadow-lg shadow-[#4F8EF7]/20' : 'border-[#8c959f]'
+                          filters[key as keyof FilterState] ? 'bg-[#58a6ff] border-[#58a6ff]  /20' : 'border-[#484F58]'
                         }`}>
-                          {filters[key as keyof FilterState] && <span className="text-[#1c2128] text-[10px] font-black">✓</span>}
+                          {filters[key as keyof FilterState] && <span className="text-[#C9D1D9] text-[10px] font-black">✓</span>}
                         </div>
                       </button>
                     ))}
@@ -218,16 +218,16 @@ export default function FilterPanel({ open, onClose, filters, onChange, onReset,
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-5 border-t border-[#d0d7de] bg-[#ffffff]/50 backdrop-blur-xl flex gap-3">
+            <div className="px-6 py-5 border-t border-[#30363D] bg-[#0d1117]/50 backdrop-blur-xl flex gap-3">
               <button 
                 onClick={onReset}
-                className="flex-1 py-3 border border-[#d0d7de] text-[#57606a] hover:text-[#1c2128] hover:bg-white/5 rounded-xl text-xs font-bold transition-all"
+                className="flex-1 py-3 border border-[#30363D] text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#0d1117]/5 rounded-xl text-xs font-bold transition-all"
               >
                 Reset
               </button>
               <button 
                 onClick={onClose}
-                className="flex-1 py-3 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-[#1c2128] rounded-xl text-xs font-black transition-all shadow-lg shadow-[#4F8EF7]/20 hover:scale-[1.02] active:scale-[0.98]"
+                className="flex-1 py-3 bg-[#58a6ff] hover:bg-[#1f6feb] text-white rounded-xl text-xs font-black transition-all  /20 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Apply
               </button>
