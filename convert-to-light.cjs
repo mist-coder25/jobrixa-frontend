@@ -2,37 +2,21 @@ const fs = require('fs');
 const path = require('path');
 
 const replacements = [
-  // Backgrounds
   [/#0d1117/gi, '#ffffff'],
-  [/#161B22/gi, '#ffffff'], 
-  [/#1C2128/gi, '#f6f8fa'],
-  
-  // Borders
-  [/#21262D/gi, '#eaeef2'],
-  [/#30363D/gi, '#d0d7de'],
-  
-  // Text
-  [/#E6EDF3/gi, '#1c2128'],
-  [/#C9D1D9/gi, '#1c2128'],
-  [/#8B949E/gi, '#57606a'],
-  [/#7D8590/gi, '#57606a'],
-  [/#484F58/gi, '#8c959f'],
-  
-  // Accents
-  [/#58a6ff/gi, '#0969da'],
-  [/#2ea043/gi, '#1a7f37'],
-  [/#3fb950/gi, '#2da44e'],
-  [/#F85149/gi, '#cf222e'],
-  [/#D29922/gi, '#9a6700'],
-  
-  // Tailwind classes
+  [/#161B22/gi, '#ffffff'], // cards go to white
+  [/#21262D/gi, '#f6f8fa'], // some backgrounds go to light grey
+  [/#30363D/gi, '#d0d7de'], // borders
+  [/#C9D1D9/gi, '#1c2128'], // text
+  [/#8B949E/gi, '#57606a'], // text
+  [/#7D8590/gi, '#57606a'], // text
+  [/#58a6ff/gi, '#0969da'], // links
+  [/#2ea043/gi, '#1a7f37'], // green
+  [/#3fb950/gi, '#2da44e'], // green
   [/text-white/gi, 'text-[#1c2128]'], 
   [/bg-black/gi, 'bg-white'],
-  [/bg-primary/gi, 'bg-[#ffffff]'],
-  [/text-textPrimary/gi, 'text-[#1c2128]'],
-  [/text-textSecondary/gi, 'text-[#57606a]'],
-  [/bg-surface/gi, 'bg-[#ffffff] shadow-sm'],
-  [/border-border/gi, 'border-[#d0d7de]'],
+  [/border-[#21262D]/gi, 'border-[#d0d7de]'],
+  [/bg-[#21262D]/gi, 'bg-[#f6f8fa]'],
+  [/shadow-\[0_8px_24px_rgba\(46,160,67,0\.12\)\]/gi, 'shadow-md'],
 ];
 
 const files = [
@@ -48,13 +32,7 @@ const files = [
   'src/components/TopBar.tsx',
   'src/components/ApplicationCard.tsx',
   'src/components/CompanyLogo.tsx',
-  'src/components/AddApplicationModal.tsx',
-  'src/components/QuickAddModal.tsx',
-  'src/components/MissedTracker.tsx',
-  'src/components/FilterPanel.tsx',
-  'src/components/NotificationCenter.tsx',
-  'src/layouts/DashboardLayout.tsx',
-  'src/App.tsx'
+  'src/components/AddApplicationModal.tsx'
 ];
 
 const root = 'd:/projects/Jobrixa/jobrixa-frontend';
@@ -67,10 +45,14 @@ files.forEach(file => {
       content = content.replace(regex, replacement);
     });
     
-    // Safety check for buttons that should stay white text
-    content = content.replace(/bg-\[#1a7f37\] (.*) text-\[#1c2128\]/g, 'bg-[#1a7f37] $1 text-white');
-    content = content.replace(/bg-\[#0969da\] (.*) text-\[#1c2128\]/g, 'bg-[#0969da] $1 text-white');
-    content = content.replace(/bg-\[#cf222e\] (.*) text-\[#1c2128\]/g, 'bg-[#cf222e] $1 text-white');
+    // Special case for cards that need shadow
+    // Example: bg-[#ffffff] border border-[#d0d7de] -> add shadow
+    content = content.replace(/className="(.*)bg-\[#ffffff\](.*)border(.*)"/g, (match, p1, p2, p3) => {
+        if (!match.includes('shadow')) {
+            return `className="${p1}bg-[#ffffff]${p2}border${p3} shadow-sm"`;
+        }
+        return match;
+    });
 
     fs.writeFileSync(filePath, content);
     console.log(`Updated ${file}`);

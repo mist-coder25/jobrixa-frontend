@@ -1,40 +1,40 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  ArrowRight, Check, Zap,
+  BarChart2, Briefcase, Bell, Chrome, Mail,
+  ArrowRight, Check, Zap, Target, TrendingUp
 } from 'lucide-react';
-
 
 export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-[#C9D1D9] overflow-x-hidden">
+    <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3] overflow-x-hidden">
 
       {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0d1117]/80 backdrop-blur-md border-b border-[#161B22] ">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0D1117]/80 backdrop-blur-md border-b border-[#21262D]">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#0969da] to-[#0969da] flex items-center justify-center  /20">
-              <span className="text-white font-black text-base">J</span>
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-[#4F8EF7] flex items-center justify-center">
+              <span className="text-white font-black text-sm">J</span>
             </div>
-            <span className="font-bold text-[#C9D1D9] text-lg tracking-tight">Jobrixa</span>
+            <span className="font-bold text-[#E6EDF3] text-base">Jobrixa</span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-sm text-[#8B949E]">
+          <div className="hidden md:flex items-center gap-6 text-sm text-[#7D8590]">
             <span onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="hover:text-[#C9D1D9] cursor-pointer transition-colors">Features</span>
+              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">Features</span>
             <span onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}
-              className="hover:text-[#C9D1D9] cursor-pointer transition-colors">How it works</span>
+              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">How it works</span>
             <span onClick={() => navigate('/pricing')}
-              className="hover:text-[#C9D1D9] cursor-pointer transition-colors">Pricing</span>
+              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">Pricing</span>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => navigate('/login')}
-              className="text-sm text-[#8B949E] hover:text-[#C9D1D9] transition-colors px-3 py-1.5">
+              className="text-sm text-[#7D8590] hover:text-[#E6EDF3] transition-colors px-3 py-1.5">
               Sign in
             </button>
             <button onClick={() => navigate('/register')}
-              className="text-sm bg-[#0969da] hover:bg-[#0969da] text-white font-medium px-4 py-1.5 rounded-lg transition-colors">
+              className="text-sm bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-medium px-4 py-1.5 rounded-lg transition-colors">
               Get started free
             </button>
           </div>
@@ -43,12 +43,12 @@ export default function Landing() {
 
       {/* BETA BANNER */}
       <div style={{
-        background: 'linear-gradient(90deg, #1e293b, #0f172a)',
-        borderBottom: '1px solid #0969da',
+        background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
+        borderBottom: '1px solid #2ea043',
         padding: '10px 24px',
         textAlign: 'center' as const,
         fontSize: '14px',
-        color: '#0969da',
+        color: '#3fb950',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -58,42 +58,33 @@ export default function Landing() {
         <span>🎉</span>
         <span>
           <strong>Beta Launch:</strong> All Pro features are completely free for the first 1,000 students. 
-          <a href="/register" style={{ color: '#0969da', marginLeft: '6px', textDecoration: 'underline' }}>
+          <a href="/register" style={{ color: '#58a6ff', marginLeft: '6px', textDecoration: 'underline' }}>
             Register now to lock in your early access →
           </a>
         </span>
       </div>
 
       {/* HERO */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden" style={{
-        backgroundColor: '#0d1117',
-        backgroundImage: 'radial-gradient(circle, #0969da20 1px, transparent 1px)',
-        backgroundSize: '28px 28px',
-        position: 'relative'
-      }}>
-        {/* Glow blob behind illustration */}
-        <div style={{
-          position: 'absolute',
-          width: '400px',
-          height: '400px',
-          background: 'radial-gradient(circle, #0969da18 0%, transparent 70%)',
-          borderRadius: '50%',
-          right: '-50px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          pointerEvents: 'none',
-          zIndex: 0
-        }} />
+      <section className="pt-32 pb-20 px-6 relative overflow-hidden" 
+        style={{
+          backgroundImage: 'radial-gradient(circle, #2ea04322 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+          backgroundColor: '#0d1117'
+        }}
+      >
+        {/* Background glows */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#4F8EF7]/6 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-20 left-1/4 w-64 h-64 bg-[#A371F7]/4 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 relative z-10">
-          {/* Left Column */}
-          <div className="flex-1 text-left">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 relative">
+          {/* Left Column: Text */}
+          <div className="flex-1 text-center md:text-left">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 bg-[#0969da15] border border-[#0969da30] rounded-full px-4 py-1.5 text-xs text-[#0969da] font-medium mb-6"
+              className="inline-flex items-center gap-2 bg-[#4F8EF7]/10 border border-[#4F8EF7]/20 rounded-full px-4 py-1.5 text-xs text-[#4F8EF7] font-medium mb-6"
             >
               <Zap size={11} />
               Built for Indian students & fresh graduates
@@ -104,18 +95,10 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              style={{
-                fontSize: '52px',
-                fontWeight: 700,
-                lineHeight: 1.2,
-                background: 'linear-gradient(135deg, #161B22 0%, #0969da 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                marginBottom: '24px'
-              }}
+              className="text-4xl md:text-6xl font-display font-bold text-[#E6EDF3] leading-tight tracking-tight mb-6"
             >
               Stop losing track of<br />
-              your job applications
+              <span className="text-[#4F8EF7]">your job applications</span>
             </motion.h1>
 
             {/* Subheadline */}
@@ -123,7 +106,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg text-[#8B949E] mb-8 leading-relaxed max-w-lg"
+              className="text-lg text-[#7D8590] max-w-2xl mb-8 leading-relaxed"
             >
               Jobrixa tracks every application, reminds you about OAs and interviews,
               and shows you exactly why you're not getting responses.
@@ -135,124 +118,153 @@ export default function Landing() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex items-center gap-4 flex-wrap"
+              className="flex items-center justify-center md:justify-start gap-4 flex-wrap"
             >
               <button onClick={() => navigate('/register')}
-                className="flex items-center gap-2 bg-[#0969da] hover:bg-[#0969da] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-105 ">
+                className="flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-105 shadow-[0_4px_20px_rgba(79,142,247,0.3)]">
                 Start tracking for free
                 <ArrowRight size={16} />
               </button>
               <button onClick={() => navigate('/login')}
-                className="flex items-center gap-2 bg-[#0d1117] hover:bg-[#161B22] border border-[#30363D] text-white font-medium px-6 py-3 rounded-xl text-sm transition-colors ">
+                className="flex items-center gap-2 bg-[#161B22] hover:bg-[#1C2128] border border-[#30363D] text-[#E6EDF3] font-medium px-6 py-3 rounded-xl text-sm transition-colors">
                 Sign in
               </button>
             </motion.div>
-
-            {/* Social Proof Line */}
-            <p style={{ color: '#8B949E', fontSize: '13px', marginTop: '16px' }}>
-              🎓 Built for Indian placement season · Free for students
-            </p>
           </div>
 
-          {/* Right Column */}
+          {/* Right Column: Illustration */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex-1 flex justify-center order-last md:order-none"
+            initial={{ opacity: 0, scale: 0.8, rotate: 2 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ type: "spring", damping: 20, stiffness: 100, delay: 0.2 }}
+            className="flex-1 flex justify-center md:justify-end"
           >
-            <img
-              src="/images/hero-student.jpg"
-              alt="Student searching for jobs"
-              style={{
-                width: '100%',
-                maxWidth: '480px',
-                height: '420px',
-                objectFit: 'cover',
-                borderRadius: '20px',
-                boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
-                border: '1px solid #161B22'
-              }}
-            />
+            <div className="relative group">
+              {/* Background glow for illustration */}
+              <div className="absolute -inset-4 bg-accent/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <img 
+                src="https://undraw.co/api/illustrations/undraw_career-growth_qvib.svg" 
+                alt="Career growth illustration"
+                style={{ width: '100%', maxWidth: '480px', height: 'auto' }}
+                className="relative z-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:-translate-y-2"
+              />
+            </div>
           </motion.div>
         </div>
-      </section>
 
-      {/* PROBLEM SECTION */}
-      <section className="py-20 px-10 border-t border-[#161B22]">
-        <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center gap-[60px]">
-          {/* Left Column - Image */}
-          <div className="flex-1 flex justify-center">
-            <img
-              src="/images/stressed-student.jpg"
-              alt="Stressed student during placement season"
-              style={{
-                width: '100%',
-                maxWidth: '440px',
-                height: '360px',
-                objectFit: 'cover',
-                borderRadius: '16px',
-                boxShadow: '0 16px 48px rgba(0,0,0,0.5)'
-              }}
-            />
-          </div>
-          {/* Right Column - Text */}
-          <div className="flex-1">
-            <p style={{ color: '#0969da', fontSize: '13px', fontWeight: 600, 
-              letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>
-              Sound familiar?
-            </p>
-            <h2 style={{ color: '#fff', fontSize: '36px', fontWeight: 700, 
-              lineHeight: 1.3, marginBottom: '20px' }}>
-              Placement season is overwhelming
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {[
-                '😓 Tracking 40+ applications in a messy Excel sheet',
-                '⏰ Missing OA deadlines because you forgot to check',
-                '👻 No idea which companies are ghosting you',
-                '📊 Zero visibility into your own job search progress'
-              ].map((pain, i) => (
-                <p key={i} style={{ color: '#8B949E', fontSize: '15px', 
-                  display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                  {pain}
-                </p>
-              ))}
+        {/* Dashboard mockup */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="max-w-5xl mx-auto mt-16 relative"
+        >
+          <div className="bg-[#161B22] border border-[#30363D] rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
+            {/* Mock browser bar */}
+            <div className="bg-[#1C2128] border-b border-[#30363D] px-4 py-3 flex items-center gap-2">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-[#F85149]/60" />
+                <div className="w-3 h-3 rounded-full bg-[#D29922]/60" />
+                <div className="w-3 h-3 rounded-full bg-[#3FB950]/60" />
+              </div>
+              <div className="flex-1 mx-4 bg-[#0D1117] rounded-md px-3 py-1 text-xs text-[#484F58]">
+                jobrixa-frontend.vercel.app/pipeline
+              </div>
+            </div>
+            {/* Mock pipeline */}
+            <div className="p-6 overflow-x-auto">
+              <div className="flex gap-4 min-w-max">
+                {[
+                  { label: 'SAVED', color: '#7D8590', cards: ['Swiggy — SDE', 'Razorpay — Backend'] },
+                  { label: 'APPLIED', color: '#4F8EF7', cards: ['Google — SWE', 'Microsoft — Intern'] },
+                  { label: 'OA/ASSESSMENT', color: '#D29922', cards: ['Flipkart — SDE2'] },
+                  { label: 'INTERVIEW', color: '#A371F7', cards: ['CRED — Frontend'] },
+                  { label: 'OFFER', color: '#3FB950', cards: [] },
+                ].map(col => (
+                  <div key={col.label} className="w-48 flex-shrink-0">
+                    <div className="bg-[#1C2128] rounded-lg border border-[#30363D] overflow-hidden"
+                      style={{ borderTop: `2px solid ${col.color}` }}>
+                      <div className="px-3 py-2 flex items-center justify-between">
+                        <span className="text-[10px] font-bold uppercase tracking-wider"
+                          style={{ color: col.color }}>{col.label}</span>
+                        <span className="text-[10px] text-[#484F58] bg-[#21262D] px-1.5 rounded">
+                          {col.cards.length}
+                        </span>
+                      </div>
+                      <div className="px-2 pb-2 space-y-1.5">
+                        {col.cards.map(card => (
+                          <div key={card} className="bg-[#0D1117] border border-[#21262D] rounded-md px-2.5 py-2">
+                            <p className="text-xs text-[#E6EDF3] font-medium">{card.split('—')[0]}</p>
+                            <p className="text-[10px] text-[#7D8590]">{card.split('—')[1]}</p>
+                          </div>
+                        ))}
+                        {col.cards.length === 0 && (
+                          <div className="text-center py-3">
+                            <span className="text-lg">🎉</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+          {/* Glow under mockup */}
+          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-[#4F8EF7]/10 blur-2xl rounded-full" />
+        </motion.div>
       </section>
 
       {/* FEATURES */}
-      <section id="features" className="py-24 px-6 border-t border-[#161B22]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-[#C9D1D9] mb-4">
+      <section id="features" className="py-20 px-6 border-t border-[#21262D]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">
               Everything you need to land the job
             </h2>
-            <p className="text-[#8B949E] max-w-xl mx-auto">
+            <p className="text-[#7D8590] max-w-xl mx-auto">
               Built specifically for placement season — not a generic todo app repurposed for job hunting.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { 
-                icon: '📋', 
-                title: 'Never Miss a Deadline', 
-                desc: 'Track every OA and interview date in one place.',
-                image: '/images/job-application.jpg'
+              {
+                icon: <Briefcase size={20} />,
+                color: '#4F8EF7',
+                title: 'Kanban Pipeline',
+                desc: 'Drag and drop applications across Saved, Applied, OA, Interview, Offer, and Rejected stages.'
               },
-              { 
-                icon: '📊', 
-                title: 'Track Every Interview', 
-                desc: 'Organize your prep and feedback for every round and stage.',
-                image: '/images/interview-table.jpg'
+              {
+                icon: <Bell size={20} />,
+                color: '#D29922',
+                title: 'Never Miss a Deadline',
+                desc: 'Set deadlines for OAs and interviews. Jobrixa automatically marks them missed if you forget.'
               },
-              { icon: '🏢', title: 'Real Company Logos', desc: 'Every card shows the company logo automatically.' },
-              { icon: '🔍', title: 'Discover Jobs', desc: 'Find openings from real sources, built for Indian students.' },
-              { icon: '😔', title: 'Track Rejections Too', desc: 'Rejections are data. Learn from every one.' },
-              { icon: '🆓', title: 'Free for First 1,000', desc: 'You\'re early. All Pro features are yours at no cost.' },
+              {
+                icon: <BarChart2 size={20} />,
+                color: '#3FB950',
+                title: 'Real Analytics',
+                desc: 'See your response rate, interview rate, and offer rate. Know exactly where your funnel leaks.'
+              },
+              {
+                icon: <Target size={20} />,
+                color: '#A371F7',
+                title: 'Ghosted Tracker',
+                desc: 'Applications with no response after 14 days are automatically marked as ghosted. Know who ghosted you.'
+              },
+              {
+                icon: <Chrome size={20} />,
+                color: '#F0883E',
+                title: 'Chrome Extension',
+                desc: 'One-click add from LinkedIn, Naukri, Internshala, and Wellfound. No copy-pasting required.'
+              },
+              {
+                icon: <Mail size={20} />,
+                color: '#EC4899',
+                title: 'Gmail Auto-Detect',
+                desc: 'Connect Gmail and Jobrixa automatically detects application confirmations, OA links, and rejections.'
+              },
             ].map(f => (
               <motion.div
                 key={f.title}
@@ -260,97 +272,26 @@ export default function Landing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4 }}
-                style={{
-                  background: '#0d1117',
-                  border: '1px solid #30363D',
-                  borderRadius: '12px',
-                  padding: '24px',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-                }}
-                className="hover:translate-y-[-4px] hover: hover:border-[#0969da40] cursor-default overflow-hidden "
+                className="bg-[#161B22] border border-[#30363D] rounded-xl p-5 hover:border-[#4F8EF7]/30 transition-colors group"
               >
-                {('image' in f) && (
-                  <img
-                    src={f.image as string}
-                    alt={f.title}
-                    style={{
-                      width: '100%',
-                      height: '140px',
-                      objectFit: 'cover',
-                      borderRadius: '8px',
-                      marginBottom: '16px'
-                    }}
-                  />
-                )}
-                <div className="text-4xl mb-4">{f.icon}</div>
-                <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-sm text-[#8B949E] leading-relaxed">{f.desc}</p>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4"
+                  style={{ background: `${f.color}15`, color: f.color }}>
+                  {f.icon}
+                </div>
+                <h3 className="text-sm font-semibold text-[#E6EDF3] mb-2">{f.title}</h3>
+                <p className="text-xs text-[#7D8590] leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="py-24 px-6 border-t border-[#161B22] bg-[#161B22]">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-12">
-            What students are saying 💬
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                name: "Priya S.",
-                college: "VIT Vellore, CSE 4th year",
-                text: "I was tracking 30 apps in Google Sheets and missing deadlines. Jobrixa saved my placement season.",
-                seed: "priya"
-              },
-              {
-                name: "Rahul M.",
-                college: "BITS Pilani, ECE 3rd year",
-                text: "The ghosting tracker is genius. I finally know which companies never reply so I stop wasting time.",
-                seed: "rahul"
-              },
-              {
-                name: "Ananya K.",
-                college: "NIT Trichy, IT 4th year",
-                text: "Looks exactly like a professional product. My friends thought I was using some paid tool.",
-                seed: "ananya"
-              }
-            ].map(t => (
-              <div key={t.name} style={{
-                background: '#0d1117',
-                border: '1px solid #30363D',
-                borderRadius: '12px',
-                padding: '20px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-              }}>
-                <div className="flex items-center gap-3 mb-4">
-                  <img
-                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${t.seed}&backgroundColor=b6e3f4`}
-                    alt={t.name}
-                    style={{ width: '44px', height: '44px', borderRadius: '50%' }}
-                  />
-                  <div>
-                    <p className="text-white font-bold text-sm">{t.name}</p>
-                    <p className="text-[#8B949E] text-xs">{t.college}</p>
-                  </div>
-                </div>
-                <p style={{ color: '#161B22', fontStyle: 'italic', fontSize: '14px', lineHeight: '1.6' }}>
-                  "{t.text}"
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* HOW IT WORKS */}
-      <section id="how" className="py-20 px-6 border-t border-[#161B22]">
+      <section id="how" className="py-20 px-6 border-t border-[#21262D]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-white mb-3">How it works</h2>
-            <p className="text-[#8B949E]">Three steps to a organised job hunt</p>
+            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">How it works</h2>
+            <p className="text-[#7D8590]">Three steps to a organised job hunt</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -366,9 +307,9 @@ export default function Landing() {
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 className="relative"
               >
-                <div className="text-5xl font-black text-white mb-4">{s.step}</div>
-                <h3 className="text-base font-semibold text-white mb-2">{s.title}</h3>
-                <p className="text-sm text-[#8B949E] leading-relaxed">{s.desc}</p>
+                <div className="text-5xl font-black text-[#21262D] mb-4">{s.step}</div>
+                <h3 className="text-base font-semibold text-[#E6EDF3] mb-2">{s.title}</h3>
+                <p className="text-sm text-[#7D8590] leading-relaxed">{s.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -376,49 +317,49 @@ export default function Landing() {
       </section>
 
       {/* PRICING TEASER */}
-      <section className="py-20 px-6 border-t border-[#161B22]">
+      <section className="py-20 px-6 border-t border-[#21262D]">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-white mb-3">Simple pricing</h2>
-            <p className="text-[#8B949E]">Start free. Upgrade when you need more.</p>
+            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">Simple pricing</h2>
+            <p className="text-[#7D8590]">Start free. Upgrade when you need more.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Free */}
-            <div className="bg-[#0d1117] border border-[#30363D] rounded-2xl p-6 ">
-              <p className="text-xs font-semibold text-[#8B949E] uppercase tracking-wider mb-2">Free</p>
-              <div className="text-3xl font-bold text-white mb-1">₹0</div>
-              <p className="text-xs text-[#8B949E] mb-6">Forever free</p>
+            <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6">
+              <p className="text-xs font-semibold text-[#7D8590] uppercase tracking-wider mb-2">Free</p>
+              <div className="text-3xl font-bold text-[#E6EDF3] mb-1">₹0</div>
+              <p className="text-xs text-[#7D8590] mb-6">Forever free</p>
               <div className="space-y-2 mb-6">
                 {['Up to 30 applications', 'Kanban pipeline', 'Basic analytics', 'Chrome extension'].map(f => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-[#8B949E]">
-                    <Check size={14} className="text-[#0969da]" />
+                  <div key={f} className="flex items-center gap-2 text-sm text-[#7D8590]">
+                    <Check size={14} className="text-[#3FB950]" />
                     {f}
                   </div>
                 ))}
               </div>
               <button onClick={() => navigate('/register')}
-                className="w-full py-2.5 border border-[#30363D] text-white font-semibold rounded-lg text-sm hover:bg-[#161B22] transition-colors">
+                className="w-full py-2.5 border border-[#30363D] text-[#E6EDF3] rounded-lg text-sm hover:bg-[#1C2128] transition-colors">
                 Get started free
               </button>
             </div>
             {/* Pro */}
-            <div className="bg-[#0d1117] border-[#30363D] border-[#0969da]/50 rounded-2xl p-6 relative ">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#0969da] text-[#C9D1D9] text-xs font-bold px-3 py-1 rounded-full">
+            <div className="bg-[#161B22] border-2 border-[#4F8EF7]/50 rounded-2xl p-6 relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#4F8EF7] text-white text-xs font-bold px-3 py-1 rounded-full">
                 MOST POPULAR
               </div>
-              <p className="text-xs font-semibold text-[#0969da] uppercase tracking-wider mb-2">Pro</p>
-              <div className="text-3xl font-bold text-white mb-1">₹149<span className="text-base font-normal text-[#8B949E]">/month</span></div>
-              <p className="text-xs text-[#8B949E] mb-6">For serious job hunters</p>
+              <p className="text-xs font-semibold text-[#4F8EF7] uppercase tracking-wider mb-2">Pro</p>
+              <div className="text-3xl font-bold text-[#E6EDF3] mb-1">₹149<span className="text-base font-normal text-[#7D8590]">/month</span></div>
+              <p className="text-xs text-[#7D8590] mb-6">For serious job hunters</p>
               <div className="space-y-2 mb-6">
                 {['Unlimited applications', 'Full analytics & insights', 'Gmail auto-detection', 'Missed & ghosted tracker', 'Priority support'].map(f => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-white">
-                    <Check size={14} className="text-[#0969da]" />
+                  <div key={f} className="flex items-center gap-2 text-sm text-[#E6EDF3]">
+                    <Check size={14} className="text-[#4F8EF7]" />
                     {f}
                   </div>
                 ))}
               </div>
               <button onClick={() => navigate('/pricing')}
-                className="w-full py-2.5 bg-[#0969da] hover:bg-[#0969da] text-[#C9D1D9] font-semibold rounded-lg text-sm transition-colors">
+                className="w-full py-2.5 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold rounded-lg text-sm transition-colors">
                 Upgrade to Pro
               </button>
             </div>
@@ -426,73 +367,38 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* BOTTOM CTA */}
-      <section className="py-20 px-6 border-t border-[#30363D]">
-        <div style={{
-          background: '#0d1117',
-          border: '1px solid #30363D',
-          borderRadius: '16px',
-          padding: '60px 40px',
-          textAlign: 'center',
-          margin: '60px auto',
-          maxWidth: '700px',
-          position: 'relative',
-          overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.05)'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <img
-              src="/images/interview-success.jpg"
-              alt="Confident student at interview"
-              style={{
-                width: '200px',
-                height: '200px',
-                objectFit: 'cover',
-                objectPosition: 'top',
-                borderRadius: '50%',
-                border: '3px solid #0969da',
-                marginBottom: '24px',
-                boxShadow: '0 8px 32px rgba(56, 139, 253,0.3)'
-              }}
-            />
-          </div>
-          <div className="text-5xl mb-6">🚀</div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#C9D1D9] mb-4">
-            Your placement season starts now
+      {/* FINAL CTA */}
+      <section className="py-20 px-6 border-t border-[#21262D]">
+        <div className="max-w-2xl mx-auto text-center">
+          <TrendingUp size={32} className="text-[#4F8EF7] mx-auto mb-4" />
+          <h2 className="text-3xl font-bold text-[#E6EDF3] mb-4">
+            Your next offer is one<br />organised job hunt away
           </h2>
-          <p className="text-[#8B949E] mb-10 max-w-md mx-auto">
-            Free for the first 1,000 students. No credit card. No catch.
+          <p className="text-[#7D8590] mb-8">
+            Stop tracking jobs in a spreadsheet. Start using a tool built for this.
           </p>
           <button onClick={() => navigate('/register')}
-            style={{
-              background: '#0969da',
-              color: 'white',
-              padding: '14px 32px',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 600,
-              transition: 'all 0.2s ease'
-            }}
-            className="hover:bg-[#0969da] hover:scale-[1.02]  ">
-            Get Started Now
+            className="inline-flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold px-8 py-3.5 rounded-xl text-sm transition-all hover:scale-105">
+            Start for free — no credit card needed
+            <ArrowRight size={16} />
           </button>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-[#161B22] py-8 px-6">
+      <footer className="border-t border-[#21262D] py-8 px-6">
         <div className="max-w-5xl mx-auto flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-[#0969da] flex items-center justify-center">
+            <div className="w-6 h-6 rounded-md bg-[#4F8EF7] flex items-center justify-center">
               <span className="text-white font-black text-xs">J</span>
             </div>
-            <span className="text-sm font-bold text-[#C9D1D9]">Jobrixa</span>
+            <span className="text-sm font-bold text-[#E6EDF3]">Jobrixa</span>
             <span className="text-xs text-[#484F58] ml-2">© 2026</span>
           </div>
           <div className="flex items-center gap-6 text-xs text-[#484F58]">
-            <span className="hover:text-[#8B949E] cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-[#8B949E] cursor-pointer">Terms</span>
-            <span className="hover:text-[#8B949E] cursor-pointer">Contact</span>
+            <span className="hover:text-[#7D8590] cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-[#7D8590] cursor-pointer">Terms</span>
+            <span className="hover:text-[#7D8590] cursor-pointer">Contact</span>
             <span className="text-[#484F58]">support@jobrixa.app</span>
           </div>
         </div>

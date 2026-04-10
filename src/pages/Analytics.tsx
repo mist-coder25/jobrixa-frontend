@@ -47,10 +47,10 @@ export default function Analytics() {
 
   if (loading) {
     return (
-      <div className="h-full flex flex-col bg-[#0d1117]">
+      <div className="h-full flex flex-col bg-[#ffffff]">
         <TopBar title="Analytics" subtitle="Know your numbers" />
         <div className="flex-1 flex items-center justify-center">
-           <div className="w-8 h-8 rounded-full border-[#30363D] border-accent border-t-transparent animate-spin"></div>
+           <div className="w-8 h-8 rounded-full border-[#d0d7de] border-accent border-t-transparent animate-spin"></div>
         </div>
       </div>
     );
@@ -76,25 +76,25 @@ export default function Analytics() {
     return intensity;
   });
 
-  const HEAT_COLORS = ['#161B22', '#e6f4ff', '#91caff', '#40a9ff', '#58a6ff'];
+  const HEAT_COLORS = ['#f6f8fa', '#1a3a5c', '#1d5a9e', '#2470d4', '#4F8EF7'];
 
   return (
-    <div className="h-full flex flex-col bg-[#0d1117] overflow-y-auto custom-scrollbar text-[#C9D1D9]">
+    <div className="h-full flex flex-col bg-[#ffffff] overflow-y-auto custom-scrollbar text-[#1c2128]">
       <TopBar title="Advanced Analytics" subtitle="Know your numbers" />
 
       <div className="p-8 space-y-10 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
         
         {/* Smart Insights */}
-        <div className="bg-gradient-to-r from-[#58a6ff10] to-white border border-[#58a6ff30] rounded-xl p-6 relative overflow-hidden flex items-start gap-4 ">
-           <div className="w-12 h-12 bg-[#58a6ff15] rounded-full flex items-center justify-center shrink-0">
-             <Lightbulb className="w-6 h-6 text-[#58a6ff]" />
+        <div className="bg-gradient-to-r from-accent/20 to-surface border border-accent/30 rounded-xl p-6 relative overflow-hidden flex items-start gap-4 shadow-[0_4px_30px_rgba(108,99,255,0.1)]">
+           <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center shrink-0">
+             <Lightbulb className="w-6 h-6 text-accent" />
            </div>
            <div>
              <h3 className="text-lg font-display font-semibold mb-1">Smart Insights & Suggestions</h3>
-             <ul className="space-y-2 text-sm text-[#8B949E] font-medium leading-relaxed">
-               <li><span className="text-[#C9D1D9]">💡 High conversion potential:</span> Your response rate from <b>Referrals</b> is 4x higher than standard applications. Focus your energy on networking this week.</li>
-               <li><span className="text-[#C9D1D9]">💡 Pipeline bottleneck:</span> You have {byStatus['OA'] || 0} pending assessments. Prioritize completing them to unblock the interview phase.</li>
-               <li><span className="text-[#C9D1D9]">💡 Consistency check:</span> You applied to {stats?.totalApplications || 0} roles in total. Keep building momentum!</li>
+             <ul className="space-y-2 text-sm text-[#57606a] font-medium leading-relaxed">
+               <li><span className="text-[#1c2128]">💡 High conversion potential:</span> Your response rate from <b>Referrals</b> is 4x higher than standard applications. Focus your energy on networking this week.</li>
+               <li><span className="text-[#1c2128]">💡 Pipeline bottleneck:</span> You have {byStatus['OA'] || 0} pending assessments. Prioritize completing them to unblock the interview phase.</li>
+               <li><span className="text-[#1c2128]">💡 Consistency check:</span> You applied to {stats?.totalApplications || 0} roles in total. Keep building momentum!</li>
              </ul>
            </div>
         </div>
@@ -102,42 +102,42 @@ export default function Analytics() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* Funnel Chart */}
-          <div className="bg-[#0d1117] border border-[#30363D] rounded-xl p-6 ">
+          <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-display font-semibold">Conversion Funnel</h3>
-              <div title="Dropoff from initial application to final offer"><Info className="w-4 h-4 text-[#8B949E]" /></div>
+              <div title="Dropoff from initial application to final offer"><Info className="w-4 h-4 text-[#57606a]" /></div>
             </div>
             <div className="h-[300px] w-full mt-4">
                <ResponsiveContainer width="100%" height={300}>
                  <BarChart data={funnelData} layout="vertical" margin={{ top: 0, right: 30, left: 20, bottom: 0 }}>
                    <XAxis type="number" hide />
-                   <YAxis dataKey="name" type="category" stroke="#8B949E" fontSize={12} tickLine={false} axisLine={false} width={80} />
+                   <YAxis dataKey="name" type="category" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} width={80} />
                    <Tooltip 
                      cursor={{ fill: 'transparent' }}
-                     contentStyle={{ backgroundColor: '#0d1117', border: '1px solid #30363D', borderRadius: '8px' }}
+                     contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                    />
-                   <Bar dataKey="value" fill="#58a6ff" radius={[0, 4, 4, 0]} barSize={32} />
+                   <Bar dataKey="value" fill="#4F8EF7" radius={[0, 4, 4, 0]} barSize={32} />
                  </BarChart>
                </ResponsiveContainer>
             </div>
           </div>
 
           {/* Response Rates by Source */}
-          <div className="bg-[#0d1117] border border-[#30363D] rounded-xl p-6 ">
+          <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6">
             <h3 className="text-lg font-display font-semibold mb-4">Response Rate by Source (%)</h3>
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={sourceData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#161B22" vertical={false} />
-                  <XAxis dataKey="name" stroke="#8B949E" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#8B949E" fontSize={12} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#2A2A38" vertical={false} />
+                  <XAxis dataKey="name" stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#8B8BA8" fontSize={12} tickLine={false} axisLine={false} />
                   <Tooltip 
-                    cursor={{fill: '#21262D', opacity: 0.4}}
-                    contentStyle={{ backgroundColor: '#0d1117', border: '1px solid #30363D', borderRadius: '8px' }}
+                    cursor={{fill: '#2A2A38', opacity: 0.4}}
+                    contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
                   />
                   <Bar dataKey="rate" radius={[4, 4, 0, 0]} barSize={40}>
                     {sourceData.map((_, i) => (
-                      <Cell key={i} fill={['#58a6ff','#1f6feb','#9a6700','#A371F7'][i % 4]} />
+                      <Cell key={i} fill={['#4F8EF7','#2da44e','#9a6700','#A371F7'][i % 4]} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -146,7 +146,7 @@ export default function Analytics() {
           </div>
         </div>
 
-        <div className="bg-[#0d1117]  border border-[#30363D] rounded-xl p-6">
+        <div className="bg-[#ffffff] shadow-sm border border-[#d0d7de] rounded-xl p-6">
             <h3 className="text-lg font-display font-semibold mb-4">Activity Heatmap</h3>
             <div className="w-full overflow-x-auto custom-scrollbar pb-2">
                <div className="flex gap-1" style={{ minWidth: '800px' }}>
@@ -165,7 +165,7 @@ export default function Analytics() {
                  ))}
                </div>
             </div>
-            <div className="flex items-center justify-end gap-2 mt-4 text-xs font-medium text-[#8B949E]">
+            <div className="flex items-center justify-end gap-2 mt-4 text-xs font-medium text-[#57606a]">
                <span>Less</span>
                <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[0] }}></div>
                <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: HEAT_COLORS[1] }}></div>
@@ -180,10 +180,10 @@ export default function Analytics() {
         <div className="mx-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-base font-semibold text-[#C9D1D9]">
+              <h2 className="text-base font-semibold text-[#1c2128]">
                 Missed Opportunities
               </h2>
-              <p className="text-xs text-[#8B949E] mt-0.5">
+              <p className="text-xs text-[#57606a] mt-0.5">
                 Assessments and interviews you didn't respond to
               </p>
             </div>
@@ -191,74 +191,74 @@ export default function Analytics() {
               <div className="flex items-center gap-6">
                 <div className="text-right">
                   <div className="text-2xl font-bold"
-                    style={{ color: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#58a6ff' }}>
+                    style={{ color: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#2da44e' }}>
                     {missedData.missedPercent}%
                   </div>
-                  <div className="text-xs text-[#8B949E]">miss rate</div>
+                  <div className="text-xs text-[#57606a]">miss rate</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-[#C9D1D9]">{missedData.missedCount}</div>
-                  <div className="text-xs text-[#8B949E]">missed</div>
+                  <div className="text-2xl font-bold text-[#1c2128]">{missedData.missedCount}</div>
+                  <div className="text-xs text-[#57606a]">missed</div>
                 </div>
               </div>
             )}
           </div>
 
-          <div className="bg-[#0d1117] border border-[#30363D] rounded-xl overflow-hidden ">
+          <div className="bg-[#ffffff] border border-[#d0d7de] rounded-xl overflow-hidden shadow-sm">
             {!missedData ? (
               <div className="p-6 space-y-3">
                 {[1,2,3].map(i => (
-                  <div key={i} className="h-10 bg-[#161B22] rounded-lg animate-pulse" />
+                  <div key={i} className="h-10 bg-[#f6f8fa] rounded-lg animate-pulse" />
                 ))}
               </div>
             ) : missedData.missedCount === 0 ? (
               <div className="p-10 flex flex-col items-center justify-center text-center">
                 <span className="text-4xl mb-3">🎯</span>
-                <p className="text-sm font-semibold text-[#C9D1D9]">No missed opportunities!</p>
-                <p className="text-xs text-[#8B949E] mt-1 max-w-xs">
+                <p className="text-sm font-semibold text-[#1c2128]">No missed opportunities!</p>
+                <p className="text-xs text-[#57606a] mt-1 max-w-xs">
                   You've responded to every OA and interview.
                   Set deadlines on your cards so Jobrixa can track future ones.
                 </p>
               </div>
             ) : (
               <>
-                <div className="px-5 py-3 border-b border-[#21262D] bg-[#161B22] flex items-center justify-between">
+                <div className="px-5 py-3 border-b border-[#f6f8fa] bg-[#f6f8fa] flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-[#cf222e]" />
-                    <span className="text-xs font-medium text-[#C9D1D9]">
+                    <span className="text-xs font-medium text-[#1c2128]">
                       {missedData.missedCount} missed
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-32 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
+                    <div className="w-32 h-1.5 bg-[#f6f8fa] rounded-full overflow-hidden">
                       <div className="h-full rounded-full transition-all"
                         style={{
                           width: `${missedData.missedPercent}%`,
-                          background: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#58a6ff'
+                          background: missedData.missedPercent > 50 ? '#cf222e' : missedData.missedPercent > 25 ? '#9a6700' : '#2da44e'
                         }} />
                     </div>
-                    <span className="text-xs text-[#8B949E]">{missedData.missedPercent}% miss rate</span>
+                    <span className="text-xs text-[#57606a]">{missedData.missedPercent}% miss rate</span>
                   </div>
                 </div>
-                <div className="grid grid-cols-5 px-5 py-2 border-b border-[#21262D]">
+                <div className="grid grid-cols-5 px-5 py-2 border-b border-[#f6f8fa]">
                   {['Company','Role','Type','Deadline','Missed On'].map(h => (
-                    <span key={h} className="text-[11px] font-semibold text-[#484F58] uppercase tracking-wider">{h}</span>
+                    <span key={h} className="text-[11px] font-semibold text-[#8c959f] uppercase tracking-wider">{h}</span>
                   ))}
                 </div>
                 {missedData.missed.map((item, i) => (
                   <div key={item.id}
-                    className={`grid grid-cols-5 px-5 py-3 items-center hover:bg-[#161B22] transition-colors ${i < missedData.missed.length - 1 ? 'border-b border-[#21262D]' : ''}`}>
+                    className={`grid grid-cols-5 px-5 py-3 items-center hover:bg-[#f6f8fa] transition-colors ${i < missedData.missed.length - 1 ? 'border-b border-[#f6f8fa]' : ''}`}>
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-md bg-[#cf222e]/10 border border-[#cf222e]/20 flex items-center justify-center text-xs font-bold text-[#cf222e]">
                         {item.company.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-sm font-medium text-[#C9D1D9] truncate">{item.company}</span>
+                      <span className="text-sm font-medium text-[#1c2128] truncate">{item.company}</span>
                     </div>
-                    <span className="text-sm text-[#8B949E] truncate pr-2">{item.role}</span>
+                    <span className="text-sm text-[#57606a] truncate pr-2">{item.role}</span>
                     <span className={`text-xs px-2 py-1 rounded-md font-medium w-fit ${
                       item.status === 'OA' || item.status === 'OA_ASSESSMENT'
                         ? 'bg-[#9a6700]/10 text-[#9a6700] border border-[#9a6700]/20'
-                        : 'bg-[#58a6ff]/10 text-[#58a6ff] border border-[#58a6ff]/20'
+                        : 'bg-[#A371F7]/10 text-[#A371F7] border border-[#A371F7]/20'
                     }`}>
                       {(item.status === 'OA' || item.status === 'OA_ASSESSMENT') ? 'OA' : 'Interview'}
                     </span>
@@ -267,13 +267,13 @@ export default function Analytics() {
                         ? new Date(item.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
                         : '—'}
                     </span>
-                    <span className="text-sm text-[#484F58]">
+                    <span className="text-sm text-[#8c959f]">
                       {new Date(item.missedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                     </span>
                   </div>
                 ))}
-                <div className="px-5 py-3 border-t border-[#21262D] bg-[#0d1117]">
-                  <p className="text-xs text-[#484F58]">
+                <div className="px-5 py-3 border-t border-[#f6f8fa] bg-[#ffffff]">
+                  <p className="text-xs text-[#8c959f]">
                     💡 Set a deadline when adding OA/Interview cards so Jobrixa auto-marks them as missed.
                   </p>
                 </div>

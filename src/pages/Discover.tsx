@@ -33,12 +33,19 @@ function TrustBadge({ score }: { score: number }) {
 
 function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: (job: NormalizedJob) => void }) {
   const srcColor = SOURCE_COLORS[job.source] ?? SOURCE_COLORS.default;
+  const inferredDomain = `${job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
 
   return (
     <div className="bg-[#0d1117] border border-[#30363D] rounded-xl p-5 flex flex-col gap-4 hover:border-[#58a6ff]/40 hover: hover:/5 transition-all cursor-pointer">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <CompanyLogo companyName={job.company} size={48} className="border border-[#30363D]/50" containerPadding="p-1.5" />
+        <CompanyLogo 
+          companyName={job.company} 
+          domain={inferredDomain} 
+          size={48} 
+          className="border border-[#30363D]/50" 
+          containerPadding="p-1.5" 
+        />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
@@ -487,6 +494,7 @@ export default function Discover() {
         initialStatus="SAVED"
         prefill={trackerJob ? {
           companyName: trackerJob.company,
+          companyDomain: `${trackerJob.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
           jobTitle: trackerJob.title,
           jobUrl: trackerJob.url,
           source: "Discover",

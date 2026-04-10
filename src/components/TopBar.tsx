@@ -18,11 +18,11 @@ export default function TopBar({
   children
 }: TopBarProps) {
   return (
-    <header className="h-16 bg-[#0d1117]/80 backdrop-blur-md border-b border-[#161B22] flex items-center justify-between px-8 sticky top-0 z-40 w-full transition-all ">
+    <header className="h-16 bg-[#0D1117]/80 backdrop-blur-md border-b border-[#21262D] flex items-center justify-between px-8 sticky top-0 z-40 w-full transition-all">
       <div className="flex items-center gap-4">
         <div>
-          <h1 className="text-base font-semibold text-[#C9D1D9]">{title}</h1>
-          {subtitle && <p className="text-xs text-[#8B949E]">{subtitle}</p>}
+          <h1 className="text-base font-semibold text-[#E6EDF3]">{title}</h1>
+          {subtitle && <p className="text-xs text-[#7D8590]">{subtitle}</p>}
         </div>
       </div>
 
@@ -34,7 +34,7 @@ export default function TopBar({
             <input
               type="text"
               placeholder="Search..."
-              className="w-52 pl-8 pr-3 py-1.5 bg-[#0d1117] border border-[#30363D] rounded-md text-sm text-[#C9D1D9] placeholder:text-[#484F58] focus:outline-none focus:border-[#58a6ff] transition-colors "
+              className="w-52 pl-8 pr-3 py-1.5 bg-[#161B22] border border-[#30363D] rounded-md text-sm text-[#E6EDF3] placeholder:text-[#484F58] focus:outline-none focus:border-[#4F8EF7] transition-colors"
             />
           </div>
         )}
@@ -44,11 +44,11 @@ export default function TopBar({
           <div className="relative">
             <button 
               onClick={onFilterClick}
-              className="group flex p-1.5 rounded-md border border-[#30363D] text-[#8B949E] hover:text-[#C9D1D9] bg-[#0d1117] transition-all relative"
+              className="group flex p-1.5 rounded-md border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] bg-[#161B22] transition-all relative"
             >
               <Filter size={14} className="group-hover:rotate-12 transition-transform" />
               {activeFilterCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#58a6ff] rounded-full text-white text-[9px] flex items-center justify-center font-bold">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#4F8EF7] rounded-full text-white text-[9px] flex items-center justify-center font-bold">
                   {activeFilterCount}
                 </span>
               )}
@@ -59,13 +59,14 @@ export default function TopBar({
         {/* Page-specific action buttons */}
         {children}
 
-        {/* User Avatar */}
-        <div className="hidden md:flex items-center gap-4 ml-2 pl-4 border-l border-[#161B22]">
-          <img
-            src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(localStorage.getItem("jobrixa_user") || "User")}&backgroundColor=4F8EF7&fontFamily=Inter`}
-            alt="User"
-            className="w-8 h-8 rounded-full border border-[#58a6ff]  /20"
-          />
+        {/* Global Profile Avatar */}
+        <div className="ml-2 pl-2 border-l border-[#21262D]">
+           <img
+             src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(localStorage.getItem("jobrixa_user") || "User")}&backgroundColor=2ea043&fontFamily=Inter`}
+             alt="Profile"
+             className="w-8 h-8 rounded-full border-2 border-[#2ea043] hover:scale-105 transition-transform cursor-pointer"
+             onClick={() => window.location.href = '/settings'}
+           />
         </div>
       </div>
     </header>

@@ -22,6 +22,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
   
   // Editable states for overview
   const [companyName, setCompanyName] = useState("");
+  const [companyDomain, setCompanyDomain] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [status, setStatus] = useState("");
   const [jobUrl, setJobUrl] = useState("");
@@ -36,6 +37,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
   useEffect(() => {
     if (app && isOpen) {
       setCompanyName(app.companyName || "");
+      setCompanyDomain(app.companyDomain || "");
       setJobTitle(app.jobTitle || "");
       setStatus(app.status || "SAVED");
       setJobUrl(app.jobUrl || "");
@@ -69,6 +71,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
       await api.put(`/applications/${app.id}`, {
         ...app,
         companyName,
+        companyDomain,
         jobTitle,
         status,
         jobUrl,
@@ -157,7 +160,7 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
           </button>
 
           <div className="flex gap-4 mt-2">
-            <CompanyLogo companyName={companyName} size={64} className="border border-border/50 " containerPadding="p-2" />
+            <CompanyLogo companyName={companyName} domain={companyDomain} size={64} className="border border-border/50 " containerPadding="p-2" />
             <div className="flex-1 pr-6 space-y-2">
               <input 
                 value={companyName}
@@ -170,6 +173,12 @@ export default function ApplicationDetailPanel({ app, isOpen, onClose, onUpdate 
                 onChange={(e) => setJobTitle(e.target.value)}
                 className="w-full bg-transparent border-none p-0 text-sm text-textSecondary focus:ring-0 placeholder:text-textSecondary/30"
                 placeholder="Job Title"
+              />
+              <input 
+                value={companyDomain}
+                onChange={(e) => setCompanyDomain(e.target.value)}
+                className="w-full bg-transparent border-none p-0 text-xs text-accent font-medium focus:ring-0 placeholder:text-textSecondary/30"
+                placeholder="Company Domain (e.g. google.com)"
               />
             </div>
           </div>

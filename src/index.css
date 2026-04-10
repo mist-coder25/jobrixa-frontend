@@ -4,32 +4,32 @@
 
 @layer base {
   :root {
-    /* Dark mode backgrounds */
-    --bg-primary: #0d1117;
+    /* New backgrounds — deep navy, not pure black */
+    --bg-primary: #0D1117;
     --bg-secondary: #161B22;
-    --bg-surface: #161B22;
-    --bg-elevated: #1C2128;
+    --bg-surface: #1C2128;
+    --bg-elevated: #22272E;
     
-    /* Borders */
+    /* Borders — subtle blue-grey */
     --border: #30363D;
     --border-subtle: #21262D;
     
-    /* Accent — GitHub Blue */
-    --accent: #58a6ff;
-    --accent-hover: #1f6feb;
-    --accent-subtle: rgba(56, 139, 253, 0.1);
+    /* New accent — sophisticated indigo-blue, NOT purple */
+    --accent: #4F8EF7;
+    --accent-hover: #3B7DE8;
+    --accent-subtle: rgba(79, 142, 247, 0.1);
     
-    /* Success — Blue staying blue or moving to darker/brighter blue */
-    --accent-teal: #58a6ff;
-    --accent-teal-subtle: rgba(56, 139, 253, 0.1);
+    /* Success green */
+    --accent-teal: #3FB950;
+    --accent-teal-subtle: rgba(63, 185, 80, 0.1);
     
-    /* Warning/Danger */
-    --warning: #d29922;
-    --danger: #f85149;
+    /* Warning amber */
+    --warning: #D29922;
+    --danger: #F85149;
     
-    /* Dark mode Text */
-    --text-primary: #C9D1D9;
-    --text-secondary: #8B949E;
+    /* Text */
+    --text-primary: #E6EDF3;
+    --text-secondary: #7D8590;
     --text-muted: #484F58;
   }
 
@@ -44,21 +44,21 @@
     letter-spacing: -0.02em;
   }
 
-  /* Custom scrollbar — Dark Mode */
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #0d1117; }
-  ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 4px; border: 2px solid #0d1117; }
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: #484F58; }
 
   /* Kanban horizontal scrollbar */
-  .kanban-scroll::-webkit-scrollbar { height: 8px; }
-  .kanban-scroll::-webkit-scrollbar-track { background: #0d1117; }
-  .kanban-scroll::-webkit-scrollbar-thumb { background: #30363D; border-radius: 4px; }
+  .kanban-scroll::-webkit-scrollbar { height: 6px; }
+  .kanban-scroll::-webkit-scrollbar-track { background: transparent; }
+  .kanban-scroll::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
   
   /* Selection color */
   ::selection {
-    background: rgba(56, 139, 253, 0.3);
-    color: #ffffff;
+    background: rgba(79, 142, 247, 0.3);
+    color: #E6EDF3;
   }
 }
 
@@ -66,27 +66,28 @@
    ANIMATION UTILITIES
    ============================================= */
 
-/* Shimmer effect for loading skeletons — Dark Mode */
+
+/* Shimmer effect for loading skeletons */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, #161B22 25%, #21262D 50%, #161B22 75%);
+  background: linear-gradient(90deg, #1A1A24 25%, #2A2A38 50%, #1A1A24 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
 
-/* Glow pulse on primary CTA buttons — adjusted for dark mode */
+/* Glow pulse on primary CTA buttons */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(56, 139, 253, 0.2); }
-  50%       { box-shadow: 0 0 20px rgba(56, 139, 253, 0.4), 0 0 30px rgba(56, 139, 253, 0.1); }
+  0%, 100% { box-shadow: 0 0 8px rgba(108, 99, 255, 0.4); }
+  50%       { box-shadow: 0 0 24px rgba(108, 99, 255, 0.8), 0 0 40px rgba(108, 99, 255, 0.3); }
 }
 .btn-glow {
   animation: glow-pulse 2.5s ease-in-out infinite;
 }
 
-/* Floating animation */
+/* Floating animation for empty state icons */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
@@ -95,36 +96,35 @@
   animation: float 3s ease-in-out infinite;
 }
 
-/* Gradient text */
+/* Gradient text for page headings */
 .gradient-text {
-  background: linear-gradient(135deg, #1f6feb, #58a6ff);
+  background: linear-gradient(135deg, #6C63FF, #00D4AA);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Subtle grid background on auth pages — Dark Mode version */
+/* Subtle grid background on auth pages */
 .auth-bg {
   background-image: 
-    radial-gradient(ellipse at 50% 0%, rgba(56, 139, 253, 0.1) 0%, transparent 60%),
-    linear-gradient(#161b22 1px, transparent 1px),
-    linear-gradient(90deg, #161b22 1px, transparent 1px);
+    radial-gradient(ellipse at 50% 0%, rgba(79, 142, 247, 0.08) 0%, transparent 60%),
+    linear-gradient(rgba(48, 54, 61, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(48, 54, 61, 0.3) 1px, transparent 1px);
   background-size: 100% 100%, 32px 32px, 32px 32px;
 }
 
-/* Card hover glow — Dark Mode version */
+/* Card hover glow */
 .card-hover {
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .card-hover:hover {
-  border-color: #30363D;
-  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(79, 142, 247, 0.3), 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* Main content background — dark dot pattern */
+/* Main content background — subtle dot pattern */
 .main-content {
-  background-color: #0d1117;
-  background-image: radial-gradient(#21262d 1px, transparent 1px);
+  background-color: #0D1117;
+  background-image: radial-gradient(#21262D 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -132,3 +132,4 @@
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
