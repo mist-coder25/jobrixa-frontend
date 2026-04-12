@@ -2,284 +2,311 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   BarChart2, Briefcase, Bell, Chrome, Mail,
-  ArrowRight, Check, Zap, Target, TrendingUp
+  ArrowRight, Check, Ghost, Laptop, Mic, Trophy, Rocket, Clipboard, Menu, X
 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { name: 'Features', href: '#features' },
+    { name: 'How it works', href: '#how' },
+    { name: 'Pricing', href: '/pricing' },
+  ];
 
   return (
-    <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3] overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] overflow-x-hidden">
+      
+      {/* BETA BANNER */}
+      <div className="bg-[#00D084] text-white py-2.5 px-4 text-center text-sm font-medium z-[60] relative">
+        <span>🎉 Beta Launch: All Pro features are completely free for the first 1,000 students. </span>
+        <button onClick={() => navigate('/register')} className="underline font-bold ml-1 hover:text-white/80 transition-colors">
+          Register now to lock in your early access →
+        </button>
+      </div>
 
-      {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0D1117]/80 backdrop-blur-md border-b border-[#21262D]">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#4F8EF7] flex items-center justify-center">
-              <span className="text-white font-black text-sm">J</span>
+      {/* HEADER */}
+      <header className="sticky top-0 z-50 bg-[var(--bg-main)]/80 backdrop-blur-md border-b border-[var(--border)] h-16">
+        <div className="container-custom h-full flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/20 text-white">
+              <span className="font-black text-lg">J</span>
             </div>
-            <span className="font-bold text-[#E6EDF3] text-base">Jobrixa</span>
+            <span className="font-bold text-xl tracking-tight">Jobrixa</span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-sm text-[#7D8590]">
-            <span onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">Features</span>
-            <span onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}
-              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">How it works</span>
-            <span onClick={() => navigate('/pricing')}
-              className="hover:text-[#E6EDF3] cursor-pointer transition-colors">Pricing</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/login')}
-              className="text-sm text-[#7D8590] hover:text-[#E6EDF3] transition-colors px-3 py-1.5">
+
+          {/* Nav Links - Desktop */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-[var(--text-secondary)] hover:text-white transition-colors text-sm font-medium"
+                onClick={(e) => {
+                  if (link.href.startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    navigate(link.href);
+                  }
+                }}
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
+
+          {/* Auth Buttons - Desktop */}
+          <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={() => navigate('/login')}
+              className="text-sm font-medium text-[var(--text-secondary)] hover:text-white px-4 py-2 transition-colors"
+            >
               Sign in
             </button>
-            <button onClick={() => navigate('/register')}
-              className="text-sm bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-medium px-4 py-1.5 rounded-lg transition-colors">
+            <button
+              onClick={() => navigate('/register')}
+              className="btn-primary py-2 px-5 text-sm"
+            >
               Get started free
             </button>
           </div>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden p-2 text-[var(--text-secondary)]"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
-      </nav>
 
-      {/* BETA BANNER */}
-      <div style={{
-        background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
-        borderBottom: '1px solid #2ea043',
-        padding: '10px 24px',
-        textAlign: 'center' as const,
-        fontSize: '14px',
-        color: '#3fb950',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        marginTop: '56px' // offset for fixed nav
-      }}>
-        <span>🎉</span>
-        <span>
-          <strong>Beta Launch:</strong> All Pro features are completely free for the first 1,000 students. 
-          <a href="/register" style={{ color: '#58a6ff', marginLeft: '6px', textDecoration: 'underline' }}>
-            Register now to lock in your early access →
-          </a>
-        </span>
-      </div>
-
-      {/* HERO */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden" 
-        style={{
-          backgroundImage: 'radial-gradient(circle, #2ea04322 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
-          backgroundColor: '#0d1117'
-        }}
-      >
-        {/* Background glows */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#4F8EF7]/6 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-20 left-1/4 w-64 h-64 bg-[#A371F7]/4 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 relative">
-          {/* Left Column: Text */}
-          <div className="flex-1 text-center md:text-left">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 bg-[#4F8EF7]/10 border border-[#4F8EF7]/20 rounded-full px-4 py-1.5 text-xs text-[#4F8EF7] font-medium mb-6"
-            >
-              <Zap size={11} />
-              Built for Indian students & fresh graduates
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl md:text-6xl font-display font-bold text-[#E6EDF3] leading-tight tracking-tight mb-6"
-            >
-              Stop losing track of<br />
-              <span className="text-[#4F8EF7]">your job applications</span>
-            </motion.h1>
-
-            {/* Subheadline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg text-[#7D8590] max-w-2xl mb-8 leading-relaxed"
-            >
-              Jobrixa tracks every application, reminds you about OAs and interviews,
-              and shows you exactly why you're not getting responses.
-              Your placement season, finally under control.
-            </motion.p>
-
-            {/* CTA buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex items-center justify-center md:justify-start gap-4 flex-wrap"
-            >
-              <button onClick={() => navigate('/register')}
-                className="flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:scale-105 shadow-[0_4px_20px_rgba(79,142,247,0.3)]">
-                Start tracking for free
-                <ArrowRight size={16} />
-              </button>
-              <button onClick={() => navigate('/login')}
-                className="flex items-center gap-2 bg-[#161B22] hover:bg-[#1C2128] border border-[#30363D] text-[#E6EDF3] font-medium px-6 py-3 rounded-xl text-sm transition-colors">
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-[var(--bg-main)] border-b border-[var(--border)] p-6 fade-in">
+            <nav className="flex flex-col gap-4 mb-6">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-lg font-medium text-[var(--text-secondary)]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </nav>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => navigate('/login')}
+                className="btn-outline w-full"
+              >
                 Sign in
               </button>
+              <button
+                onClick={() => navigate('/register')}
+                className="btn-primary w-full"
+              >
+                Get started free
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* HERO SECTION */}
+      <section className="section-spacing relative overflow-hidden flex items-center justify-center min-h-[calc(100vh-104px)]">
+        {/* Background Accents */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[var(--primary)]/5 rounded-full blur-[120px] pointer-events-none" />
+        
+        <div className="container-custom relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--border)] rounded-full px-4 py-1.5 text-xs text-[var(--text-secondary)] font-medium mb-8"
+              >
+                <span className="text-[var(--primary)] text-lg">⚡</span>
+                Built for Indian students & fresh graduates
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight mb-8"
+              >
+                Stop losing track of <br />
+                <span className="text-[var(--primary)]">your job applications</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto lg:mx-0 mb-10 leading-relaxed"
+              >
+                Jobrixa tracks every application, reminds you about OAs and interviews, and shows you exactly why you're not getting responses. Your placement season, finally under control.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+              >
+                <button
+                  onClick={() => navigate('/register')}
+                  className="btn-primary text-base px-8 py-4 shadow-xl shadow-[var(--primary)]/20 w-full sm:w-auto"
+                >
+                  Start tracking for free
+                  <ArrowRight size={20} />
+                </button>
+                <button
+                  onClick={() => navigate('/login')}
+                  className="btn-secondary text-base px-8 py-4 w-full sm:w-auto"
+                >
+                  Sign in to your account
+                </button>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="hidden lg:block relative"
+            >
+              <div className="absolute -inset-4 bg-[var(--primary)]/10 blur-3xl rounded-full" />
+              <img 
+                src="/images/career-growth.png" 
+                alt="Career growth illustration" 
+                className="relative w-full h-auto max-w-[550px] mx-auto drop-shadow-2xl"
+              />
             </motion.div>
           </div>
-
-          {/* Right Column: Illustration */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: 2 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ type: "spring", damping: 20, stiffness: 100, delay: 0.2 }}
-            className="flex-1 flex justify-center md:justify-end"
-          >
-            <div className="relative group">
-              {/* Background glow for illustration */}
-              <div className="absolute -inset-4 bg-accent/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <img 
-                src="https://undraw.co/api/illustrations/undraw_career-growth_qvib.svg" 
-                alt="Career growth illustration"
-                style={{ width: '100%', maxWidth: '480px', height: 'auto' }}
-                className="relative z-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:-translate-y-2"
-              />
-            </div>
-          </motion.div>
         </div>
+      </section>
 
-        {/* Dashboard mockup */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="max-w-5xl mx-auto mt-16 relative"
-        >
-          <div className="bg-[#161B22] border border-[#30363D] rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
-            {/* Mock browser bar */}
-            <div className="bg-[#1C2128] border-b border-[#30363D] px-4 py-3 flex items-center gap-2">
+      {/* PIPELINE PREVIEW */}
+      <section className="py-20 bg-[var(--bg-main)]/50 border-y border-[var(--border)]">
+        <div className="container-custom">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-2xl">
+            {/* Header Mockup */}
+            <div className="bg-[var(--bg-main)]/50 border-b border-[var(--border)] px-6 py-4 flex items-center gap-2">
               <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-[#F85149]/60" />
-                <div className="w-3 h-3 rounded-full bg-[#D29922]/60" />
-                <div className="w-3 h-3 rounded-full bg-[#3FB950]/60" />
+                <div className="w-3 h-3 rounded-full bg-red-500/50" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+                <div className="w-3 h-3 rounded-full bg-green-500/50" />
               </div>
-              <div className="flex-1 mx-4 bg-[#0D1117] rounded-md px-3 py-1 text-xs text-[#484F58]">
-                jobrixa-frontend.vercel.app/pipeline
+              <div className="flex-1 text-center text-xs text-[var(--text-tertiary)] font-mono">
+                jobrixa.app/dashboard/pipeline
               </div>
             </div>
-            {/* Mock pipeline */}
-            <div className="p-6 overflow-x-auto">
-              <div className="flex gap-4 min-w-max">
+
+            <div className="p-6 md:p-8 overflow-x-auto">
+              <div className="flex gap-6 min-w-max">
                 {[
-                  { label: 'SAVED', color: '#7D8590', cards: ['Swiggy — SDE', 'Razorpay — Backend'] },
-                  { label: 'APPLIED', color: '#4F8EF7', cards: ['Google — SWE', 'Microsoft — Intern'] },
-                  { label: 'OA/ASSESSMENT', color: '#D29922', cards: ['Flipkart — SDE2'] },
-                  { label: 'INTERVIEW', color: '#A371F7', cards: ['CRED — Frontend'] },
-                  { label: 'OFFER', color: '#3FB950', cards: [] },
+                  { label: 'SAVED', icon: <Rocket size={14} />, count: 2, color: 'var(--text-tertiary)', companies: [{ name: 'Swiggy', pos: 'SDE-1' }, { name: 'Razorpay', pos: 'Backend Intern' }] },
+                  { label: 'APPLIED', icon: <Clipboard size={14} />, count: 2, color: 'var(--primary)', companies: [{ name: 'Google', pos: 'Software Engineer' }, { name: 'Microsoft', pos: 'Program Manager' }] },
+                  { label: 'OA/ASSESSMENT', icon: <Laptop size={14} />, count: 1, color: 'var(--accent-orange)', companies: [{ name: 'Flipkart', pos: 'Associate SDE' }] },
+                  { label: 'INTERVIEW', icon: <Mic size={14} />, count: 1, color: 'var(--accent-purple)', companies: [{ name: 'CRED', pos: 'Frontend Dev' }] },
+                  { label: 'OFFER', icon: <Trophy size={14} />, count: 1, color: 'var(--accent-green)', companies: [{ name: 'Zomato', pos: 'SDE' }] },
                 ].map(col => (
-                  <div key={col.label} className="w-48 flex-shrink-0">
-                    <div className="bg-[#1C2128] rounded-lg border border-[#30363D] overflow-hidden"
-                      style={{ borderTop: `2px solid ${col.color}` }}>
-                      <div className="px-3 py-2 flex items-center justify-between">
-                        <span className="text-[10px] font-bold uppercase tracking-wider"
-                          style={{ color: col.color }}>{col.label}</span>
-                        <span className="text-[10px] text-[#484F58] bg-[#21262D] px-1.5 rounded">
-                          {col.cards.length}
+                  <div key={col.label} className="w-64 flex-shrink-0">
+                    <div className="flex items-center justify-between mb-4 px-1">
+                      <div className="flex items-center gap-2">
+                        <span style={{ color: col.color }}>{col.icon}</span>
+                        <span className="text-[10px] font-bold tracking-widest text-[var(--text-secondary)] uppercase">
+                          {col.label}
                         </span>
                       </div>
-                      <div className="px-2 pb-2 space-y-1.5">
-                        {col.cards.map(card => (
-                          <div key={card} className="bg-[#0D1117] border border-[#21262D] rounded-md px-2.5 py-2">
-                            <p className="text-xs text-[#E6EDF3] font-medium">{card.split('—')[0]}</p>
-                            <p className="text-[10px] text-[#7D8590]">{card.split('—')[1]}</p>
-                          </div>
-                        ))}
-                        {col.cards.length === 0 && (
-                          <div className="text-center py-3">
-                            <span className="text-lg">🎉</span>
-                          </div>
-                        )}
-                      </div>
+                      <span className="text-[10px] font-bold bg-[var(--border)] text-[var(--text-secondary)] px-2 py-0.5 rounded-full">
+                        {col.count}
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {col.companies.map((comp, idx) => (
+                        <div key={idx} className="bg-[var(--bg-main)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
+                          <p className="text-sm font-bold text-white mb-1">{comp.name}</p>
+                          <p className="text-xs text-[var(--text-secondary)]">{comp.pos}</p>
+                        </div>
+                      ))}
+                      {col.companies.length === 0 && (
+                        <div className="border border-dashed border-[var(--border)] rounded-xl h-24 flex items-center justify-center text-[var(--text-tertiary)] text-xs">
+                          No items yet
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          {/* Glow under mockup */}
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-[#4F8EF7]/10 blur-2xl rounded-full" />
-        </motion.div>
+        </div>
       </section>
 
-      {/* FEATURES */}
-      <section id="features" className="py-20 px-6 border-t border-[#21262D]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">
-              Everything you need to land the job
-            </h2>
-            <p className="text-[#7D8590] max-w-xl mx-auto">
-              Built specifically for placement season — not a generic todo app repurposed for job hunting.
-            </p>
-          </div>
+      {/* FEATURES GRID */}
+      <section id="features" className="section-spacing">
+        <div className="container-custom text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything you need to land the job</h2>
+          <p className="text-[var(--text-secondary)] max-w-2xl mx-auto mb-16">
+            Built specifically for placement season — not a generic todo app repurposed for job hunting.
+          </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: <Briefcase size={20} />,
-                color: '#4F8EF7',
                 title: 'Kanban Pipeline',
-                desc: 'Drag and drop applications across Saved, Applied, OA, Interview, Offer, and Rejected stages.'
+                desc: 'Drag and drop applications across Saved, Applied, OA, Interview, Offer, and Rejected stages.',
+                icon: <Briefcase className="text-[var(--primary)]" />
               },
               {
-                icon: <Bell size={20} />,
-                color: '#D29922',
                 title: 'Never Miss a Deadline',
-                desc: 'Set deadlines for OAs and interviews. Jobrixa automatically marks them missed if you forget.'
+                desc: 'Set deadlines for OAs and interviews. Jobrixa automatically marks them missed if you forget.',
+                icon: <Bell className="text-[var(--accent-orange)]" />
               },
               {
-                icon: <BarChart2 size={20} />,
-                color: '#3FB950',
                 title: 'Real Analytics',
-                desc: 'See your response rate, interview rate, and offer rate. Know exactly where your funnel leaks.'
+                desc: 'See your response rate, interview rate, and offer rate. Know exactly where your funnel leaks.',
+                icon: <BarChart2 className="text-[var(--accent-green)]" />
               },
               {
-                icon: <Target size={20} />,
-                color: '#A371F7',
                 title: 'Ghosted Tracker',
-                desc: 'Applications with no response after 14 days are automatically marked as ghosted. Know who ghosted you.'
+                desc: 'Applications with no response after 14 days are automatically marked as ghosted. Know who ghosted you.',
+                icon: <Ghost className="text-[var(--accent-purple)]" />
               },
               {
-                icon: <Chrome size={20} />,
-                color: '#F0883E',
                 title: 'Chrome Extension',
-                desc: 'One-click add from LinkedIn, Naukri, Internshala, and Wellfound. No copy-pasting required.'
+                desc: 'One-click add from LinkedIn, Naukri, Internshala, and Wellfound. No copy-pasting required.',
+                icon: <Chrome className="text-[#F0883E]" />
               },
               {
-                icon: <Mail size={20} />,
-                color: '#EC4899',
                 title: 'Gmail Auto-Detect',
-                desc: 'Connect Gmail and Jobrixa automatically detects application confirmations, OA links, and rejections.'
-              },
-            ].map(f => (
+                desc: 'Connect Gmail and Jobrixa automatically detects application confirmations, OA links, and rejections.',
+                icon: <Mail className="text-[var(--accent-red)]" />
+              }
+            ].map((feature, i) => (
               <motion.div
-                key={f.title}
+                key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="bg-[#161B22] border border-[#30363D] rounded-xl p-5 hover:border-[#4F8EF7]/30 transition-colors group"
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="card card-hover text-left flex flex-col gap-4"
               >
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4"
-                  style={{ background: `${f.color}15`, color: f.color }}>
-                  {f.icon}
+                <div className="w-12 h-12 rounded-xl bg-[var(--bg-main)] border border-[var(--border)] flex items-center justify-center text-xl shadow-inner">
+                  {feature.icon}
                 </div>
-                <h3 className="text-sm font-semibold text-[#E6EDF3] mb-2">{f.title}</h3>
-                <p className="text-xs text-[#7D8590] leading-relaxed">{f.desc}</p>
+                <div>
+                  <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
+                  <p className="text-[var(--text-secondary)] text-sm leading-relaxed">{feature.desc}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -287,79 +314,90 @@ export default function Landing() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" className="py-20 px-6 border-t border-[#21262D]">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">How it works</h2>
-            <p className="text-[#7D8590]">Three steps to a organised job hunt</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section id="how" className="section-spacing bg-[var(--bg-card)]/30 border-y border-[var(--border)]">
+        <div className="container-custom text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">How it works</h2>
+          <p className="text-[var(--text-secondary)] mb-16 underline-offset-4">Three steps to a organised job hunt</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+            {/* Step Connectors (Desktop) */}
+            <div className="hidden md:block absolute top-12 left-1/4 right-1/4 h-px border-t border-dashed border-[var(--border)] z-0" />
+            
             {[
-              { step: '01', title: 'Add your applications', desc: 'Paste a job URL, use the Chrome extension, or add manually. Takes 10 seconds per job.' },
-              { step: '02', title: 'Track every stage', desc: 'Move cards across your pipeline as you progress. Set deadlines so you never miss an OA.' },
-              { step: '03', title: 'Analyse and improve', desc: 'See your conversion rates, spot where you\'re getting ghosted, and fix your approach.' },
-            ].map((s, i) => (
-              <motion.div
-                key={s.step}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="relative"
-              >
-                <div className="text-5xl font-black text-[#21262D] mb-4">{s.step}</div>
-                <h3 className="text-base font-semibold text-[#E6EDF3] mb-2">{s.title}</h3>
-                <p className="text-sm text-[#7D8590] leading-relaxed">{s.desc}</p>
-              </motion.div>
+              {
+                num: '01',
+                title: 'Add your applications',
+                desc: 'Paste a job URL, use the Chrome extension, or add manually. Takes 10 seconds per job.'
+              },
+              {
+                num: '02',
+                title: 'Track every stage',
+                desc: 'Move cards across your pipeline as you progress. Set deadlines so you never miss an OA.'
+              },
+              {
+                num: '03',
+                title: 'Analyse and improve',
+                desc: 'See your conversion rates, spot where you\'re getting ghosted, and fix your approach.'
+              }
+            ].map((step, i) => (
+              <div key={i} className="relative z-10 flex flex-col items-center">
+                <div className="text-5xl md:text-6xl font-black text-[var(--border)]/50 mb-6 group-hover:text-[var(--primary)]/20 transition-colors">
+                  {step.num}
+                </div>
+                <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+                <p className="text-[var(--text-secondary)] text-sm leading-relaxed max-w-xs">{step.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* PRICING TEASER */}
-      <section className="py-20 px-6 border-t border-[#21262D]">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-[#E6EDF3] mb-3">Simple pricing</h2>
-            <p className="text-[#7D8590]">Start free. Upgrade when you need more.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Free */}
-            <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6">
-              <p className="text-xs font-semibold text-[#7D8590] uppercase tracking-wider mb-2">Free</p>
-              <div className="text-3xl font-bold text-[#E6EDF3] mb-1">₹0</div>
-              <p className="text-xs text-[#7D8590] mb-6">Forever free</p>
-              <div className="space-y-2 mb-6">
-                {['Up to 30 applications', 'Kanban pipeline', 'Basic analytics', 'Chrome extension'].map(f => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-[#7D8590]">
-                    <Check size={14} className="text-[#3FB950]" />
-                    {f}
-                  </div>
+      {/* PRICING (SIMPLE) */}
+      <section className="section-spacing">
+        <div className="container-custom text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple pricing</h2>
+          <p className="text-[var(--text-secondary)] mb-12">Start free. Upgrade when you need more.</p>
+
+          <div className="flex flex-col md:flex-row justify-center gap-8 max-w-4xl mx-auto">
+            {/* Free Plan */}
+            <div className="card flex-1 flex flex-col items-center text-center">
+              <span className="text-[var(--text-tertiary)] font-bold text-xs tracking-widest uppercase mb-4">Free Plan</span>
+              <div className="text-4xl font-bold mb-1">₹0</div>
+              <p className="text-[var(--text-secondary)] text-sm mb-8">Perfect for trying out Jobrixa</p>
+              
+              <ul className="space-y-4 mb-10 text-left w-full">
+                {['Up to 30 applications', 'Kanban pipeline', 'Basic analytics', 'Chrome extension'].map((feature, i) => (
+                  <li key={i} className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                    <Check size={16} className="text-[var(--accent-green)]" />
+                    {feature}
+                  </li>
                 ))}
-              </div>
-              <button onClick={() => navigate('/register')}
-                className="w-full py-2.5 border border-[#30363D] text-[#E6EDF3] rounded-lg text-sm hover:bg-[#1C2128] transition-colors">
+              </ul>
+
+              <button onClick={() => navigate('/register')} className="btn-outline w-full mt-auto">
                 Get started free
               </button>
             </div>
-            {/* Pro */}
-            <div className="bg-[#161B22] border-2 border-[#4F8EF7]/50 rounded-2xl p-6 relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#4F8EF7] text-white text-xs font-bold px-3 py-1 rounded-full">
-                MOST POPULAR
+
+            {/* Pro Plan */}
+            <div className="card flex-1 flex flex-col items-center text-center border-[var(--primary)] ring-1 ring-[var(--primary)] relative">
+              <div className="absolute -top-3 bg-[var(--primary)] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
+                Most Popular
               </div>
-              <p className="text-xs font-semibold text-[#4F8EF7] uppercase tracking-wider mb-2">Pro</p>
-              <div className="text-3xl font-bold text-[#E6EDF3] mb-1">₹149<span className="text-base font-normal text-[#7D8590]">/month</span></div>
-              <p className="text-xs text-[#7D8590] mb-6">For serious job hunters</p>
-              <div className="space-y-2 mb-6">
-                {['Unlimited applications', 'Full analytics & insights', 'Gmail auto-detection', 'Missed & ghosted tracker', 'Priority support'].map(f => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-[#E6EDF3]">
-                    <Check size={14} className="text-[#4F8EF7]" />
-                    {f}
-                  </div>
+              <span className="text-[var(--primary)] font-bold text-xs tracking-widest uppercase mb-4">Pro Plan</span>
+              <div className="text-4xl font-bold mb-1">₹149<span className="text-base font-normal text-[var(--text-secondary)]">/mo</span></div>
+              <p className="text-[var(--text-secondary)] text-sm mb-8">For serious job hunters</p>
+              
+              <ul className="space-y-4 mb-10 text-left w-full">
+                {['Unlimited applications', 'Full analytics & insights', 'Gmail auto-detection', 'Missed & ghosted tracker', 'Priority support'].map((feature, i) => (
+                  <li key={i} className="flex items-center gap-3 text-sm text-[var(--text-primary)]">
+                    <Check size={16} className="text-[var(--primary)]" />
+                    {feature}
+                  </li>
                 ))}
-              </div>
-              <button onClick={() => navigate('/pricing')}
-                className="w-full py-2.5 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold rounded-lg text-sm transition-colors">
+              </ul>
+
+              <button onClick={() => navigate('/pricing')} className="btn-primary w-full mt-auto">
                 Upgrade to Pro
               </button>
             </div>
@@ -368,42 +406,47 @@ export default function Landing() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-20 px-6 border-t border-[#21262D]">
-        <div className="max-w-2xl mx-auto text-center">
-          <TrendingUp size={32} className="text-[#4F8EF7] mx-auto mb-4" />
-          <h2 className="text-3xl font-bold text-[#E6EDF3] mb-4">
-            Your next offer is one<br />organised job hunt away
-          </h2>
-          <p className="text-[#7D8590] mb-8">
+      <section className="section-spacing bg-gradient-to-b from-[var(--bg-main)] to-[#0D1117]">
+        <div className="container-custom text-center">
+          <div className="mb-8 flex justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--primary)]/10 border border-[var(--primary)]/20 flex items-center justify-center text-3xl">
+              ↗️
+            </div>
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">Your next offer is one <br /> organized job hunt away</h2>
+          <p className="text-[var(--text-secondary)] text-lg mb-10 max-w-2xl mx-auto">
             Stop tracking jobs in a spreadsheet. Start using a tool built for this.
           </p>
-          <button onClick={() => navigate('/register')}
-            className="inline-flex items-center gap-2 bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white font-semibold px-8 py-3.5 rounded-xl text-sm transition-all hover:scale-105">
-            Start for free — no credit card needed
-            <ArrowRight size={16} />
+          <button
+            onClick={() => navigate('/register')}
+            className="btn-primary text-lg px-10 py-5 rounded-xl shadow-2xl shadow-[var(--primary)]/30 hover:scale-105"
+          >
+            Start for free — no credit card needed →
           </button>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-[#21262D] py-8 px-6">
-        <div className="max-w-5xl mx-auto flex items-center justify-between flex-wrap gap-4">
+      <footer className="py-12 border-t border-[var(--border)]">
+        <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-[#4F8EF7] flex items-center justify-center">
-              <span className="text-white font-black text-xs">J</span>
+            <div className="w-6 h-6 rounded bg-[var(--primary)] flex items-center justify-center text-white text-[10px] font-bold">
+              J
             </div>
-            <span className="text-sm font-bold text-[#E6EDF3]">Jobrixa</span>
-            <span className="text-xs text-[#484F58] ml-2">© 2026</span>
+            <span className="font-bold text-lg">Jobrixa</span>
           </div>
-          <div className="flex items-center gap-6 text-xs text-[#484F58]">
-            <span className="hover:text-[#7D8590] cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-[#7D8590] cursor-pointer">Terms</span>
-            <span className="hover:text-[#7D8590] cursor-pointer">Contact</span>
-            <span className="text-[#484F58]">support@jobrixa.app</span>
+          
+          <div className="flex gap-8 text-[var(--text-tertiary)] text-sm">
+            <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
+            <span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span>
+            <span className="hover:text-white cursor-pointer transition-colors">support@jobrixa.app</span>
+          </div>
+          
+          <div className="text-[var(--text-tertiary)] text-sm">
+            © 2026 Jobrixa. Made for students.
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Check, Zap, Sparkles, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Check, Zap, Sparkles, ShieldCheck } from "lucide-react";
 import { usePayment } from "../api/usePayment";
 import { trackEvent } from "../utils/analytics";
 
@@ -13,14 +14,6 @@ const FREE_FEATURES = [
   "Resume library (3 max)",
 ];
 
-const PRO_MONTHLY_FEATURES = [
-  "Unlimited applications",
-  "Full analytics & insights",
-  "Activity timeline & events",
-  "Follow-up reminders",
-  "Priority email support",
-];
-
 const PRO_YEARLY_FEATURES = [
   { text: "Unlimited applications", badge: null },
   { text: "Full analytics & insights", badge: null },
@@ -30,12 +23,10 @@ const PRO_YEARLY_FEATURES = [
   { text: "All resume versions", badge: null },
   { text: "Trust score on job listings", badge: null },
   { text: "Early access to new features", badge: null },
-  { text: "Missed & ghosted tracker", badge: "Yearly" },
-  { text: "Export data to CSV", badge: "Yearly" },
-  { text: "Application deadline reminders via email", badge: "Yearly" },
+  { text: "Missed & ghosted tracker", badge: "YEARLY" },
+  { text: "Export data to CSV", badge: "YEARLY" },
+  { text: "Application deadline reminders via email", badge: "YEARLY" },
 ];
-
-
 
 export default function Pricing() {
   const navigate = useNavigate();
@@ -61,152 +52,148 @@ export default function Pricing() {
   const proSuffix = billing === "monthly" ? "/month" : "/year";
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-[#C9D1D9]">
+    <div className="min-h-screen bg-[var(--bg-main)] text-white flex flex-col">
 
-      {/* Nav */}
-      <nav className="border-b border-[#30363D] px-6 py-4 flex items-center justify-between sticky top-0 bg-[#0d1117]/90 backdrop-blur-md z-30">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-display font-bold text-white">J</div>
-          <span className="text-xl font-display font-bold text-[#C9D1D9] tracking-wide">Jobrixa</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          {isLoggedIn ? (
-            <Link to="/dashboard" className="text-sm text-[#8B949E] hover:text-[#C9D1D9] transition-colors">Dashboard</Link>
-          ) : (
-            <>
-              <Link to="/login" className="text-sm text-[#8B949E] hover:text-[#C9D1D9] transition-colors">Login</Link>
-              <Link to="/register" className="text-sm bg-accent hover:bg-[#5A52E8] text-white px-4 py-2 rounded-lg transition-all">Sign Up</Link>
-            </>
-          )}
-        </div>
-      </nav>
-
-      <div className="max-w-6xl mx-auto px-6 py-16">
-
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6">
-            <Sparkles size={14} /> Simple, transparent pricing
+      {/* Header Navigation */}
+      <header className="sticky top-0 z-50 bg-[var(--bg-main)]/80 backdrop-blur-md border-b border-[var(--border)] h-16">
+        <div className="container-custom h-full flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center font-bold text-white shadow-lg shadow-[var(--primary)]/20">J</div>
+            <span className="text-xl font-bold tracking-tight">Jobrixa</span>
+          </Link>
+          <div className="flex items-center gap-6">
+            <Link to="/" className="text-sm font-medium text-[var(--text-secondary)] hover:text-white transition-colors">Home</Link>
+            {isLoggedIn ? (
+              <Link to="/dashboard" className="btn-primary text-xs py-2 px-4 shadow-none">Go to Dashboard</Link>
+            ) : (
+              <Link to="/login" className="btn-outline text-xs py-2 px-4">Sign In</Link>
+            )}
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold text-[#C9D1D9] mb-4">
+        </div>
+      </header>
+
+      <div className="flex-1 container-custom py-16 md:py-24">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-xs font-bold uppercase tracking-[0.15em] mb-6"
+          >
+            <Sparkles size={12} /> Simple, transparent pricing
+          </motion.div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
             Invest in your career,<br />
-            <span className="text-accent">not your spreadsheets</span>
+            <span className="text-[var(--primary)]">not your spreadsheets</span>
           </h1>
-          <p className="text-[#8B949E] text-lg max-w-2xl mx-auto">
+          <p className="text-[var(--text-secondary)] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
             Start free. Upgrade when you need more. No credit card required to get started.
           </p>
         </div>
 
         {/* Billing Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-12">
-          <span className={`text-sm font-medium ${billing === "monthly" ? "text-[#C9D1D9]" : "text-[#8B949E]"}`}>Monthly</span>
+        <div className="flex items-center justify-center gap-5 mb-16">
+          <span className={`text-sm font-bold uppercase tracking-widest ${billing === "monthly" ? "text-white" : "text-[var(--text-tertiary)]"}`}>Monthly</span>
           <button
             onClick={() => setBilling(b => b === "monthly" ? "yearly" : "monthly")}
-            className={`relative w-12 h-6 rounded-full transition-all duration-200 ${billing === "yearly" ? "bg-accent" : "bg-border"}`}
+            className="w-14 h-8 rounded-full bg-[var(--bg-card)] border border-[var(--border)] relative p-1 transition-all"
           >
-            <span className={`absolute top-1 w-4 h-4 rounded-full bg-[#0d1117] shadow transition-all duration-200 ${billing === "yearly" ? "left-7" : "left-1"}`} />
+            <div className={`w-5 h-5 rounded-full bg-[var(--primary)] shadow-lg shadow-[var(--primary)]/40 transition-all ${billing === "yearly" ? "translate-x-7" : "translate-x-0"}`} />
           </button>
-          <span className={`text-sm font-medium ${billing === "yearly" ? "text-[#C9D1D9]" : "text-[#8B949E]"}`}>
-            Yearly <span className="text-emerald-400 text-xs font-bold ml-1">Save ₹789</span>
-          </span>
+          <div className="flex flex-col">
+            <span className={`text-sm font-bold uppercase tracking-widest ${billing === "yearly" ? "text-white" : "text-[var(--text-tertiary)]"}`}>Yearly</span>
+            <span className="text-[10px] text-[var(--accent-green)] font-black uppercase tracking-tighter">Save ₹789</span>
+          </div>
         </div>
 
-        {/* Cards */}
-        <div className="flex flex-col md:flex-row justify-center gap-8 items-stretch max-w-4xl mx-auto">
-
-          {/* Free */}
-          <div className="flex-1 bg-[#0d1117]  border border-[#30363D] rounded-2xl p-8 flex flex-col max-w-md">
-            <div className="mb-6">
-              <p className="text-[#8B949E] text-sm font-medium uppercase tracking-wider mb-2">Free</p>
-              <div className="flex items-end gap-2">
-                <span className="text-4xl font-display font-bold text-[#C9D1D9]">₹0</span>
-                <span className="text-[#8B949E] text-sm mb-1">forever</span>
+        {/* Pricing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+          
+          {/* Free Plan */}
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-8 md:p-10 flex flex-col hover:border-[var(--text-tertiary)] transition-colors">
+            <div className="mb-10">
+              <span className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em] mb-4 block">Free Plan</span>
+              <div className="flex items-baseline gap-1 mb-2">
+                <span className="text-5xl font-bold">₹0</span>
+                <span className="text-[var(--text-tertiary)] font-medium underline decoration-[var(--border)] underline-offset-4">forever</span>
               </div>
-              <p className="text-[#8B949E] text-sm mt-2">Perfect for trying out Jobrixa</p>
+              <p className="text-[var(--text-secondary)] text-sm font-medium italic">"Perfect for trying out Jobrixa"</p>
             </div>
 
-            <ul className="space-y-3 mb-8 flex-1">
+            <div className="space-y-4 mb-12 flex-1">
               {FREE_FEATURES.map(f => (
-                <li key={f} className="flex items-start gap-2.5 text-sm text-[#8B949E]">
-                  <Check size={15} className="text-[#8B949E]/50 shrink-0 mt-0.5" />
-                  {f}
-                </li>
+                <div key={f} className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[var(--bg-main)] border border-[var(--border)] flex items-center justify-center shrink-0">
+                    <Check size={12} className="text-[var(--text-tertiary)]" />
+                  </div>
+                  <span className="text-sm font-medium text-[var(--text-secondary)]">{f}</span>
+                </div>
               ))}
-            </ul>
-
-            <Link
-              to={isLoggedIn ? "/dashboard" : "/register"}
-              className="w-full py-3 text-center border border-[#30363D] rounded-xl text-sm font-semibold text-[#8B949E] hover:text-[#C9D1D9] hover:border-accent/40 transition-all"
-            >
-              {isLoggedIn ? "Current Plan" : "Get Started Free"}
-            </Link>
-          </div>
-
-          {/* Pro — Hero */}
-          <div className="flex-1 relative bg-accent rounded-2xl p-8 flex flex-col  border border-accent/50 max-w-md">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="px-4 py-1 bg-[#0d1117] text-accent text-xs font-bold rounded-full ">
-                ✦ MOST POPULAR
-              </span>
             </div>
-
-            <div className="mb-6">
-              <div className="w-10 h-10 rounded-xl bg-[#0d1117]/20 flex items-center justify-center mb-3">
-                <Zap size={20} className="text-[#161B22]" />
-              </div>
-              <p className="text-[#161B22]/70 text-sm font-medium uppercase tracking-wider mb-2">Pro</p>
-              <div className="flex items-end gap-2">
-                <span className="text-4xl font-display font-bold text-[#161B22]">₹{proPrice}</span>
-                <span className="text-[#161B22]/60 text-sm mb-1">{proSuffix}</span>
-              </div>
-              {billing === "yearly" && (
-                <p className="text-[#161B22]/60 text-xs mt-1">Billed once annually · Save ₹789</p>
-              )}
-              <p className="text-[#161B22]/70 text-sm mt-2">For serious job hunters</p>
-            </div>
-
-            <ul className="space-y-3 mb-8 flex-1">
-              {billing === "monthly" ? (
-                PRO_MONTHLY_FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-[#161B22]/90">
-                    <Check size={15} className="text-[#161B22] shrink-0 mt-0.5" />
-                    {f}
-                  </li>
-                ))
-              ) : (
-                PRO_YEARLY_FEATURES.map(f => (
-                  <li key={f.text} className="flex items-start gap-2.5 text-sm text-[#161B22]/90">
-                    <Check size={15} className="text-[#161B22] shrink-0 mt-0.5" />
-                    <span>
-                      {f.text}
-                      {f.badge && (
-                        <span className="ml-2 px-1.5 py-0.5 bg-emerald-400 text-[#000] text-[9px] font-black rounded uppercase">
-                          {f.badge}
-                        </span>
-                      )}
-                    </span>
-                  </li>
-                ))
-              )}
-            </ul>
 
             <button
-              onClick={() => handleUpgrade()}
-              className="w-full py-3 bg-[#0d1117] text-accent rounded-xl text-sm font-bold hover:bg-[#0d1117]/90 transition-all flex items-center justify-center gap-2"
+                disabled
+                className="w-full py-4 rounded-xl border border-[var(--border)] text-[var(--text-tertiary)] font-bold uppercase tracking-widest text-xs cursor-default"
             >
-              Upgrade to Pro <ArrowRight size={15} />
+                Current Plan
             </button>
           </div>
 
+          {/* Pro Plan */}
+          <div className="bg-gradient-to-br from-[var(--primary)]/90 to-[var(--primary-hover)] rounded-3xl p-8 md:p-10 flex flex-col relative overflow-hidden shadow-2xl shadow-[var(--primary)]/20 text-white">
+            <div className="absolute top-0 right-0 p-10 opacity-10 pointer-events-none">
+                <Zap size={200} fill="white" />
+            </div>
+            
+            <div className="mb-10 relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                    <span className="text-[10px] font-black text-white/90 uppercase tracking-[0.2em]">Pro Plan</span>
+                    <span className="bg-white/20 backdrop-blur-sm text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-sm">MOST POPULAR</span>
+                </div>
+              <div className="flex items-baseline gap-1 mb-2">
+                <span className="text-5xl font-black">₹{proPrice}</span>
+                <span className="text-white/70 font-bold uppercase tracking-widest text-xs">{proSuffix}</span>
+              </div>
+              {billing === "yearly" && (
+                <p className="text-white/90 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
+                    <Zap size={10} fill="white" /> Billed once annually - Save ₹789
+                </p>
+              )}
+              <p className="text-white font-medium mt-3 italic underline decoration-white/20 underline-offset-4 font-serif">"For serious job hunters"</p>
+            </div>
 
+            <div className="space-y-4 mb-12 flex-1 relative z-10">
+              {PRO_YEARLY_FEATURES.map((f, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0 mt-0.5">
+                    <Check size={12} className="text-white" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold leading-tight">{f.text}</span>
+                    {f.badge && <span className="text-[8px] font-black bg-white text-[var(--primary)] px-1.5 py-0.5 rounded-sm mt-1 w-fit tracking-tighter">{f.badge}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={handleUpgrade}
+              className="w-full py-5 bg-white text-[var(--primary)] rounded-2xl text-sm font-black uppercase tracking-[0.2em] shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all relative z-10"
+            >
+              Upgrade to Pro
+            </button>
+          </div>
         </div>
 
-        {/* FAQ strip */}
-        <div className="mt-16 text-center">
-          <p className="text-[#8B949E] text-sm">
-            Payments secured by Razorpay. Cancel anytime. For questions, email{" "}
-            <a href="mailto:support@jobrixa.app" className="text-accent hover:underline">support@jobrixa.app</a>
-          </p>
+        {/* Trust Footer */}
+        <div className="mt-24 text-center space-y-4">
+            <div className="flex items-center justify-center gap-2 text-[var(--text-tertiary)] font-bold text-xs uppercase tracking-widest">
+                <ShieldCheck size={16} />
+                Payments secured by Razorpay
+            </div>
+            <p className="text-[var(--text-secondary)] text-sm max-w-sm mx-auto leading-relaxed italic">
+                Cancel anytime. No hidden fees. For student queries, email <a href="mailto:support@jobrixa.app" className="text-[var(--primary)] hover:underline">support@jobrixa.app</a>
+            </p>
         </div>
       </div>
     </div>

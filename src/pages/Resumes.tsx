@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
-import { FileText, Upload, Eye, Trash2, FileUp, X, CheckCircle2, Loader2 } from "lucide-react";
+import { FileText, Upload, Eye, Trash2, X, CheckCircle2, Loader2, Plus } from "lucide-react";
 import TopBar from "../components/TopBar";
 import { toast } from "../components/Toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ResumeEntry {
   id: string;
@@ -19,7 +20,6 @@ export default function Resumes() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  // Form state
   const [label, setLabel] = useState("");
   const [version, setVersion] = useState("v1");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -43,7 +43,7 @@ export default function Resumes() {
     if (!selectedFile) { toast.error("Please select a PDF file"); return; }
 
     setUploading(true);
-    await new Promise(res => setTimeout(res, 800)); // simulate upload
+    await new Promise(res => setTimeout(res, 800));
 
     const entry: ResumeEntry = {
       id: crypto.randomUUID(),
@@ -67,221 +67,185 @@ export default function Resumes() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
+    <div className="h-full flex flex-col overflow-y-auto">
       <TopBar 
-        title="My Resumes" 
-        subtitle="Store different resume versions and track which one gets the most callbacks."
+        title="Resume Library" 
+        subtitle="Manage and track your resume versions"
       >
         <button
           onClick={openModal}
-          className="flex items-center gap-2 bg-[#58a6ff] hover:bg-[#1f6feb] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all "
+          className="btn-primary py-2 px-4 shadow-none text-xs"
         >
-          <Upload size={15} /> 
-          <span className="hidden md:inline">Upload Resume</span>
+          <Upload size={14} /> Upload Resume
         </button>
       </TopBar>
 
-      <div className="p-6 md:p-8 flex-1">
+      <div className="p-6 md:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
         {resumes.length === 0 ? (
-          /* Empty State */
-          <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center">
-            <div className="w-24 h-24 rounded-2xl bg-surface border border-border flex items-center justify-center mb-6 ">
-              <FileText size={40} className="text-textSecondary opacity-50" />
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <div className="w-20 h-20 rounded-3xl bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-center mb-6">
+              <FileText size={32} className="text-[var(--text-tertiary)]" />
             </div>
-            <h3 className="text-xl font-display font-semibold text-textPrimary mb-2">No resumes yet</h3>
-            <p className="text-textSecondary text-sm max-w-xs leading-relaxed mb-6">
-              Upload your resume versions to track which one gets the best callbacks
+            <h3 className="text-2xl font-bold mb-2">No resumes yet</h3>
+            <p className="text-[var(--text-secondary)] max-w-sm mb-8 leading-relaxed">
+              Upload your resume versions to track which one gets the best callbacks from recruiters.
             </p>
             <button
               onClick={openModal}
-              className="flex items-center gap-2 bg-accent hover:bg-[#5A52E8] text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-all "
+              className="btn-primary py-4 px-10"
             >
-              <Upload size={16} /> Upload Resume
+              <Plus size={18} /> Upload Your First Resume
             </button>
           </div>
         ) : (
-          <>
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-lg font-display font-semibold text-textPrimary">{resumes.length} {resumes.length === 1 ? "resume" : "resumes"} uploaded</h2>
-                <p className="text-sm text-textSecondary">Manage your resume library</p>
-              </div>
-              <button
-                onClick={openModal}
-                className="flex items-center gap-2 bg-accent hover:bg-[#5A52E8] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all "
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {resumes.map(resume => (
+              <motion.div
+                key={resume.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-6 flex flex-col gap-6 hover:border-[var(--text-tertiary)] transition-all group"
               >
-                <Upload size={15} /> Upload Resume
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {resumes.map(resume => (
-                <div
-                  key={resume.id}
-                  className="bg-surface border border-border rounded-xl p-5 flex flex-col gap-4 hover:border-accent/40 transition-all group hover:"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
-                      <FileText size={28} className="text-red-400" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-display font-semibold text-textPrimary truncate">{resume.label}</h3>
-                        <span className="px-2 py-0.5 bg-accent/15 text-accent text-xs font-bold rounded-full border border-accent/25 shrink-0">
-                          {resume.version}
-                        </span>
-                      </div>
-                      <p className="text-xs text-textSecondary mt-1 truncate">{resume.filename}</p>
-                      <p className="text-xs text-textSecondary/60 mt-0.5">Uploaded {resume.uploadedAt}</p>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 rounded-xl bg-[var(--accent-red)]/5 border border-[var(--accent-red)]/10 flex items-center justify-center shrink-0">
+                    <FileText size={28} className="text-[var(--accent-red)]" />
                   </div>
-
-                  <div className="flex gap-2 pt-2 border-t border-border">
-                    <a
-                      href={resume.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-border text-textSecondary hover:text-textPrimary hover:border-accent/40 hover:bg-accent/5 text-sm font-medium transition-all"
-                    >
-                      <Eye size={14} /> Preview
-                    </a>
-                    <button
-                      onClick={() => setDeleteTarget(resume.id)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-border text-textSecondary hover:text-danger hover:border-danger/40 hover:bg-danger/5 text-sm font-medium transition-all"
-                    >
-                      <Trash2 size={14} /> Delete
-                    </button>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-bold text-white truncate">{resume.label}</h3>
+                      <span className="px-2 py-0.5 bg-[var(--primary)] text-white text-[9px] font-black rounded-full uppercase tracking-tighter">
+                        {resume.version}
+                      </span>
+                    </div>
+                    <p className="text-xs text-[var(--text-tertiary)] mt-1 truncate font-medium">{resume.filename}</p>
+                    <p className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase tracking-widest mt-2">Added {resume.uploadedAt}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </>
+
+                <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[var(--border)]">
+                  <a
+                    href={resume.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[var(--border)] text-[var(--text-secondary)] hover:text-white hover:border-white text-xs font-bold uppercase tracking-wider transition-all"
+                  >
+                    <Eye size={14} /> Preview
+                  </a>
+                  <button
+                    onClick={() => setDeleteTarget(resume.id)}
+                    className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--accent-red)] hover:border-[var(--accent-red)] text-xs font-bold uppercase tracking-wider transition-all"
+                  >
+                    <Trash2 size={14} /> Delete
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         )}
       </div>
 
       {/* Upload Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-surface border border-border rounded-2xl w-full max-w-md  animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between p-6 border-b border-border">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-accent/15 border border-accent/25 flex items-center justify-center">
-                  <FileUp size={18} className="text-accent" />
-                </div>
-                <div>
-                  <h2 className="font-display font-semibold text-textPrimary">Upload Resume</h2>
-                  <p className="text-xs text-textSecondary">PDF files only</p>
-                </div>
-              </div>
-              <button onClick={() => setIsModalOpen(false)} className="p-2 rounded-full text-textSecondary hover:text-danger transition-colors">
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={handleUpload} className="p-6 space-y-5">
-              <div className="space-y-1.5">
-                <label className="text-xs uppercase font-medium text-textSecondary tracking-wider">Resume Label *</label>
-                <input
-                  type="text"
-                  required
-                  value={label}
-                  onChange={e => setLabel(e.target.value)}
-                  className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary placeholder:text-textSecondary/50 focus:outline-none focus:border-accent transition-colors"
-                  placeholder="e.g. Backend Resume v2"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs uppercase font-medium text-textSecondary tracking-wider">Version</label>
-                <input
-                  type="text"
-                  value={version}
-                  onChange={e => setVersion(e.target.value)}
-                  className="w-full bg-primary border border-border rounded-lg px-3 py-2.5 text-sm text-textPrimary placeholder:text-textSecondary/50 focus:outline-none focus:border-accent transition-colors"
-                  placeholder="e.g. v2"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs uppercase font-medium text-textSecondary tracking-wider">PDF File *</label>
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
-                    selectedFile ? "border-accent/50 bg-accent/5" : "border-border hover:border-accent/40 hover:bg-accent/3"
-                  }`}
-                >
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  {selectedFile ? (
-                    <div className="flex items-center justify-center gap-2 text-accent">
-                      <CheckCircle2 size={20} />
-                      <span className="text-sm font-medium truncate max-w-[200px]">{selectedFile.name}</span>
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsModalOpen(false)}
+                className="absolute inset-0 bg-[var(--bg-main)]/80 backdrop-blur-md"
+            />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                className="relative w-full max-w-md bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-2xl"
+            >
+                <div className="px-8 py-6 border-b border-[var(--border)] flex items-center justify-between">
+                    <div>
+                        <h2 className="text-xl font-bold">Upload Resume</h2>
+                        <p className="text-xs text-[var(--text-tertiary)] font-bold uppercase tracking-wider">PDF files only</p>
                     </div>
-                  ) : (
-                    <div className="text-textSecondary">
-                      <Upload size={24} className="mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">Click to choose PDF</p>
-                      <p className="text-xs mt-1 opacity-60">or drag & drop here</p>
-                    </div>
-                  )}
+                    <button onClick={() => setIsModalOpen(false)} className="text-[var(--text-tertiary)] hover:text-white">
+                        <X size={24} />
+                    </button>
                 </div>
-              </div>
 
-              <div className="flex gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-2.5 text-sm font-medium text-textSecondary hover:text-textPrimary hover:bg-[#0d1117]/5 rounded-lg transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={uploading}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-sm font-medium transition-all disabled:opacity-70"
-                >
-                  {uploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-                  {uploading ? "Uploading..." : "Upload"}
-                </button>
-              </div>
-            </form>
+                <form onSubmit={handleUpload} className="p-8 space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Resume Label</label>
+                        <input
+                            required value={label} onChange={e => setLabel(e.target.value)}
+                            className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none"
+                            placeholder="e.g. SDE Resume v2"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Version</label>
+                        <input
+                            value={version} onChange={e => setVersion(e.target.value)}
+                            className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none"
+                            placeholder="e.g. v2"
+                        />
+                    </div>
+                    
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Select File</label>
+                        <div
+                            onClick={() => fileInputRef.current?.click()}
+                            className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
+                                selectedFile ? "border-[var(--primary)] bg-[var(--primary)]/5" : "border-[var(--border)] hover:border-[var(--primary)]/50"
+                            }`}
+                        >
+                            <input ref={fileInputRef} type="file" accept=".pdf" onChange={handleFileChange} className="hidden" />
+                            {selectedFile ? (
+                                <div className="flex flex-col items-center gap-2">
+                                    <CheckCircle2 size={32} className="text-[var(--primary)]" />
+                                    <span className="text-sm font-bold truncate max-w-full px-4">{selectedFile.name}</span>
+                                </div>
+                            ) : (
+                                <div>
+                                    <Upload size={32} className="mx-auto mb-3 opacity-30" />
+                                    <p className="text-xs font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Click to browse PDF</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4 pt-4">
+                        <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 font-bold text-xs uppercase tracking-widest text-[var(--text-tertiary)]">Cancel</button>
+                        <button
+                            type="submit" disabled={uploading}
+                            className="flex-1 btn-primary py-4 shadow-lg shadow-[var(--primary)]/20"
+                        >
+                            {uploading ? <Loader2 size={16} className="animate-spin" /> : "Upload Now"}
+                        </button>
+                    </div>
+                </form>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* Delete Confirmation Modal */}
-      {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-surface border border-border rounded-2xl w-full max-w-sm p-6  animate-in zoom-in-95 duration-200">
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-danger/15 border border-danger/30 flex items-center justify-center mx-auto mb-4">
-                <Trash2 size={20} className="text-danger" />
-              </div>
-              <h3 className="font-display font-semibold text-textPrimary mb-1">Delete Resume?</h3>
-              <p className="text-sm text-textSecondary mb-6">This action cannot be undone.</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setDeleteTarget(null)}
-                  className="flex-1 py-2.5 border border-border rounded-lg text-sm font-medium text-textSecondary hover:text-textPrimary transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleDelete(deleteTarget)}
-                  className="flex-1 py-2.5 bg-danger hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
-                >
-                  Delete
-                </button>
-              </div>
+      <AnimatePresence>
+          {deleteTarget && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={() => setDeleteTarget(null)} className="absolute inset-0 bg-[var(--bg-main)]/80 backdrop-blur-md" />
+                <motion.div initial={{opacity:0, scale:0.95}} animate={{opacity:1, scale:1}} exit={{opacity:0, scale:0.95}} className="relative bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
+                    <div className="w-16 h-16 rounded-full bg-[var(--accent-red)]/10 border border-[var(--accent-red)]/20 flex items-center justify-center mx-auto mb-6">
+                        <Trash2 size={24} className="text-[var(--accent-red)]" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">Delete Resume?</h3>
+                    <p className="text-sm text-[var(--text-secondary)] mb-8">This action is permanent and cannot be undone. Are you sure?</p>
+                    <div className="flex gap-4">
+                        <button onClick={() => setDeleteTarget(null)} className="flex-1 font-bold text-xs uppercase tracking-widest text-[var(--text-tertiary)]">Cancel</button>
+                        <button onClick={() => handleDelete(deleteTarget)} className="flex-1 py-3 bg-[var(--accent-red)] hover:bg-red-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest">Delete</button>
+                    </div>
+                </motion.div>
             </div>
-          </div>
-        </div>
-      )}
+          )}
+      </AnimatePresence>
     </div>
   );
 }

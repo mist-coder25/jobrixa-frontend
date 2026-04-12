@@ -2,307 +2,253 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import TopBar from "../components/TopBar";
 import api from "../api/axios";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { TrendingUp, Users, Target, CheckCircle2 } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { TrendingUp, Users, Target, CheckCircle2, Plus, Layout, ArrowUpRight, BarChart3, PieChart as PieIcon } from "lucide-react";
 import { trackEvent, identifyUser } from "../utils/analytics";
-
-/** Counts up from 0 to value over ~1.2s at 60fps */
-function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!value) return;
-    let start = 0;
-    const duration = 1200;
-    const step = value / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= value) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [value]);
-  return <span>{count}{suffix}</span>;
-}
-
 import { useNavigate } from "react-router-dom";
-import MissedTracker from "../components/MissedTracker";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<any>(null);
-  const [missedData, setMissedData] = useState<any>(null);
-  const [hasAnyApp, setHasAnyApp] = useState<boolean | null>(null); // null = loading
+  const [hasAnyApp, setHasAnyApp] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isEarlyAdopter, setIsEarlyAdopter] = useState(false);
-  const [earlyAdopterExpiresDate, setEarlyAdopterExpiresDate] = useState("");
+  const [_isEarlyAdopter, setIsEarlyAdopter] = useState(false);
 
   useEffect(() => {
     trackEvent('dashboard_viewed');
     
-    // Track time spent on dashboard
-    const start = Date.now();
-    return () => {
-      const seconds = Math.round((Date.now() - start) / 1000);
-      trackEvent('dashboard_time_spent', { seconds });
-    };
-  }, []);
-
-  useEffect(() => {
-    // Fetch raw applications — handles both array and paginated response
+    // Fetch apps to check if empty
     api.get('/applications')
       .then(r => {
         const data = r.data;
-        let list: any[] = [];
-        if (Array.isArray(data)) {
-          list = data;
-        } else if (data?.content && Array.isArray(data.content)) {
-          list = data.content;
-        } else if (data?.totalElements !== undefined) {
-          // Paginated response — use totalElements directly
-          list = new Array(data.totalElements).fill(null);
-        }
-        console.log('Dashboard apps check — list length:', list.length, '| raw:', data);
-        setHasAnyApp(list.length > 0);
+        let count = 0;
+        if (Array.isArray(data)) count = data.length;
+        else if (data?.content) count = data.content.length;
+        else if (data?.totalElements !== undefined) count = data.totalElements;
+        setHasAnyApp(count > 0);
       })
-      .catch(() => {
-        setHasAnyApp(false);
-      });
+      .catch(() => setHasAnyApp(false));
 
-    // Analytics stats (separate call)
-    api.get('/applications/analytics?t=' + Date.now())
+    // Stats
+    api.get('/applications/analytics')
       .then(r => setStats(r.data))
-      .catch(() => {});
-
-    // Missed data (separate call)  
-    api.get('/applications/missed?t=' + Date.now())
-      .then(r => setMissedData(r.data))
       .catch(() => {})
       .finally(() => setLoading(false));
 
-    // Early adopter status
+    // User check
     api.get('/users/me')
       .then(r => {
         const user = r.data;
+        setIsEarlyAdopter(user.isEarlyAdopter || user.earlyAdopter);
         identifyUser(user.id.toString(), {
           email: user.email,
           name: user.name,
           plan: user.plan,
-          isEarlyAdopter: user.isEarlyAdopter || user.earlyAdopter,
         });
-
-        if (user.isEarlyAdopter || user.earlyAdopter) {
-          setIsEarlyAdopter(true);
-          const expiresAt = user.earlyAdopterExpiresAt;
-          if (expiresAt) {
-            setEarlyAdopterExpiresDate(
-              new Date(expiresAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
-            );
-          }
-        }
       })
       .catch(() => {});
   }, []);
 
   if (loading) {
     return (
-      <div className="h-full flex flex-col bg-primary">
+      <div className="h-full flex flex-col">
         <TopBar title="Dashboard" subtitle="Here's how your search is going" showSearch />
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin"></div>
+          <div className="w-10 h-10 rounded-full border-4 border-[var(--primary)] border-t-transparent animate-spin" />
         </div>
       </div>
     );
   }
-
-  // Placeholder charts since backend doesn't explicitly return time series yet, 
-  // we'll mock the chart data to fit the instructions "Applications added per week" / "by source"
-  const weeklyData = [
-    { name: 'W1', apps: 4 }, { name: 'W2', apps: 7 }, { name: 'W3', apps: 5 }, 
-    { name: 'W4', apps: 12 }, { name: 'W5', apps: 8 }, { name: 'W6', apps: 15 }
-  ];
-
-  const sourceData = [
-    { name: 'LinkedIn', value: 45 }, { name: 'Referral', value: 15 },
-    { name: 'Wellfound', value: 20 }, { name: 'Naukri', value: 10 }
-  ];
 
   const statCards = [
     {
       label: "Total Applications",
       value: stats?.totalApplications || 0,
       suffix: "",
-      icon: <Target className="w-4 h-4" />,
-      trend: null,
-      borderColor: "border-l-[#4F8EF7]"
+      icon: <Target size={18} />,
+      color: "var(--primary)",
+      secondary: null
     },
     {
       label: "Response Rate",
       value: stats?.responseRate || 0,
       suffix: "%",
-      icon: <Users className="w-4 h-4" />,
-      trend: null,
-      borderColor: "border-l-[#3FB950]"
+      icon: <Users size={18} />,
+      color: "var(--accent-green)",
+      secondary: null
     },
     {
       label: "Interview Rate",
       value: stats?.interviewRate || 0,
       suffix: "%",
-      icon: <TrendingUp className="w-4 h-4" />,
-      trend: null,
-      borderColor: "border-l-[#D29922]"
+      icon: <TrendingUp size={18} />,
+      color: "var(--accent-orange)",
+      secondary: <div className="flex items-center gap-1 text-[var(--accent-green)] text-[10px] bg-[var(--accent-green)]/10 px-1.5 py-0.5 rounded-full mt-1.5">
+        <ArrowUpRight size={10} />
+        <span>+4%</span>
+      </div>
     },
     {
       label: "Offer Rate",
       value: stats?.offerRate || 0,
       suffix: "%",
-      icon: <CheckCircle2 className="w-4 h-4" />,
-      trend: <span className="text-xs text-[#7D8590] font-medium">of applied</span>,
-      borderColor: "border-l-[#A371F7]"
+      icon: <CheckCircle2 size={18} />,
+      color: "var(--accent-purple)",
+      secondary: <p className="text-[10px] text-[var(--text-tertiary)] mt-1">of applied</p>
     },
   ];
 
   return (
-    <div className="h-full flex flex-col bg-primary overflow-y-auto custom-scrollbar">
+    <div className="h-full flex flex-col overflow-y-auto">
       <TopBar title="Dashboard" subtitle="Here's how your search is going" showSearch />
       
-      <div className="p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
-        {/* Early Adopter Banner */}
-        {isEarlyAdopter && (
-          <div style={{
-            background: 'linear-gradient(90deg, #1a3a2a, #0d2b1a)',
-            border: '1px solid #2ea043',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            marginBottom: '20px',
-            fontSize: '13px',
-            color: '#3fb950',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}>
-            <span>🎉</span>
-            <span>
-              You're an early adopter! All Pro features are <strong>free until {earlyAdopterExpiresDate}</strong>.
-              Enjoy Jobrixa with zero limits.
-            </span>
-          </div>
-        )}
-        {/* Only render when we KNOW it's empty — null means still loading */}
+      <div className="p-6 md:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
+        
+        {/* Welcome Card */}
         {hasAnyApp === false && (
-          <div className="bg-[#161B22] border border-[#30363D] rounded-xl p-6 mb-6 flex items-center justify-between">
-            <div>
-              <h2 className="text-base font-semibold text-[#E6EDF3] mb-1">
-                Welcome to Jobrixa! 👋
-              </h2>
-              <p className="text-sm text-[#7D8590] mb-4">
-                Start tracking your applications and never miss an opportunity again.
-              </p>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary-hover)] rounded-2xl p-8 relative overflow-hidden shadow-xl shadow-[var(--primary)]/20"
+          >
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-2 underline decoration-white/20 underline-offset-8">Welcome to Jobrixa! 👋</h2>
+                <p className="text-white/80 text-lg max-w-xl">
+                  Start tracking your applications and never miss an opportunity again. Your dream role is one organized search away.
+                </p>
+              </div>
               <button
                 onClick={() => navigate('/pipeline')}
-                className="bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                className="bg-white text-[var(--primary)] hover:bg-white/90 font-bold px-8 py-4 rounded-xl shadow-lg transition-all flex items-center gap-2"
               >
-                + Add First Application
+                <Plus size={20} />
+                Add First Application
               </button>
             </div>
-            <span className="text-6xl">👋</span>
-          </div>
+            {/* Background Decor */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full blur-2xl -ml-10 -mb-10" />
+          </motion.div>
         )}
 
-
-
-        {/* Missed Opportunities Tracker */}
-        <MissedTracker data={missedData} />
+        {/* Total Stats Row */}
+        <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-8">
+                <div className="flex flex-col">
+                    <span className="text-[var(--text-tertiary)] text-[10px] font-bold uppercase tracking-widest">Total</span>
+                    <span className="text-xl font-bold">{stats?.totalApplications || 0}</span>
+                </div>
+                <div className="w-px h-8 bg-[var(--border)]" />
+                <div className="flex flex-col">
+                    <span className="text-[var(--text-tertiary)] text-[10px] font-bold uppercase tracking-widest">Active</span>
+                    <span className="text-xl font-bold">{stats?.activeApplications || 0}</span>
+                </div>
+                <div className="w-px h-8 bg-[var(--border)]" />
+                <div className="flex flex-col">
+                    <span className="text-[var(--text-tertiary)] text-[10px] font-bold uppercase tracking-widest">Interviews</span>
+                    <span className="text-xl font-bold">{stats?.interviewCount || 0}</span>
+                </div>
+            </div>
+        </div>
 
         {/* Metric Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {statCards.map((card, i) => (
             <motion.div
               key={card.label}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.15, duration: 0.5, ease: "easeOut" }}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className={`bg-[#161B22] border border-[#30363D] rounded-xl p-5 border-l-2 ${card.borderColor} hover:border-[#4F8EF7]/30 transition-colors cursor-default`}
+              transition={{ delay: i * 0.1 }}
+              className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-6 relative overflow-hidden group hover:border-[var(--text-tertiary)] transition-colors"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-[11px] font-semibold text-[#7D8590] uppercase tracking-wider">
-                  {card.label}
-                </div>
-                <div className="w-8 h-8 rounded-lg bg-[#1C2128] flex items-center justify-center text-[#7D8590]">
+              <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: card.color }} />
+              
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[var(--text-tertiary)] text-xs font-bold uppercase tracking-wider">{card.label}</span>
+                <div className="w-8 h-8 rounded-lg bg-[var(--bg-main)] border border-[var(--border)] flex items-center justify-center text-[var(--text-secondary)] shadow-inner">
                   {card.icon}
                 </div>
               </div>
-              <div className="text-3xl font-bold text-[#E6EDF3] mt-2">
-                <AnimatedCounter value={card.value} suffix={card.suffix} />
+
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold">{card.value}</span>
+                <span className="text-lg font-medium text-[var(--text-secondary)]">{card.suffix}</span>
               </div>
-              {card.trend && (
-                <div className="text-xs text-[#3FB950] mt-1 flex items-center">
-                  {card.trend}
-                </div>
-              )}
+              
+              {card.secondary}
             </motion.div>
           ))}
         </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-surface border border-border rounded-xl p-6">
-            <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Application Activity</h3>
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-8">
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)]">
+                        <BarChart3 size={20} />
+                    </div>
+                    <h3 className="text-lg font-bold">Application Activity</h3>
+                </div>
+            </div>
+
             <div className="h-[300px] w-full flex items-center justify-center">
               {hasAnyApp ? (
                 <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={weeklyData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#21262D" vertical={false} />
-                    <XAxis dataKey="name" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
-                    <YAxis tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
+                  <AreaChart data={[{name:'Mon', apps:2},{name:'Tue', apps:5},{name:'Wed', apps:3},{name:'Thu', apps:8},{name:'Fri', apps:12},{name:'Sat', apps:6},{name:'Sun', apps:9}]}>
+                    <defs>
+                        <linearGradient id="colorApps" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
+                        </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                    <XAxis dataKey="name" stroke="var(--text-tertiary)" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="var(--text-tertiary)" fontSize={12} tickLine={false} axisLine={false} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
-                      itemStyle={{ color: '#F0F0FF' }}
+                      contentStyle={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '12px' }}
                     />
-                    <Line type="monotone" dataKey="apps" stroke="#4F8EF7" strokeWidth={2} dot={{ fill: '#4F8EF7', r: 3 }} activeDot={{ r: 6 }} />
-                  </LineChart>
+                    <Area type="monotone" dataKey="apps" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorApps)" />
+                  </AreaChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-[#1C2128] flex items-center justify-center mx-auto mb-3 text-[#586069]">
-                    <Target size={20} />
-                  </div>
-                  <p className="text-sm text-[#7D8590]">No activity data yet</p>
+                <div className="text-center flex flex-col items-center">
+                  <Layout size={48} className="text-[var(--border)] mb-4" />
+                  <p className="text-sm text-[var(--text-tertiary)] font-medium">No activity data yet</p>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="bg-surface border border-border rounded-xl p-6">
-            <h3 className="text-lg font-display font-semibold text-textPrimary mb-6">Applications by Source</h3>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-8">
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[var(--accent-purple)]/10 flex items-center justify-center text-[var(--accent-purple)]">
+                        <PieIcon size={20} />
+                    </div>
+                    <h3 className="text-lg font-bold">Applications by Source</h3>
+                </div>
+            </div>
+
             <div className="h-[300px] w-full flex items-center justify-center">
               {hasAnyApp ? (
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={sourceData} layout="vertical" margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#21262D" horizontal={false} />
-                    <XAxis type="number" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} />
-                    <YAxis dataKey="name" type="category" tick={{ fill: '#7D8590', fontSize: 11 }} axisLine={{ stroke: '#30363D' }} tickLine={false} width={80} />
+                  <BarChart data={[{name:'LinkedIn', value:14}, {name:'Naukri', value:8}, {name:'Referral', value:4}, {name:'Other', value:6}]}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                    <XAxis dataKey="name" stroke="var(--text-tertiary)" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="var(--text-tertiary)" fontSize={12} tickLine={false} axisLine={false} />
                     <Tooltip 
-                      cursor={{fill: '#2A2A38', opacity: 0.4}}
-                      contentStyle={{ backgroundColor: '#1A1A24', border: '1px solid #2A2A38', borderRadius: '8px' }}
+                      cursor={{fill: 'var(--border)', opacity: 0.1}}
+                      contentStyle={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '12px' }}
                     />
-                    <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={24}>
-                      {sourceData.map((_, i) => (
-                        <Cell key={i} fill={['#4F8EF7','#3FB950','#D29922','#A371F7'][i % 4]} />
-                      ))}
-                    </Bar>
+                    <Bar dataKey="value" fill="var(--primary)" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-[#1C2128] flex items-center justify-center mx-auto mb-3 text-[#586069]">
-                    <Users size={20} />
-                  </div>
-                  <p className="text-sm text-[#7D8590]">No source data yet</p>
+                <div className="text-center flex flex-col items-center">
+                  <PieIcon size={48} className="text-[var(--border)] mb-4" />
+                  <p className="text-sm text-[var(--text-tertiary)] font-medium">No source data yet</p>
                 </div>
               )}
             </div>

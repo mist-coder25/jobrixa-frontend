@@ -1,4 +1,6 @@
 import { Search, Filter } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Avatar from "./Avatar";
 
 interface TopBarProps {
   title: string;
@@ -17,56 +19,61 @@ export default function TopBar({
   activeFilterCount = 0,
   children
 }: TopBarProps) {
+  const navigate = useNavigate();
+  const userName = localStorage.getItem("jobrixa_user") || "User";
+
   return (
-    <header className="h-16 bg-[#0D1117]/80 backdrop-blur-md border-b border-[#21262D] flex items-center justify-between px-8 sticky top-0 z-40 w-full transition-all">
-      <div className="flex items-center gap-4">
-        <div>
-          <h1 className="text-base font-semibold text-[#E6EDF3]">{title}</h1>
-          {subtitle && <p className="text-xs text-[#7D8590]">{subtitle}</p>}
-        </div>
+    <header className="h-16 bg-[var(--bg-main)] border-b border-[var(--border)] flex items-center justify-between px-6 md:px-8 sticky top-0 z-40 w-full">
+      <div className="flex flex-col">
+        <h1 className="text-lg font-bold text-white leading-tight">{title}</h1>
+        {subtitle && <p className="text-xs text-[var(--text-tertiary)] font-medium">{subtitle}</p>}
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Search — only if showSearch=true */}
+      <div className="flex items-center gap-4">
+        {/* Search */}
         {showSearch && (
-          <div className="hidden md:flex relative group">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#484F58]" />
+          <div className="hidden lg:flex relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
             <input
               type="text"
               placeholder="Search..."
-              className="w-52 pl-8 pr-3 py-1.5 bg-[#161B22] border border-[#30363D] rounded-md text-sm text-[#E6EDF3] placeholder:text-[#484F58] focus:outline-none focus:border-[#4F8EF7] transition-colors"
+              className="w-64 pl-10 pr-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] rounded-xl text-sm text-white placeholder:text-[var(--text-tertiary)] focus:border-[var(--primary)] transition-all"
             />
           </div>
         )}
 
-        {/* Filter — only if onFilterClick provided */}
+        {/* Filter */}
         {onFilterClick && (
-          <div className="relative">
-            <button 
-              onClick={onFilterClick}
-              className="group flex p-1.5 rounded-md border border-[#30363D] text-[#7D8590] hover:text-[#E6EDF3] bg-[#161B22] transition-all relative"
-            >
-              <Filter size={14} className="group-hover:rotate-12 transition-transform" />
-              {activeFilterCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#4F8EF7] rounded-full text-white text-[9px] flex items-center justify-center font-bold">
-                  {activeFilterCount}
-                </span>
-              )}
-            </button>
-          </div>
+          <button 
+            onClick={onFilterClick}
+            className="p-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-white transition-all relative"
+          >
+            <Filter size={18} />
+            {activeFilterCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--primary)] rounded-full text-white text-[9px] flex items-center justify-center font-bold">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
         )}
 
-        {/* Page-specific action buttons */}
-        {children}
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+            {children}
+        </div>
 
-        {/* Global Profile Avatar */}
-        <div className="ml-2 pl-2 border-l border-[#21262D]">
-           <img
-             src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(localStorage.getItem("jobrixa_user") || "User")}&backgroundColor=2ea043&fontFamily=Inter`}
-             alt="Profile"
-             className="w-8 h-8 rounded-full border-2 border-[#2ea043] hover:scale-105 transition-transform cursor-pointer"
-             onClick={() => window.location.href = '/settings'}
-           />
+        {/* User */}
+        <div className="hidden sm:flex items-center gap-3 pl-4 border-l border-[var(--border)] ml-2 invisible lg:visible">
+            <div 
+                onClick={() => navigate('/settings')}
+                className="cursor-pointer hover:scale-105 transition-transform"
+            >
+                <Avatar 
+                    name={userName} 
+                    size="small" 
+                    backgroundColor="#5B9FFF"
+                />
+            </div>
         </div>
       </div>
     </header>

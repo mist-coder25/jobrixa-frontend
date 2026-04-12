@@ -3,11 +3,10 @@ import Sidebar from "../components/Sidebar";
 
 export default function DashboardLayout() {
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0d1117] text-[#C9D1D9]">
+    <div className="flex h-screen overflow-hidden bg-[var(--bg-main)] text-white font-inter">
       <Sidebar />
-      <div className="flex-1 flex flex-col md:pl-56 pb-16 md:pb-0 h-full overflow-hidden">
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto relative h-full main-content">
+      <div className="flex-1 flex flex-col md:pl-64 h-full overflow-hidden transition-all duration-300">
+        <main className="flex-1 flex flex-col h-full bg-[var(--bg-card)]/10">
           <Outlet />
         </main>
       </div>

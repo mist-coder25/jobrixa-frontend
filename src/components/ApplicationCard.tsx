@@ -1,5 +1,6 @@
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { formatDistanceToNow, parseISO, isValid } from "date-fns";
 import CompanyLogo from "./CompanyLogo";
+import { MapPin, Calendar, ExternalLink } from "lucide-react";
 
 export interface JobApplication {
   id: string;
@@ -32,12 +33,11 @@ interface ApplicationCardProps {
   isDragging: boolean;
 }
 
-
-
 export default function ApplicationCard({ app, onClick, innerRef, draggableProps, dragHandleProps, isDragging }: ApplicationCardProps) {
-  const daysAppliedText = app.appliedAt 
-    ? formatDistanceToNow(parseISO(app.appliedAt), { addSuffix: true }) 
-    : "Date unknown";
+  const dateStr = app.appliedAt || app.createdAt;
+  const daysAppliedText = dateStr && isValid(parseISO(dateStr))
+    ? formatDistanceToNow(parseISO(dateStr), { addSuffix: true }) 
+    : "Recently";
 
   return (
     <div
@@ -45,36 +45,64 @@ export default function ApplicationCard({ app, onClick, innerRef, draggableProps
       {...draggableProps}
       {...dragHandleProps}
       onClick={onClick}
-      className={`mx-3 mb-2 bg-[#161B22] border border-[#30363D] rounded-lg p-3 cursor-pointer hover:border-[#4F8EF7]/40 hover:shadow-md hover:shadow-black/40 transition-all group ${
-        isDragging ? "border-[#4F8EF7] shadow-[0_4px_24px_rgba(0,0,0,0.4)] scale-[1.02]" : ""
+      className={`mx-3 mb-3 bg-[var(--bg-card)] border-[var(--border)] rounded-xl p-4 cursor-pointer transition-all duration-200 group active:scale-[0.98] ${
+        isDragging 
+            ? "border-[var(--primary)] shadow-2xl scale-[1.05] z-50 bg-[var(--bg-main)]" 
+            : "border hover:border-[var(--text-tertiary)] hover:bg-[var(--bg-main)]"
       }`}
     >
-      {/* Top row — company + source */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          {/* Company logo */}
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-center gap-3 min-w-0">
           <CompanyLogo 
             companyName={app.companyName} 
             domain={app.companyDomain} 
-            size={24} 
-            containerPadding="p-0.5"
-            className="rounded"
+            size={36} 
+            className="rounded-lg ring-1 ring-white/10"
           />
-          <span className="text-xs font-semibold text-[#E6EDF3]">{app.companyName}</span>
+          <div className="min-w-0">
+            <h4 className="text-sm font-bold text-white truncate">{app.companyName}</h4>
+            <div className="flex items-center gap-1.5 text-[10px] text-[var(--text-tertiary)] font-medium">
+                <Calendar size={10} />
+                <span>{daysAppliedText}</span>
+            </div>
+          </div>
         </div>
-        <span className="text-[10px] text-[#484F58]">{daysAppliedText}</span>
+        
+        {app.jobUrl && (
+            <a 
+                href={app.jobUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/10 transition-colors"
+                title="View Job"
+            >
+                <ExternalLink size={14} />
+            </a>
+        )}
       </div>
 
-      {/* Job title */}
-      <p className="text-xs text-[#7D8590] mb-3 leading-relaxed">{app.jobTitle}</p>
+      <p className="text-xs font-semibold text-[var(--text-secondary)] mb-4 leading-relaxed line-clamp-2">
+        {app.jobTitle}
+      </p>
 
-      {/* Bottom row — source badge + salary */}
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#21262D] text-[#7D8590] border border-[#30363D]">
-          {app.source || "Other"}
-        </span>
-        {app.salaryMin && app.salaryMax && (
-          <span className="text-[10px] font-medium text-[#3FB950]">${app.salaryMin/1000}k-${app.salaryMax/1000}k</span>
+      <div className="flex items-center justify-between mt-auto pt-3 border-t border-[var(--border)]/50">
+        <div className="flex items-center gap-2">
+            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[var(--bg-main)] text-[var(--text-tertiary)] border border-[var(--border)] uppercase tracking-wide">
+                {app.source || "Direct"}
+            </span>
+            {app.isRemote && (
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[var(--accent-green)]/10 text-[var(--accent-green)] border border-[var(--accent-green)]/20 uppercase tracking-wide">
+                    Remote
+                </span>
+            )}
+        </div>
+        
+        {app.location && (
+            <div className="flex items-center gap-1 text-[9px] text-[var(--text-tertiary)] font-bold truncate max-w-[80px]">
+                <MapPin size={9} />
+                <span className="truncate">{app.location}</span>
+            </div>
         )}
       </div>
     </div>

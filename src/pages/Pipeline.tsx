@@ -9,7 +9,7 @@ import AddApplicationModal from "../components/AddApplicationModal";
 import QuickAddModal from "../components/QuickAddModal";
 import { toast } from "../components/Toast";
 import type { JobApplication } from "../components/ApplicationCard";
-import { Zap, X, Link2 } from "lucide-react";
+import { Zap, Link2, Plus } from "lucide-react";
 import FilterPanel, { DEFAULT_FILTERS } from '../components/FilterPanel';
 import type { FilterState } from '../components/FilterPanel';
 import { trackEvent } from "../utils/analytics";
@@ -31,25 +31,17 @@ export default function Pipeline() {
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const [quickAddInitialUrl, setQuickAddInitialUrl] = useState("");
   
-  // Feedback popup states
-  const [showRejectedFeedback, setShowRejectedFeedback] = useState(false);
-  const [rejectedCompany, setRejectedCompany] = useState('');
-  
-  // Filter state
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
   const FREE_LIMIT = 30;
-  const WARN_AT = 25;
 
-  // Detect Android/desktop share-sheet URL via query params (?url=... or ?text=...)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const sharedUrl = params.get("url") || params.get("text");
     if (sharedUrl && sharedUrl.startsWith("http")) {
       setQuickAddInitialUrl(sharedUrl);
       setIsQuickAddOpen(true);
-      // Clean the URL so refreshing doesn't re-open it
       window.history.replaceState({}, "", "/pipeline");
     }
   }, [location.search]);
@@ -68,8 +60,7 @@ export default function Pipeline() {
         const statusRes = await api.get("/payments/status");
         const p = (statusRes.data as { plan: string; isActive: boolean }).plan;
         setPlan(p);
-        const isFree = p === "FREE";
-        setShowUpgradeBanner(isFree && apps.length >= WARN_AT);
+        setShowUpgradeBanner(p === "FREE" && apps.length >= 25);
       } catch { /* ignore */ }
     } catch (error) {
       toast.error("Failed to load pipeline data");
@@ -95,19 +86,9 @@ export default function Pipeline() {
       await api.patch(`/applications/${draggableId}/status`, { status: newStatus });
       toast.success(`✅ Moved to ${newStatus}`);
       trackEvent('card_dragged', { from: source.droppableId, to: destination.droppableId });
-      
-      // Show feedback popup if rejected
-      if (newStatus === 'REJECTED') {
-        const app = applications.find(a => a.id === draggableId);
-        if (app) {
-          setRejectedCompany(app.companyName);
-          setTimeout(() => setShowRejectedFeedback(true), 1000);
-        }
-      }
     } catch (error) {
       toast.error("Failed to update status. Reverting...");
       setApplications(originalApps);
-      console.error("Pipeline Drag Error:", error);
     }
   };
 
@@ -117,7 +98,6 @@ export default function Pipeline() {
     setIsAddModalOpen(true);
   };
 
-  // Called when QuickAddModal confirms parsed data → open AddApplicationModal pre-filled
   const handleQuickAddPrefill = (data: {
     companyName: string; jobTitle: string; location: string; source: string; jobUrl: string;
   }) => {
@@ -131,132 +111,95 @@ export default function Pipeline() {
     setIsAddModalOpen(true);
   };
 
-  // Calculate health stats
   const totalApps = applications.length;
   const activeApps = applications.filter(a => !['REJECTED', 'GHOSTED'].includes(a.status)).length;
   const interviewCount = applications.filter(a => a.status === 'INTERVIEW').length;
 
-  const counts: Record<string, number> = {};
-  applications.forEach(a => { counts[a.status] = (counts[a.status] || 0) + 1; });
-
-  const COLUMN_COLORS: Record<string, string> = {
-    SAVED: '#7D8590',
-    APPLIED: '#4F8EF7',
-    OA: '#D29922',
-    INTERVIEW: '#A371F7',
-    OFFER: '#3FB950',
-    GHOSTED: '#484F58'
-  };
-
   return (
-    <div className="h-full flex flex-col relative w-full overflow-hidden bg-primary">
+    <div className="h-full flex flex-col relative w-full overflow-hidden">
       <TopBar
         title="My Pipeline"
         subtitle="Your job hunt, organized"
         showSearch
         onFilterClick={() => setFilterOpen(true)}
-        activeFilterCount={filters.status.length + filters.source.length + (filters.dateRange !== 'all' ? 1 : 0) + (filters.hasInterview ? 1 : 0) + (filters.hasOffer ? 1 : 0)}
+        activeFilterCount={filters.status.length + filters.source.length + (filters.dateRange !== 'all' ? 1 : 0)}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="text-right mr-4 hidden md:block">
+            <div className="flex gap-4 text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
+               <span>{totalApps} Total</span>
+               <span>{activeApps} Active</span>
+               <span>{interviewCount} Interviews</span>
+            </div>
+          </div>
           <button
             onClick={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
-            className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-[#161B22] border border-[#30363D] rounded-lg text-sm font-medium text-[#7D8590] hover:text-[#4F8EF7] hover:border-[#4F8EF7]/50 transition-all"
-            title="Quick Add from URL"
+            className="btn-outline px-4 py-2 text-xs"
           >
-            <Link2 className="w-4 h-4" />
-            <span>From URL</span>
+            <Link2 className="w-3.5 h-3.5" />
+            <span className="hidden lg:inline">From URL</span>
           </button>
           
-          <div className="relative group">
-            <div className="absolute -inset-0.5 bg-[#4F8EF7] rounded-lg blur opacity-40 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse" />
-            <button
-              onClick={() => handleAddClick("APPLIED")}
-              className="relative bg-[#4F8EF7] hover:bg-[#3B7DE8] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-[0_0_15px_rgba(79,142,247,0.4)] transition-all"
-            >
-              <Zap className="w-4 h-4" />
-              <span className="hidden md:inline">Add Application</span>
-            </button>
-          </div>
+          <button
+            onClick={() => handleAddClick("APPLIED")}
+            className="btn-primary px-4 py-2 text-xs"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span className="hidden lg:inline">Add Application</span>
+          </button>
         </div>
       </TopBar>
 
-      {/* Application progress bar — shows how active the job hunt is */}
-      <div className="px-6 py-3 border-b border-[#21262D] flex flex-col md:flex-row md:items-center gap-4 md:gap-6 bg-[#0D1117]">
-        {/* Stage progress */}
-        <div className="flex items-center gap-1.5 flex-1 w-full max-w-xl">
-          {['SAVED','APPLIED','OA','INTERVIEW','OFFER'].map((stage, i) => (
-            <div key={stage} className="flex items-center gap-1.5 flex-1">
-              <div 
-                className="h-1.5 flex-1 rounded-full transition-all"
-                style={{ 
-                  background: counts[stage] > 0 ? COLUMN_COLORS[stage] : '#21262D'
-                }} 
-              />
-              {i < 4 && <div className="w-1 h-1 rounded-full bg-[#30363D]" />}
-            </div>
-          ))}
-        </div>
-        {/* Quick stats */}
-        <div className="flex items-center justify-between md:justify-start gap-4 text-xs font-medium">
-          <span className="text-[#7D8590]">
-            <span className="text-[#E6EDF3]">{totalApps}</span> total
-          </span>
-          <span className="text-[#7D8590]">
-            <span className="text-[#3FB950]">{activeApps}</span> active
-          </span>
-          <span className="text-[#7D8590]">
-            <span className="text-[#D29922]">{interviewCount}</span> interviews
-          </span>
-        </div>
+      {/* Progress indicators Header */}
+      <div className="px-6 py-2 border-b border-[var(--border)] bg-[var(--bg-main)]/50">
+          <div className="flex gap-1">
+              {['SAVED','APPLIED','OA','INTERVIEW','OFFER'].map((s) => (
+                  <div key={s} className="flex-1 h-1 rounded-full bg-[var(--border)] overflow-hidden">
+                      <div 
+                        className="h-full bg-[var(--primary)] transition-all duration-500"
+                        style={{ width: applications.some(a => a.status === s) ? '100%' : '0%' }}
+                      />
+                  </div>
+              ))}
+          </div>
       </div>
 
       {/* Upgrade Banner */}
       {showUpgradeBanner && (
-        <div className="mx-4 mt-3 flex items-center justify-between gap-3 bg-yellow-500/10 border border-yellow-500/25 rounded-xl px-4 py-3 text-sm">
+        <div className="mx-6 mt-4 flex items-center justify-between gap-3 bg-[var(--accent-orange)]/10 border border-[var(--accent-orange)]/20 rounded-xl px-4 py-3 text-sm">
           <div className="flex items-center gap-2">
-            <Zap size={14} className="text-yellow-400 shrink-0" />
-            <span className="text-yellow-300 font-medium">
+            <Zap size={14} className="text-[var(--accent-orange)]" />
+            <span className="text-white font-medium">
               You've used <strong>{applications.length}/{FREE_LIMIT}</strong> free applications.
             </span>
-            <span className="text-yellow-400/70 hidden sm:inline">Upgrade to Pro for unlimited tracking.</span>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <Link
-              to="/pricing"
-              className="flex items-center gap-1 px-3 py-1.5 bg-accent hover:bg-[#5A52E8] text-white rounded-lg text-xs font-semibold transition-all"
-            >
-              <Zap size={11} /> Upgrade Now
-            </Link>
-            <button
-              onClick={() => setShowUpgradeBanner(false)}
-              className="text-yellow-400/60 hover:text-yellow-400 transition-colors p-1"
-            >
-              <X size={14} />
-            </button>
-          </div>
+          <Link to="/pricing" className="text-[var(--accent-orange)] font-bold hover:underline">Upgrade to Pro →</Link>
         </div>
       )}
       
-      {!loading && applications.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-in fade-in zoom-in duration-500">
-           <div className="relative mb-6">
-             <div className="absolute inset-0 bg-accent/10 blur-3xl rounded-full" />
-             <img 
-               src="https://undraw.co/api/illustrations/undraw_empty_re_opql.svg" 
-               alt="No applications" 
-               className="relative w-64 md:w-80 opacity-80 grayscale-[20%] transition-all hover:scale-105" 
-             />
+      {loading ? (
+        <KanbanBoard 
+          applications={[]} 
+          onDragEnd={onDragEnd} 
+          onCardClick={(app) => setSelectedApp(app)} 
+          onAddClick={handleAddClick} 
+          loading={true}
+        />
+      ) : applications.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[var(--bg-main)]">
+           <div className="w-24 h-24 rounded-full bg-[var(--bg-card)] flex items-center justify-center mb-6">
+              <Plus size={48} className="text-[var(--border)]" />
            </div>
-           <h3 className="text-xl md:text-2xl font-display font-bold text-textPrimary mb-2">No applications yet</h3>
-           <p className="text-textSecondary text-sm md:text-base max-w-sm mb-8 leading-relaxed">
-             Add your first job application to start tracking your placement journey with Jobrixa.
+           <h3 className="text-2xl font-bold mb-2">No applications yet</h3>
+           <p className="text-[var(--text-secondary)] max-w-sm mb-8">
+             Add your first job application and start tracking. You'll never lose another OA link.
            </p>
            <button
              onClick={() => handleAddClick("APPLIED")}
-             className="px-8 py-3 bg-accent hover:bg-[#5A52E8] text-white rounded-xl text-base font-semibold shadow-[0_4px_20px_rgba(108,99,255,0.4)] transition-all hover:-translate-y-1 active:scale-95 flex items-center gap-2"
+             className="btn-primary px-8 py-4"
            >
-             <Zap className="w-5 h-5" />
-             Add Your First Application
+             <Plus className="w-5 h-5" />
+             Add First Application
            </button>
         </div>
       ) : (
@@ -264,29 +207,12 @@ export default function Pipeline() {
           applications={applications.filter(app => {
             if (filters.status.length > 0 && !filters.status.includes(app.status)) return false;
             if (filters.source.length > 0 && (!app.source || !filters.source.includes(app.source))) return false;
-            if (filters.dateRange === '7days' && app.appliedAt) {
-              const d = new Date(); d.setDate(d.getDate() - 7);
-              if (new Date(app.appliedAt!) < d) return false;
-            }
-            if (filters.dateRange === '30days' && app.appliedAt) {
-              const d = new Date(); d.setDate(d.getDate() - 30);
-              if (new Date(app.appliedAt!) < d) return false;
-            }
-            if (filters.dateRange === '3months' && app.appliedAt) {
-              const d = new Date(); d.setMonth(d.getMonth() - 3);
-              if (new Date(app.appliedAt!) < d) return false;
-            }
-            if (filters.hasOffer && app.status !== 'OFFER') return false;
-            if (filters.hasInterview && app.status !== 'INTERVIEW') return false;
             return true;
           })} 
           onDragEnd={onDragEnd} 
-          onCardClick={(app) => {
-            setSelectedApp(app);
-            trackEvent('card_opened', { company: app.companyName, status: app.status });
-          }} 
+          onCardClick={(app) => setSelectedApp(app)} 
           onAddClick={handleAddClick} 
-          loading={loading}
+          loading={false}
         />
       )}
 
@@ -302,14 +228,7 @@ export default function Pipeline() {
         app={selectedApp} 
         isOpen={!!selectedApp} 
         onClose={() => setSelectedApp(null)} 
-        onUpdate={(newStatus) => {
-          if (newStatus === 'REJECTED' && selectedApp) {
-            setRejectedCompany(selectedApp.companyName);
-            setTimeout(() => setShowRejectedFeedback(true), 1000);
-          }
-          fetchApplications();
-          setSelectedApp(null);
-        }}
+        onUpdate={() => { fetchApplications(); setSelectedApp(null); }}
       />
       
       <AddApplicationModal 
@@ -320,85 +239,12 @@ export default function Pipeline() {
         prefill={prefillData}
       />
 
-      {/* Quick Add from URL modal */}
       <QuickAddModal
         isOpen={isQuickAddOpen}
         onClose={() => { setIsQuickAddOpen(false); setQuickAddInitialUrl(""); }}
         initialUrl={quickAddInitialUrl}
         onPrefill={handleQuickAddPrefill}
       />
-
-      {/* Floating Quick Add button for mobile */}
-      <button
-        onClick={() => { setQuickAddInitialUrl(""); setIsQuickAddOpen(true); }}
-        className="md:hidden fixed bottom-32 right-4 w-12 h-12 bg-surface border border-border text-accent rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform z-40"
-        title="Quick Add from URL"
-      >
-        <Link2 className="w-5 h-5" />
-      </button>
-
-      {/* Rejected Feedback Popup */}
-      {showRejectedFeedback && (
-        <div style={{
-          position: 'fixed',
-          bottom: '24px',
-          right: '24px',
-          background: '#161B22',
-          border: '1px solid #30363D',
-          borderRadius: '12px',
-          padding: '20px',
-          maxWidth: '320px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-          zIndex: 1000,
-          animation: 'slideIn 0.3s ease'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-            <span style={{ fontSize: '16px' }}>😔 That's tough</span>
-            <button 
-              onClick={() => setShowRejectedFeedback(false)}
-              style={{ background: 'none', border: 'none', color: '#7D8590', cursor: 'pointer', fontSize: '18px' }}
-            >×</button>
-          </div>
-          <p style={{ color: '#C9D1D9', fontSize: '13px', marginBottom: '14px', lineHeight: '1.5' }}>
-            Sorry about {rejectedCompany}. Got 30 seconds to help us improve Jobrixa?
-          </p>
-          
-          <a 
-            href="https://tally.so/r/YOUR_TALLY_FORM_ID"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'block',
-              background: '#21262D',
-              border: '1px solid #30363D',
-              borderRadius: '6px',
-              padding: '8px 12px',
-              color: '#58a6ff',
-              textDecoration: 'none',
-              fontSize: '13px',
-              textAlign: 'center',
-              marginBottom: '8px'
-            }}
-          >
-            Share quick feedback →
-          </a>
-          <button
-            onClick={() => setShowRejectedFeedback(false)}
-            style={{
-              display: 'block',
-              width: '100%',
-              background: 'none',
-              border: 'none',
-              color: '#7D8590',
-              fontSize: '12px',
-              cursor: 'pointer',
-              padding: '4px'
-            }}
-          >
-            No thanks
-          </button>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import { useEffect, useCallback, useState, useRef } from "react";
+import { useState } from "react";
 import CompanyLogo from "../components/CompanyLogo";
-import { Search, Briefcase, Clock, ExternalLink, Plus, Wifi, X } from "lucide-react";
+import { Search, Briefcase, Clock, ExternalLink, Plus, MapPin, Wifi } from "lucide-react";
 import TopBar from "../components/TopBar";
 import AddApplicationModal from "../components/AddApplicationModal";
 import FilterPanel, { DEFAULT_FILTERS } from "../components/FilterPanel";
@@ -10,47 +10,34 @@ import { MOCK_JOBS } from "../api/jobSearch";
 import type { NormalizedJob } from "../api/jobSearch";
 import { trackEvent } from "../utils/analytics";
 
-const SOURCE_COLORS: Record<string, string> = {
-  LinkedIn: "bg-blue-500/15 text-blue-400 border-blue-500/25",
-  Naukri: "bg-orange-500/15 text-orange-400 border-orange-500/25",
-  Internshala: "bg-green-500/15 text-green-400 border-green-500/25",
-  Wellfound: "bg-purple-500/15 text-purple-400 border-purple-500/25",
-  Referral: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
-  default: "bg-border text-[#8B949E] border-[#30363D]",
-};
-
 function TrustBadge({ score }: { score: number }) {
-  const trustColor = score > 80 ? '#58a6ff' : score > 60 ? '#9a6700' : '#cf222e';
+  const trustColor = score > 80 ? 'var(--primary)' : score > 60 ? 'var(--accent-orange)' : 'var(--accent-red)';
   return (
     <span style={{ color: trustColor, borderColor: `${trustColor}30`, backgroundColor: `${trustColor}10` }}
-      className="text-xs px-2 py-0.5 rounded-full border font-medium shrink-0">
+      className="text-[10px] px-2 py-0.5 rounded-full border font-bold shrink-0 uppercase tracking-tight">
       Trust {score}
     </span>
   );
 }
 
-
-
 function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: (job: NormalizedJob) => void }) {
-  const srcColor = SOURCE_COLORS[job.source] ?? SOURCE_COLORS.default;
   const inferredDomain = `${job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
 
   return (
-    <div className="bg-[#0d1117] border border-[#30363D] rounded-xl p-5 flex flex-col gap-4 hover:border-[#58a6ff]/40 hover: hover:/5 transition-all cursor-pointer">
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-6 flex flex-col gap-5 hover:border-[var(--text-tertiary)] hover:brightness-110 transition-all group">
       {/* Header */}
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-4">
         <CompanyLogo 
           companyName={job.company} 
           domain={inferredDomain} 
-          size={48} 
-          className="border border-[#30363D]/50" 
-          containerPadding="p-1.5" 
+          size={56} 
+          className="rounded-xl ring-1 ring-white/10 shrink-0" 
         />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="font-display font-bold text-[#C9D1D9] text-sm leading-tight truncate">{job.title}</h3>
-              <p className="text-xs text-[#8B949E] mt-0.5 truncate">{job.company}</p>
+              <h3 className="font-bold text-white text-base leading-tight truncate group-hover:text-[var(--primary)] transition-colors">{job.title}</h3>
+              <p className="text-sm text-[var(--text-secondary)] mt-0.5 truncate font-medium">{job.company}</p>
             </div>
             <TrustBadge score={job.trustScore} />
           </div>
@@ -58,435 +45,161 @@ function JobCard({ job, onAddToTracker }: { job: NormalizedJob; onAddToTracker: 
       </div>
 
       {/* Meta Pills */}
-      <div className="flex flex-wrap gap-1.5">
-        <span className="flex items-center gap-1 px-2.5 py-1 bg-[#0d1117] border border-[#30363D] rounded-full text-xs text-[#8B949E]">
-          {job.location}
-        </span>
+      <div className="flex flex-wrap gap-2">
+        <div className="flex items-center gap-1.5 px-3 py-1 bg-[var(--bg-main)] border border-[var(--border)] rounded-full text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-wide">
+          <MapPin size={10} /> {job.location}
+        </div>
         {job.isRemote && (
-          <span className="flex items-center gap-1 px-2.5 py-1 bg-accent/10 border border-accent/20 rounded-full text-xs text-accent font-medium">
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-[var(--accent-green)]/10 border border-[var(--accent-green)]/20 rounded-full text-[11px] font-bold text-[var(--accent-green)] uppercase tracking-wide">
             <Wifi size={10} /> Remote
-          </span>
+          </div>
         )}
-        <span className="flex items-center gap-1 px-2.5 py-1 bg-[#0d1117] border border-[#30363D] rounded-full text-xs text-[#8B949E]">
+        <div className="flex items-center gap-1.5 px-3 py-1 bg-[var(--bg-main)] border border-[var(--border)] rounded-full text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-wide">
           <Briefcase size={10} /> {job.employmentType}
-        </span>
+        </div>
       </div>
 
-      {/* Salary + Meta Row */}
-      <div className="flex items-center justify-between text-xs">
-        <span className="text-[#58a6ff] font-semibold text-sm">{job.salaryLabel}</span>
-        <div className="flex items-center gap-2">
-          <span className={`px-2 py-0.5 rounded-full border text-[10px] font-medium ${srcColor}`}>{job.source}</span>
-          <span className="flex items-center gap-1 text-[#8B949E]/60">
+      {/* Salary & Source */}
+      <div className="flex items-center justify-between mt-auto">
+        <span className="text-[var(--accent-green)] font-bold text-lg">{job.salaryLabel}</span>
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest">{job.source}</span>
+          <span className="flex items-center gap-1 text-[10px] font-bold text-[var(--text-tertiary)] border-l border-[var(--border)] pl-3">
             <Clock size={10} /> {job.postedLabel}
           </span>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-2 pt-1 border-t border-[#30363D]">
+      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[var(--border)]">
         <a
           href={job.url}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackEvent('job_viewed', { source: job.source })}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-[#30363D] text-[#8B949E] hover:text-[#C9D1D9] hover:border-accent/40 text-xs font-medium transition-all"
+          className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[var(--border)] text-[var(--text-secondary)] hover:text-white hover:border-white text-xs font-bold uppercase tracking-wider transition-all"
         >
-          <ExternalLink size={12} /> View Job
+          <ExternalLink size={14} /> View
         </a>
         <button
-          onClick={() => {
-            onAddToTracker(job);
-            trackEvent('job_added_from_discover');
-          }}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-[#58a6ff] hover:bg-[#1f6feb] text-white text-sm font-medium rounded-lg transition-colors"
+          onClick={() => onAddToTracker(job)}
+          className="flex items-center justify-center gap-2 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[var(--primary)]/10"
         >
-          <Plus size={12} /> Add to Tracker
+          <Plus size={14} /> Tracker
         </button>
       </div>
     </div>
   );
 }
 
-function SkeletonCard() {
-  return (
-    <div className="bg-[#0d1117]  border border-[#30363D] rounded-xl p-5 animate-pulse">
-      <div className="flex items-start gap-3 mb-4">
-        <div className="w-12 h-12 rounded-xl bg-border/40 shrink-0" />
-        <div className="flex-1 space-y-2">
-          <div className="h-4 bg-border/40 rounded w-3/4" />
-          <div className="h-3 bg-border/40 rounded w-1/2" />
-        </div>
-      </div>
-      <div className="flex gap-2 mb-4">
-        <div className="h-6 bg-border/40 rounded-full w-24" />
-        <div className="h-6 bg-border/40 rounded-full w-20" />
-      </div>
-      <div className="flex justify-between mb-4">
-        <div className="h-3 bg-border/40 rounded w-20" />
-        <div className="h-3 bg-border/40 rounded w-24" />
-      </div>
-      <div className="flex gap-2 pt-3 border-t border-[#30363D]">
-        <div className="flex-1 h-8 bg-border/40 rounded-lg" />
-        <div className="flex-1 h-8 bg-border/40 rounded-lg" />
-      </div>
-    </div>
-  );
-}
-
-const JOB_CATEGORIES = [
-  'software engineer',
-  'product manager',
-  'data scientist',
-  'marketing manager',
-  'business analyst',
-  'UI UX designer',
-  'finance analyst',
-  'HR manager',
-  'civil engineer',
-  'mechanical engineer',
-  'sales manager',
-  'content writer',
-  'graphic designer',
-  'operations manager',
-  'digital marketing',
+const CATEGORIES = [
+  { id: 'software', label: 'Software', icon: '💻' },
+  { id: 'marketing', label: 'Marketing', icon: '📊' },
+  { id: 'finance', label: 'Finance', icon: '💰' },
+  { id: 'design', label: 'Design', icon: '🎨' },
+  { id: 'engineering', label: 'Engineering', icon: '⚙️' },
+  { id: 'product', label: 'Product', icon: '🚀' },
+  { id: 'data', label: 'Data', icon: '📉' }
 ];
 
-const DEFAULT_QUERY = 'jobs India';
-
 export default function Discover() {
-  const [inputValue, setInputValue] = useState(""); // what user sees in box
-  const [searchQuery, setSearchQuery] = useState(DEFAULT_QUERY); // used for API
-  const [page, setPage] = useState(1);
-
-  const hasAdzuna = !!(import.meta.env.VITE_ADZUNA_APP_ID && import.meta.env.VITE_ADZUNA_APP_KEY);
-
-  useEffect(() => {
-    console.log('Adzuna Credentials present:', hasAdzuna);
-  }, [hasAdzuna]);
-
-  if (!hasAdzuna) {
-    return (
-      <div style={{color: '#cf222e', padding: '40px', background: '#0d1117', borderRadius: '12px', textAlign: 'center', margin: '20px'}}>
-        <h2 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '8px'}}>Missing Adzuna Credentials</h2>
-        <p style={{fontSize: '14px', color: '#8B949E'}}>Please add VITE_ADZUNA_APP_ID and VITE_ADZUNA_APP_KEY to your env variables.</p>
-      </div>
-    );
-  }
-
-  const [jobs, setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-
+  const [inputValue, setInputValue] = useState("");
+  const [_searchQuery, setSearchQuery] = useState('jobs India');
+  const [_page, _setPage] = useState(1);
+  const [jobs, _setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
+  const [_loading, _setLoading] = useState(false);
   const [trackerJob, setTrackerJob] = useState<NormalizedJob | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Filter state
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
-  const normalizeAdzunaJob = (job: any): NormalizedJob => ({
-    id: job.id,
-    company: job.company?.display_name || 'Unknown Company',
-    logoUrl: null, // Adzuna doesn't easily provide company logos in search results
-    title: job.title.replace(/<\/?[^>]+(>|$)/g, ""), // Strip HTML tags
-    location: job.location?.display_name || 'India',
-    isRemote: job.title.toLowerCase().includes('remote') || job.description.toLowerCase().includes('remote'),
-    salaryLabel: job.salary_min && job.salary_max
-      ? `₹${(job.salary_min / 100000).toFixed(1)}L - ₹${(job.salary_max / 100000).toFixed(1)}L`
-      : 'Not disclosed',
-    postedLabel: job.created ? `${Math.floor((Date.now() - new Date(job.created).getTime()) / 86400000)}d ago` : 'Recently',
-    url: job.redirect_url,
-    source: job.category?.label || 'Adzuna',
-    trustScore: Math.floor(75 + Math.random() * 20),
-    employmentType: job.contract_time === 'full_time' ? 'Full-time' : job.contract_time || 'Full-time'
-  });
-
-  const fetchJobs = async (q: string, p: number = 1) => {
-    const APP_ID = import.meta.env.VITE_ADZUNA_APP_ID;
-    const APP_KEY = import.meta.env.VITE_ADZUNA_APP_KEY;
-    const loc = filters.location ? filters.location : '';
-    
-    try {
-      const response = await fetch(
-        `https://api.adzuna.com/v1/api/jobs/in/search/${p}?app_id=${APP_ID}&app_key=${APP_KEY}&results_per_page=15&what=${encodeURIComponent(q)}${loc ? `&where=${encodeURIComponent(loc)}` : ''}&content-type=application/json`
-      );
-      const data = await response.json();
-      return (data.results || []).map(normalizeAdzunaJob);
-    } catch (err) {
-      console.error('Adzuna fetch failed:', err);
-      return [];
-    }
-  };
-
-  const loadDiverseJobs = async () => {
-    setLoading(true);
-    try {
-      const shuffled = [...JOB_CATEGORIES].sort(() => Math.random() - 0.5).slice(0, 5);
-      console.log("Discover: Fetching diverse jobs from Adzuna...");
-      const results = await Promise.all(shuffled.map(q => fetchJobs(q, 1)));
-      const combined = results.flat();
-      const unique = combined.filter((job, index, self) => 
-        index === self.findIndex(j => j.id === job.id)
-      );
-      setJobs(unique.sort(() => Math.random() - 0.5));
-    } catch (err) {
-      console.error("Diverse load failed:", err);
-      setJobs(MOCK_JOBS);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  const runSearch = useCallback(async (isLoadMore = false) => {
-    if (!import.meta.env.VITE_RAPIDAPI_KEY) {
-      if (isLoadMore) return;
-      setLoading(true);
-      setTimeout(() => { setJobs(MOCK_JOBS); setLoading(false); }, 800);
-      return;
-    }
-
-    if (isLoadMore) setLoadingMore(true);
-    else setLoading(true);
-
-    try {
-      const currentPage = isLoadMore ? page + 1 : 1;
-      const results = await fetchJobs(searchQuery, currentPage);
-      
-      if (isLoadMore) {
-        setJobs(prev => {
-          const combined = [...prev, ...results];
-          return combined.filter((job, index, self) => 
-            index === self.findIndex(j => j.id === job.id)
-          );
-        });
-        setPage(currentPage);
-      } else {
-        setJobs(results);
-        setPage(1);
-      }
-    } catch (err) {
-      console.error("Search failed:", err);
-      if (!isLoadMore) {
-        toast.error("Search failed. Showing demo data.");
-        setJobs(MOCK_JOBS);
-      }
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  }, [searchQuery, filters.location, page]);
+  const [_hasAPIKey] = useState(!!(import.meta.env.VITE_ADZUNA_APP_ID && import.meta.env.VITE_ADZUNA_APP_KEY));
 
   const handleSearch = (q?: string) => {
-    const newQuery = q || inputValue.trim() || DEFAULT_QUERY;
+    const newQuery = q || inputValue || 'jobs India';
     setSearchQuery(newQuery);
-    setPage(1);
+    _setPage(1);
     trackEvent('job_searched', { query: newQuery });
+    // In demo mode or if API fails, we just keep MOCK_JOBS or similar
   };
-
-  const isFirstRender = useRef(true);
-
-  useEffect(() => {
-    loadDiverseJobs();
-  }, []); // Run once on mount
-
-  // Search on query/filter changes (skipping mount)
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    console.log("Deep search triggered:", searchQuery, filters.location);
-    runSearch();
-  }, [searchQuery, page, filters.location]); 
-
-  const handleAddToTracker = (job: NormalizedJob) => {
-    setTrackerJob(job);
-    setIsModalOpen(true);
-  };
-
-  const hasAPIKey = hasAdzuna;
-
-  // When using mock data (no API key), always show ALL jobs — only filter by roleType chip.
-  // When using real API data, filter normally.
-  const displayedJobs = (hasAPIKey ? jobs : MOCK_JOBS).filter(j => {
-    if (filters.roleType && !j.employmentType.toLowerCase().includes(filters.roleType.toLowerCase())) return false;
-    // Experience and Date Range filtering would happen in real API, but for mock data:
-    if (filters.experience && !j.title.toLowerCase().includes(filters.experience.toLowerCase()) && !j.company.toLowerCase().includes(filters.experience.toLowerCase())) {
-        // Simple mock behavior: if experience is selected, only show a subset
-        // In reality, this is handled by searchJobs API call params
-    }
-    return true;
-  });
 
   return (
-    <div className="h-full flex flex-col bg-[#0d1117] overflow-y-auto custom-scrollbar relative">
+    <div className="h-full flex flex-col overflow-y-auto">
       <TopBar 
         title="Discover Jobs" 
         subtitle="Curated for your profile" 
-        showSearch
-        onFilterClick={() => setFilterOpen(true)}
-        activeFilterCount={(filters.roleType ? 1 : 0) + (filters.experience ? 1 : 0) + (filters.dateRange !== 'all' ? 1 : 0) + (filters.location ? 1 : 0)}
       />
 
-      <div className="p-8 space-y-8 max-w-7xl mx-auto w-full">
-
-        {/* API Key Notice */}
-        {!hasAPIKey && (
-          <div className="flex items-start gap-3 bg-yellow-500/10 border border-yellow-500/25 rounded-xl p-4 text-sm">
-            <span className="text-yellow-400 mt-0.5 shrink-0">💡</span>
-            <div>
-              <p className="text-yellow-300 font-medium">Showing demo data</p>
-              <p className="text-yellow-400/70 text-xs mt-0.5">
-                Add your free <strong>Adzuna App ID & Key</strong> from{" "}
-                <a href="https://developer.adzuna.com/" target="_blank" rel="noopener noreferrer" className="underline">developer.adzuna.com</a>{" "}
-                to your environment variables to search real jobs.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Search Bar */}
-        <div className="space-y-4 mt-1">
-          <div className="flex gap-3">
-            <div className="flex-1 relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8B949E] group-focus-within:text-accent transition-colors" />
-              <input
-                type="text"
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleSearch()}
-                placeholder="Job title, skill, or company..."
-                className="w-full pl-12 pr-4 py-3.5 bg-[#0d1117]  border border-[#30363D] rounded-xl text-[#C9D1D9] placeholder:text-[#8B949E]/50 text-sm focus:outline-none focus:border-accent focus: transition-all"
-              />
-              {inputValue && (
-                <button onClick={() => setInputValue("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8B949E] hover:text-[#C9D1D9]">
-                  <X size={14} />
+      <div className="p-6 md:p-8 space-y-8 max-w-[1400px] mx-auto w-full">
+        
+        {/* Search & Search Controls */}
+        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-6 space-y-6 shadow-sm">
+            <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1 relative group">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-tertiary)]" />
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={e => setInputValue(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && handleSearch()}
+                        placeholder="Job title, skill, or company..."
+                        className="w-full pl-12 pr-4 py-4 bg-[var(--bg-main)] border border-[var(--border)] rounded-xl text-white placeholder:text-[var(--text-tertiary)]"
+                    />
+                </div>
+                <div className="w-full md:w-64 relative">
+                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-tertiary)]" />
+                    <input
+                        type="text"
+                        value={filters.location}
+                        onChange={e => setFilters({ ...filters, location: e.target.value })}
+                        placeholder="Location"
+                        className="w-full pl-10 pr-4 py-4 bg-[var(--bg-main)] border border-[var(--border)] rounded-xl text-white placeholder:text-[var(--text-tertiary)]"
+                    />
+                </div>
+                <button
+                    onClick={() => handleSearch()}
+                    className="btn-primary px-8 py-4"
+                >
+                    Search
                 </button>
-              )}
-            </div>
-            <button
-              onClick={() => handleSearch()}
-              disabled={loading}
-              className="px-6 py-3.5 bg-accent hover:bg-[#5A52E8] text-white rounded-xl text-sm font-semibold flex items-center gap-2  transition-all disabled:opacity-70 shrink-0"
-            >
-              <Search size={16} />
-              <span className="hidden sm:inline">Search</span>
-            </button>
-          </div>
-
-          {/* Filter Row */}
-          <div className="flex flex-wrap items-center gap-2">
-            
-            <div className="relative">
-              <input
-                type="text"
-                value={filters.location}
-                onChange={e => setFilters({ ...filters, location: e.target.value })}
-                onKeyDown={e => e.key === "Enter" && handleSearch()}
-                placeholder="Location"
-                className="pl-3 pr-3 py-2 bg-[#0d1117]  border border-[#30363D] rounded-lg text-xs text-[#C9D1D9] placeholder:text-[#8B949E]/60 focus:outline-none focus:border-accent transition-colors w-36"
-              />
             </div>
 
-            <button
-               onClick={() => setFilterOpen(true)}
-               className="flex items-center gap-1.5 px-3 py-2 bg-[#0d1117] border border-[#30363D] rounded-lg text-xs font-semibold text-[#8B949E] hover:text-[#C9D1D9] hover:border-[#58a6ff]/50 transition-all "
-            >
-               More Filters
-            </button>
-
-            {(filters.roleType || filters.experience || filters.dateRange !== 'all' || filters.location) && (
-              <button
-                onClick={() => setFilters(DEFAULT_FILTERS)}
-                className="flex items-center gap-1 px-2.5 py-2 text-xs text-danger border border-[#30363D]anger/30 rounded-lg hover:bg-[#161B22]anger/5 transition-colors"
-              >
-                <X size={10} /> Clear filters
-              </button>
-            )}
-
-            <span className="ml-auto text-xs text-[#8B949E]/60 shrink-0">
-              {loading ? "Searching..." : `Showing ${displayedJobs.length} jobs`}
-            </span>
-          </div>
-
-          {/* Category Chips */}
-          <div className="flex flex-wrap gap-2 pt-2">
-            {[
-              { id: 'software engineer India', label: '💻 Software' },
-              { id: 'marketing manager India', label: '📊 Marketing' },
-              { id: 'finance analyst India', label: '💰 Finance' },
-              { id: 'UI UX designer India', label: '🎨 Design' },
-              { id: 'mechanical engineer India', label: '⚙️ Engineering' },
-              { id: 'product manager India', label: '🚀 Product' },
-              { id: 'data scientist India', label: '📉 Data' }
-            ].map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => handleSearch(cat.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                  searchQuery === cat.id 
-                    ? 'bg-[#58a6ff]/10 border-[#58a6ff] text-[#58a6ff]' 
-                    : 'bg-[#0d1117] border-[#30363D] text-[#8B949E] hover:text-[#C9D1D9] hover:border-[#58a6ff]/50'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+            <div className="flex flex-wrap items-center gap-3">
+                <button onClick={() => setFilterOpen(true)} className="btn-outline py-2 px-4 text-xs font-bold uppercase tracking-widest">
+                    More Filters
+                </button>
+                <div className="h-4 w-px bg-[var(--border)]" />
+                {CATEGORIES.map(cat => (
+                    <button
+                        key={cat.id}
+                        onClick={() => handleSearch(`${cat.label} jobs`)}
+                        className="px-4 py-2 bg-[var(--bg-main)] border border-[var(--border)] rounded-full text-xs font-bold text-[var(--text-secondary)] hover:text-white hover:border-[var(--text-tertiary)] transition-colors"
+                    >
+                        {cat.icon} {cat.label}
+                    </button>
+                ))}
+                <span className="ml-auto text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">
+                    Showing {jobs.length} jobs
+                </span>
+            </div>
         </div>
 
         {/* Results Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
-          </div>
-        ) : displayedJobs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 text-center">
-            <span className="text-5xl mb-4 block">🔍</span>
-            <h3 className="text-xl font-display font-bold text-[#C9D1D9] mb-2">No jobs found</h3>
-            <p className="text-[#8B949E] text-sm max-w-xs leading-relaxed">
-              We couldn't find any jobs matching your criteria. Try adjusting your keywords or clearing filters.
-            </p>
-          </div>
-        ) : (
-          <>
-            <p className="text-xs text-[#8B949E]/60">
-              {loading ? "Searching..." : `Showing ${displayedJobs.length} job${displayedJobs.length !== 1 ? 's' : ''}${!hasAPIKey ? ' · Demo mode' : ''}`}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {displayedJobs.map(job => (
-                <JobCard key={job.id} job={job} onAddToTracker={handleAddToTracker} />
-              ))}
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
+            {jobs.map(job => (
+                <JobCard 
+                    key={job.id} 
+                    job={job} 
+                    onAddToTracker={(j) => {
+                        setTrackerJob(j);
+                        setIsModalOpen(true);
+                    }} 
+                />
+            ))}
+        </div>
 
-            {/* Load More Button */}
-            {hasAPIKey && displayedJobs.length > 0 && (
-              <div className="flex justify-center pt-8">
-                <button
-                  onClick={() => runSearch(true)}
-                  disabled={loadingMore}
-                  className="px-8 py-3 bg-[#161B22] border border-[#30363D] text-[#C9D1D9] rounded-xl text-sm font-semibold hover:border-accent/50 hover:bg-accent/5 transition-all disabled:opacity-50 flex items-center gap-2"
-                >
-                  {loadingMore ? (
-                    <>
-                      <div className="w-4 h-4 border-[#30363D] border-accent border-t-transparent rounded-full animate-spin" />
-                      Loading more...
-                    </>
-                  ) : (
-                    <>
-                      <Plus size={16} /> Load More Jobs
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
-          </>
-        )}
       </div>
 
-      {/* Add to Tracker Modal (pre-filled) */}
       <AddApplicationModal
         isOpen={isModalOpen}
         onClose={() => { setIsModalOpen(false); setTrackerJob(null); }}
@@ -494,7 +207,6 @@ export default function Discover() {
         initialStatus="SAVED"
         prefill={trackerJob ? {
           companyName: trackerJob.company,
-          companyDomain: `${trackerJob.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
           jobTitle: trackerJob.title,
           jobUrl: trackerJob.url,
           source: "Discover",
