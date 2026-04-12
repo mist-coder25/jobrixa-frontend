@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
 
-interface AddApplicationModalProps {
+interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit?: (data: any) => void;
+  preFilledData?: { company: string; title: string; url: string } | null;
+  onSubmit?: () => void;
 }
 
-export default function AddApplicationModal({
+export default function AddApplicationModalWithPreFill({
   isOpen,
   onClose,
+  preFilledData,
   onSubmit,
-}: AddApplicationModalProps) {
+}: ModalProps) {
   const [formData, setFormData] = useState({
+    companyName: '',
     jobTitle: '',
     jobUrl: '',
     status: 'SAVED',
@@ -21,6 +24,19 @@ export default function AddApplicationModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  // Pre-fill data when modal opens
+  useEffect(() => {
+    if (isOpen && preFilledData) {
+      setFormData({
+        companyName: preFilledData.company || '',
+        jobTitle: preFilledData.title || '',
+        jobUrl: preFilledData.url || '',
+        status: 'SAVED',
+        appliedAt: new Date().toISOString().split('T')[0],
+      });
+    }
+  }, [isOpen, preFilledData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +51,8 @@ export default function AddApplicationModal({
     setLoading(true);
 
     try {
-      const response = await api.post('/applications', {
+      await api.post('/applications', {
+        companyName: formData.companyName,
         jobTitle: formData.jobTitle,
         jobUrl: formData.jobUrl || null,
         status: formData.status,
@@ -44,27 +61,16 @@ export default function AddApplicationModal({
 
       setSuccess(true);
 
-      // Call parent callback if provided
       if (onSubmit) {
-        onSubmit(response.data);
+        onSubmit();
       }
 
-      // Reset form
-      setFormData({
-        jobTitle: '',
-        jobUrl: '',
-        status: 'SAVED',
-        appliedAt: new Date().toISOString().split('T')[0],
-      });
-
-      // Close modal after 1 second
       setTimeout(() => {
         onClose();
         setSuccess(false);
       }, 1000);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to add job. Please try again.');
-      console.error('Error adding job:', err);
     } finally {
       setLoading(false);
     }
@@ -101,68 +107,88 @@ export default function AddApplicationModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2
-          style={{
-            margin: '0 0 24px 0',
-            fontSize: '20px',
-            fontWeight: '600',
-            color: '#FFFFFF',
-          }}
-        >
-          Add Job Application
+        <h2 style={{
+          margin: '0 0 24px 0',
+          fontSize: '20px',
+          fontWeight: '600',
+          color: '#FFFFFF',
+        }}>
+          Track Job Application
         </h2>
 
         {error && (
-          <div
-            style={{
-              padding: '12px',
-              backgroundColor: '#FF4757',
-              color: '#FFFFFF',
-              borderRadius: '8px',
-              marginBottom: '16px',
-              fontSize: '14px',
-            }}
-          >
+          <div style={{
+            padding: '12px',
+            backgroundColor: '#FF4757',
+            color: '#FFFFFF',
+            borderRadius: '8px',
+            marginBottom: '16px',
+            fontSize: '14px',
+          }}>
             {error}
           </div>
         )}
 
         {success && (
-          <div
-            style={{
-              padding: '12px',
-              backgroundColor: '#00D084',
-              color: '#FFFFFF',
-              borderRadius: '8px',
-              marginBottom: '16px',
-              fontSize: '14px',
-            }}
-          >
-            ✓ Job added successfully!
+          <div style={{
+            padding: '12px',
+            backgroundColor: '#00D084',
+            color: '#FFFFFF',
+            borderRadius: '8px',
+            marginBottom: '16px',
+            fontSize: '14px',
+          }}>
+            ✓ Job added to pipeline!
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
+          {/* Company Name */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{
+              display: 'block',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#A0AEC0',
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+            }}>
+              Company Name
+            </label>
+            <input
+              type="text"
+              value={formData.companyName}
+              onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+              placeholder="e.g., Google"
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                backgroundColor: '#0A0E27',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+            />
+          </div>
+
           {/* Job Title */}
           <div style={{ marginBottom: '20px' }}>
-            <label
-              style={{
-                display: 'block',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#A0AEC0',
-                marginBottom: '8px',
-                textTransform: 'uppercase',
-              }}
-            >
+            <label style={{
+              display: 'block',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#A0AEC0',
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+            }}>
               Job Title *
             </label>
             <input
               type="text"
               value={formData.jobTitle}
-              onChange={(e) =>
-                setFormData({ ...formData, jobTitle: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
               placeholder="e.g., Software Engineer"
               style={{
                 width: '100%',
@@ -180,24 +206,20 @@ export default function AddApplicationModal({
 
           {/* Job URL */}
           <div style={{ marginBottom: '20px' }}>
-            <label
-              style={{
-                display: 'block',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#A0AEC0',
-                marginBottom: '8px',
-                textTransform: 'uppercase',
-              }}
-            >
+            <label style={{
+              display: 'block',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#A0AEC0',
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+            }}>
               Job URL
             </label>
             <input
               type="url"
               value={formData.jobUrl}
-              onChange={(e) =>
-                setFormData({ ...formData, jobUrl: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, jobUrl: e.target.value })}
               placeholder="https://..."
               style={{
                 width: '100%',
@@ -214,23 +236,19 @@ export default function AddApplicationModal({
 
           {/* Status */}
           <div style={{ marginBottom: '20px' }}>
-            <label
-              style={{
-                display: 'block',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#A0AEC0',
-                marginBottom: '8px',
-                textTransform: 'uppercase',
-              }}
-            >
+            <label style={{
+              display: 'block',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#A0AEC0',
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+            }}>
               Status
             </label>
             <select
               value={formData.status}
-              onChange={(e) =>
-                setFormData({ ...formData, status: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               style={{
                 width: '100%',
                 padding: '10px 12px',
@@ -254,24 +272,20 @@ export default function AddApplicationModal({
 
           {/* Applied Date */}
           <div style={{ marginBottom: '24px' }}>
-            <label
-              style={{
-                display: 'block',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#A0AEC0',
-                marginBottom: '8px',
-                textTransform: 'uppercase',
-              }}
-            >
+            <label style={{
+              display: 'block',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#A0AEC0',
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+            }}>
               Applied Date
             </label>
             <input
               type="date"
               value={formData.appliedAt}
-              onChange={(e) =>
-                setFormData({ ...formData, appliedAt: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, appliedAt: e.target.value })}
               style={{
                 width: '100%',
                 padding: '10px 12px',
@@ -303,7 +317,7 @@ export default function AddApplicationModal({
                 opacity: loading || success ? 0.6 : 1,
               }}
             >
-              {loading ? 'Adding...' : success ? '✓ Added' : 'Add Application'}
+              {loading ? 'Adding...' : success ? '✓ Added' : 'Track Job'}
             </button>
             <button
               type="button"

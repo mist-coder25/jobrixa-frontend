@@ -2,14 +2,14 @@ import { useState } from "react";
 import CompanyLogo from "../components/CompanyLogo";
 import { Search, Briefcase, Clock, ExternalLink, Plus, MapPin, Wifi } from "lucide-react";
 import TopBar from "../components/TopBar";
-import AddApplicationModal from "../components/AddApplicationModal";
+import AddApplicationModalWithPreFill from "../components/AddApplicationModalWithPreFill";
 import FilterPanel, { DEFAULT_FILTERS } from "../components/FilterPanel";
 import type { FilterState } from "../components/FilterPanel";
-import { toast } from "../components/Toast";
+
 import { MOCK_JOBS } from "../api/jobSearch";
 import type { NormalizedJob } from "../api/jobSearch";
 import { trackEvent } from "../utils/analytics";
-import api from "../api/axios";
+
 
 function TrustBadge({ score }: { score: number }) {
   const trustColor = score > 80 ? 'var(--primary)' : score > 60 ? 'var(--accent-orange)' : 'var(--accent-red)';
@@ -108,8 +108,7 @@ export default function Discover() {
   const [_searchQuery, setSearchQuery] = useState('jobs India');
   const [_page, _setPage] = useState(1);
   const [jobs, _setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
-  const [_loading, _setLoading] = useState(false);
-  const [_trackerJob, setTrackerJob] = useState<NormalizedJob | null>(null);
+  const [selectedJob, setSelectedJob] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
@@ -124,18 +123,7 @@ export default function Discover() {
     // In demo mode or if API fails, we just keep MOCK_JOBS or similar
   };
 
-  const handleAddApplication = async (formData: any) => {
-    try {
-      const response = await api.post('/applications', formData);
-      if (response.data) {
-        toast.success("✅ Added to your pipeline!");
-        setIsModalOpen(false);
-      }
-    } catch (error) {
-      console.error('Failed to add application:', error);
-      toast.error("Failed to add application");
-    }
-  };
+
 
   return (
     <div className="h-full flex flex-col overflow-y-auto">
@@ -205,7 +193,11 @@ export default function Discover() {
                     key={job.id} 
                     job={job} 
                     onAddToTracker={(j) => {
-                        setTrackerJob(j);
+                        setSelectedJob({
+                            company: j.company,
+                            title: j.title,
+                            url: j.url
+                        });
                         setIsModalOpen(true);
                     }} 
                 />
@@ -214,10 +206,17 @@ export default function Discover() {
 
       </div>
 
-      <AddApplicationModal
+      <AddApplicationModalWithPreFill
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddApplication}
+        onClose={() => {
+            setIsModalOpen(false);
+            setSelectedJob(null);
+        }}
+        preFilledData={selectedJob}
+        onSubmit={() => {
+            setIsModalOpen(false);
+            setSelectedJob(null);
+        }}
       />
 
       <FilterPanel

@@ -1,141 +1,301 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import api from "../api/axios";
-import { toast } from "../components/Toast";
-import { Loader2, Target, CheckCircle2 } from "lucide-react";
-import PasswordStrength from "../components/PasswordStrength";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import api from '../api/axios';
+import { toast } from '../components/Toast';
 
 export default function Register() {
-  const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
   const [loading, setLoading] = useState(false);
-  const [showStrength, setShowStrength] = useState(false);
+  const navigate = useNavigate();
 
-  const handleGoogleAuth = () => {
-    toast.success('Google registration coming soon! Use email for now 🚀');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
       return;
     }
 
     setLoading(true);
     try {
-      const response = await api.post("/auth/register", { fullName, email, password });
-      localStorage.setItem("jobrixa_token", response.data.token);
-      localStorage.setItem("jobrixa_user", fullName);
-      localStorage.setItem("jobrixa_plan", "FREE");
-      navigate("/dashboard");
-      toast.success("Account created successfully!");
-    } catch (err) {
-      toast.error("Registration failed. Email might be in use.");
+      await api.post('/auth/register', {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      toast.success('Registration successful! Please sign in.');
+      navigate('/login');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleGoogleAuth = () => {
+    // Redirect to Google OAuth endpoint
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
+    window.location.href = `${apiUrl}/oauth2/authorization/google`;
+  };
+
   return (
-    <div className="min-h-screen bg-[var(--bg-main)] flex">
-      {/* Left side — form */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 relative overflow-y-auto">
-        <div className="w-full max-w-md my-12">
-          {/* Logo */}
-          <div className="flex items-center gap-2 mb-12 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center text-white">
-              <span className="font-black text-lg">J</span>
-            </div>
-            <span className="font-bold text-xl tracking-tight">Jobrixa</span>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+      minHeight: '100vh',
+      backgroundColor: '#0A0E27',
+    }}>
+      {/* Left Side - Form */}
+      <div style={{
+        padding: '40px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        overflowY: 'auto',
+      }}>
+        {/* Logo */}
+        <div 
+          onClick={() => navigate('/')}
+          style={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: '#FFFFFF',
+            marginBottom: '40px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}
+        >
+          <div style={{
+            width: '32px',
+            height: '32px',
+            backgroundColor: '#5B9FFF',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontWeight: '900'
+          }}>J</div>
+          Jobrixa
+        </div>
+
+        {/* Heading */}
+        <h1 style={{
+          fontSize: '32px',
+          fontWeight: 'bold',
+          color: '#FFFFFF',
+          marginBottom: '8px',
+        }}>
+          Create an account
+        </h1>
+        <p style={{
+          fontSize: '16px',
+          color: '#A0AEC0',
+          marginBottom: '32px',
+        }}>
+          Start tracking your applications today
+        </p>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          {/* Full Name */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{
+              display: 'block',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#A0AEC0',
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+            }}>
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="Your full name"
+              style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: '#0F1419',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+              required
+            />
           </div>
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Create an account</h1>
-            <p className="text-[var(--text-secondary)]">Start tracking your applications today</p>
+          {/* Email */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{
+              display: 'block',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#A0AEC0',
+              marginBottom: '8px',
+              textTransform: 'uppercase',
+            }}>
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="you@example.com"
+              style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: '#0F1419',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+              required
+            />
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-4">
+          {/* Password Fields */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
             <div>
-              <label htmlFor="fullName">Full Name</label>
+              <label style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#A0AEC0',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+              }}>
+                Password
+              </label>
               <input
-                id="fullName"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Your full name"
-                className="w-full"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  backgroundColor: '#0F1419',
+                  border: '1px solid #1E293B',
+                  borderRadius: '8px',
+                  color: '#FFFFFF',
+                  fontSize: '14px',
+                  boxSizing: 'border-box',
+                }}
                 required
               />
             </div>
-
             <div>
-              <label htmlFor="email">Email address</label>
+              <label style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#A0AEC0',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+              }}>
+                Confirm
+              </label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email address"
-                className="w-full"
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="••••••••"
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  backgroundColor: '#0F1419',
+                  border: '1px solid #1E293B',
+                  borderRadius: '8px',
+                  color: '#FFFFFF',
+                  fontSize: '14px',
+                  boxSizing: 'border-box',
+                }}
                 required
               />
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => { setPassword(e.target.value); setShowStrength(true); }}
-                  onFocus={() => setShowStrength(true)}
-                  placeholder="Password"
-                  className="w-full"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="confirmPassword">Confirm</label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Repeat"
-                  className="w-full"
-                  required
-                />
-              </div>
-            </div>
-
-            {showStrength && <PasswordStrength password={password} />}
-
-            <button
-              type="submit"
-              disabled={loading || password.length < 8}
-              className="btn-primary w-full py-3.5 mt-4"
-            >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign Up"}
-            </button>
-          </form>
-
-          <div className="flex items-center gap-4 my-8">
-            <div className="flex-1 h-px bg-[var(--border)]" />
-            <span className="text-xs text-[var(--text-tertiary)] font-bold uppercase tracking-widest">or</span>
-            <div className="flex-1 h-px bg-[var(--border)]" />
           </div>
 
-          <button 
-            type="button" 
-            onClick={handleGoogleAuth} 
-            className="w-full btn-outline py-3.5 flex items-center justify-center gap-2"
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '12px',
+              backgroundColor: '#5B9FFF',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              fontSize: '16px',
+              fontWeight: '600',
+              marginBottom: '20px',
+              opacity: loading ? 0.6 : 1,
+            }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24">
+            {loading ? 'Creating account...' : 'Sign Up'}
+          </button>
+
+          {/* Divider */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            marginBottom: '20px',
+          }}>
+            <div style={{ flex: 1, height: '1px', backgroundColor: '#1E293B' }} />
+            <span style={{ color: '#A0AEC0', fontSize: '14px' }}>OR</span>
+            <div style={{ flex: 1, height: '1px', backgroundColor: '#1E293B' }} />
+          </div>
+
+          {/* Google Sign Up */}
+          <button
+            type="button"
+            onClick={handleGoogleAuth}
+            style={{
+              width: '100%',
+              padding: '12px',
+              backgroundColor: 'transparent',
+              border: '1px solid #1E293B',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              marginBottom: '20px',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -144,47 +304,146 @@ export default function Register() {
             Continue with Google
           </button>
 
-          <p className="mt-8 text-center text-sm text-[var(--text-secondary)]">
-            Already have an account?{" "}
-            <Link to="/login" className="text-[var(--primary)] font-bold hover:underline ml-1">
+          {/* Sign In Link */}
+          <p style={{
+            textAlign: 'center',
+            fontSize: '14px',
+            color: '#A0AEC0',
+          }}>
+            Already have an account?{' '}
+            <Link
+              to="/login"
+              style={{
+                color: '#5B9FFF',
+                textDecoration: 'none',
+                fontWeight: '600',
+              }}
+            >
               Sign In
             </Link>
           </p>
-        </div>
+        </form>
       </div>
 
-      {/* Right side — Branding */}
-      <div className="hidden lg:flex flex-1 bg-[var(--bg-card)] border-l border-[var(--border)] items-center justify-center p-12 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--primary)]/5 rounded-full blur-[100px]" />
-        
-        <div className="max-w-md text-center">
-          <div className="mb-10 inline-flex p-6 rounded-3xl bg-gradient-to-br from-pink-500/10 to-purple-600/10 border border-white/5 shadow-2xl">
-            <Target size={80} className="text-transparent bg-clip-content bg-gradient-to-br from-pink-500 to-purple-600" style={{ fill: 'none', stroke: 'url(#target-gradient)' }} />
-            <svg width="0" height="0">
-              <linearGradient id="target-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ec4899" />
-                <stop offset="100%" stopColor="#9333ea" />
-              </linearGradient>
-            </svg>
+      {/* Right Side - Info */}
+      <div style={{
+        backgroundColor: '#0F1419',
+        padding: '40px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        borderLeft: '1px solid #1E293B'
+      }}>
+        {/* Icon */}
+        <div style={{
+          fontSize: '64px',
+          marginBottom: '24px',
+        }}>
+          🎯
+        </div>
+
+        {/* Heading */}
+        <h2 style={{
+          fontSize: '28px',
+          fontWeight: 'bold',
+          color: '#FFFFFF',
+          marginBottom: '16px',
+        }}>
+          Your next offer is one organized job hunt away
+        </h2>
+
+        {/* Subtitle */}
+        <p style={{
+          fontSize: '16px',
+          color: '#A0AEC0',
+          marginBottom: '32px',
+          lineHeight: '1.6',
+        }}>
+          Stop tracking jobs in a spreadsheet. Start using a tool built for this. Join our beta and get early access to exclusive features.
+        </p>
+
+        {/* Features */}
+        <div style={{
+          textAlign: 'left',
+          maxWidth: '400px'
+        }}>
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            marginBottom: '16px',
+            alignItems: 'flex-start',
+          }}>
+            <span style={{ fontSize: '20px', color: '#5B9FFF' }}>✓</span>
+            <div>
+              <p style={{
+                margin: '0 0 4px 0',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#FFFFFF',
+              }}>
+                Real-time application tracking
+              </p>
+              <p style={{
+                margin: 0,
+                fontSize: '13px',
+                color: '#A0AEC0',
+              }}>
+                Track every application in one place
+              </p>
+            </div>
           </div>
-          <h2 className="text-4xl font-bold mb-6">
-            Join 1,000+ students <br />
-            <span className="text-[var(--primary)]">tracking their future.</span>
-          </h2>
-          
-          <div className="space-y-4 text-left mt-12 bg-[var(--bg-main)]/50 p-6 rounded-2xl border border-[var(--border)]">
-            {[
-              "Real-time application tracking",
-              "Never miss an OA or Interview deadline",
-              "Analyze why you're geting ghosted",
-              "100% free while in Beta launch"
-            ].map((text, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-[var(--primary)] flex-shrink-0" />
-                <span className="text-[var(--text-secondary)] font-medium">{text}</span>
-              </div>
-            ))}
+
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            marginBottom: '16px',
+            alignItems: 'flex-start',
+          }}>
+            <span style={{ fontSize: '20px', color: '#5B9FFF' }}>✓</span>
+            <div>
+              <p style={{
+                margin: '0 0 4px 0',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#FFFFFF',
+              }}>
+                Never miss a deadline
+              </p>
+              <p style={{
+                margin: 0,
+                fontSize: '13px',
+                color: '#A0AEC0',
+              }}>
+                Get alerts for OAs and interviews
+              </p>
+            </div>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            alignItems: 'flex-start',
+          }}>
+            <span style={{ fontSize: '20px', color: '#5B9FFF' }}>✓</span>
+            <div>
+              <p style={{
+                margin: '0 0 4px 0',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#FFFFFF',
+              }}>
+                100% free during beta
+              </p>
+              <p style={{
+                margin: 0,
+                fontSize: '13px',
+                color: '#A0AEC0',
+              }}>
+                No credit card required
+              </p>
+            </div>
           </div>
         </div>
       </div>

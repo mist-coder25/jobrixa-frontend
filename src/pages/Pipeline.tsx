@@ -24,16 +24,8 @@ export default function Pipeline() {
     fetchApplications();
   }, []);
 
-  const handleAddApplication = async (formData: any) => {
-    try {
-      const response = await api.post('/applications', formData);
-      if (response.data) {
-        setApplications([...applications, response.data]);
-        setIsModalOpen(false);
-      }
-    } catch (error) {
-      console.error('Failed to add application:', error);
-    }
+  const handleAddApplication = (newApp: any) => {
+    setApplications((prev) => [...prev, newApp]);
   };
 
   return (
