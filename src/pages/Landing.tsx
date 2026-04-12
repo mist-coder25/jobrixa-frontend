@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   BarChart2, Briefcase, Bell, Chrome, Mail,
-  ArrowRight, Check, Ghost, Laptop, Mic, Trophy, Rocket, Clipboard, Menu, X
+  ArrowRight, Ghost, Laptop, Mic, Trophy, Rocket, Clipboard, Menu, X
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -358,46 +358,77 @@ export default function Landing() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple pricing</h2>
           <p className="text-[var(--text-secondary)] mb-12">Start free. Upgrade when you need more.</p>
 
-          <div className="flex flex-col md:flex-row justify-center gap-8 max-w-4xl mx-auto">
-            {/* Free Plan */}
-            <div className="card flex-1 flex flex-col items-center text-center">
-              <span className="text-[var(--text-tertiary)] font-bold text-xs tracking-widest uppercase mb-4">Free Plan</span>
-              <div className="text-4xl font-bold mb-1">₹0</div>
-              <p className="text-[var(--text-secondary)] text-sm mb-8">Perfect for trying out Jobrixa</p>
-              
-              <ul className="space-y-4 mb-10 text-left w-full">
-                {['Up to 30 applications', 'Kanban pipeline', 'Basic analytics', 'Chrome extension'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-                    <Check size={16} className="text-[var(--accent-green)]" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <button onClick={() => navigate('/register')} className="btn-outline w-full mt-auto">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '24px',
+            maxWidth: '900px',
+            margin: '0 auto'
+          }}>
+            {/* FREE PLAN */}
+            <div style={{
+              backgroundColor: '#0F1419',
+              border: '1px solid #1E293B',
+              borderRadius: '8px',
+              padding: '32px',
+              textAlign: 'center',
+            }}>
+              <h3 style={{ fontSize: '13px', textTransform: 'uppercase', margin: '0 0 8px 0', color: '#A0AEC0' }}>FREE</h3>
+              <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '4px' }}>₹0</div>
+              <p style={{ fontSize: '13px', color: '#A0AEC0', margin: '0 0 24px 0' }}>Forever</p>
+              <button onClick={() => navigate('/register')} style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: 'transparent',
+                border: '1px solid #1E293B',
+                color: '#5B9FFF',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: '600',
+              }}>
                 Get started free
               </button>
             </div>
 
-            {/* Pro Plan */}
-            <div className="card flex-1 flex flex-col items-center text-center border-[var(--primary)] ring-1 ring-[var(--primary)] relative">
-              <div className="absolute -top-3 bg-[var(--primary)] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                Most Popular
+            {/* PRO PLAN */}
+            <div style={{
+              backgroundColor: '#5B9FFF',
+              borderRadius: '8px',
+              padding: '32px',
+              textAlign: 'center',
+              position: 'relative',
+              boxShadow: '0 20px 40px rgba(91, 159, 255, 0.2)'
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '-12px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: '#FFFFFF',
+                color: '#5B9FFF',
+                padding: '4px 12px',
+                borderRadius: '20px',
+                fontSize: '11px',
+                fontWeight: '800',
+                letterSpacing: '0.05em'
+              }}>
+                MOST POPULAR
               </div>
-              <span className="text-[var(--primary)] font-bold text-xs tracking-widest uppercase mb-4">Pro Plan</span>
-              <div className="text-4xl font-bold mb-1">₹149<span className="text-base font-normal text-[var(--text-secondary)]">/mo</span></div>
-              <p className="text-[var(--text-secondary)] text-sm mb-8">For serious job hunters</p>
-              
-              <ul className="space-y-4 mb-10 text-left w-full">
-                {['Unlimited applications', 'Full analytics & insights', 'Gmail auto-detection', 'Missed & ghosted tracker', 'Priority support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-[var(--text-primary)]">
-                    <Check size={16} className="text-[var(--primary)]" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <button onClick={() => navigate('/pricing')} className="btn-primary w-full mt-auto">
+              <h3 style={{ fontSize: '13px', textTransform: 'uppercase', margin: '8px 0', color: 'rgba(255,255,255,0.8)' }}>PRO</h3>
+              <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '4px', color: '#FFFFFF' }}>₹149</div>
+              <p style={{ fontSize: '13px', margin: '0 0 24px 0', color: 'rgba(255,255,255,0.9)' }}>/month</p>
+              <button onClick={() => navigate('/pricing')} style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: '#FFFFFF',
+                color: '#5B9FFF',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: '600',
+              }}>
                 Upgrade to Pro
               </button>
             </div>
@@ -405,21 +436,49 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="section-spacing bg-gradient-to-b from-[var(--bg-main)] to-[#0D1117]">
-        <div className="container-custom text-center">
-          <div className="mb-8 flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-[var(--primary)]/10 border border-[var(--primary)]/20 flex items-center justify-center text-3xl">
-              ↗️
-            </div>
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Your next offer is one <br /> organized job hunt away</h2>
-          <p className="text-[var(--text-secondary)] text-lg mb-10 max-w-2xl mx-auto">
+      {/* FINAL CTA SECTION - MUST BE CENTERED */}
+      <section style={{
+        textAlign: 'center',
+        padding: '80px 24px',
+        backgroundColor: '#0A0E27',
+        borderTop: '1px solid #1E293B',
+      }}>
+        <div style={{
+          maxWidth: '800px',
+          margin: '0 auto',
+        }}>
+          <h2 style={{
+            fontSize: '32px',
+            fontWeight: 'bold',
+            marginBottom: '16px',
+            color: '#FFFFFF',
+          }}>
+            Your next offer is one organised job hunt away
+          </h2>
+          <p style={{
+            fontSize: '16px',
+            color: '#A0AEC0',
+            marginBottom: '32px',
+            lineHeight: '1.6'
+          }}>
             Stop tracking jobs in a spreadsheet. Start using a tool built for this.
           </p>
           <button
             onClick={() => navigate('/register')}
-            className="btn-primary text-lg px-10 py-5 rounded-xl shadow-2xl shadow-[var(--primary)]/30 hover:scale-105"
+            style={{
+              padding: '16px 32px',
+              backgroundColor: '#5B9FFF',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              boxShadow: '0 10px 20px rgba(91, 159, 255, 0.3)',
+              transition: 'transform 0.2s'
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.02)')}
+            onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             Start for free — no credit card needed →
           </button>

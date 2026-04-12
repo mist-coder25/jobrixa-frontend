@@ -139,22 +139,48 @@ export default function Sidebar() {
         </nav>
 
         <div className="p-4 space-y-4">
-          {/* Upgrade Section */}
+          {/* Upgrade Section - MUST MATCH LANDING PRICING */}
           {!isPro && !isEarlyAdopter && (
-            <div className="bg-[#0F1419] border border-[#1E293B] rounded-2xl p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-bold text-[#718096] uppercase tracking-widest">Plan: Free</span>
-                <button onClick={() => navigate('/pricing')} className="text-[10px] font-bold text-[#5B9FFF] hover:underline uppercase">Upgrade</button>
+            <div style={{
+              padding: '16px',
+              backgroundColor: '#0F1419',
+              border: '1px solid #1E293B',
+              borderRadius: '8px',
+              marginBottom: '16px',
+              textAlign: 'center',
+            }}>
+              <div style={{
+                fontSize: '12px',
+                fontWeight: '600',
+                marginBottom: '4px',
+                color: '#FFFFFF'
+              }}>
+                Free Plan
               </div>
-              <div className="h-1.5 bg-[#0A0E27] rounded-full overflow-hidden mb-2">
-                <div 
-                  className="h-full bg-[#5B9FFF] rounded-full transition-all duration-1000" 
-                  style={{ width: `${Math.min(((totalAppsCreated || 0) / 30) * 100, 100)}%` }}
-                />
-              </div>
-              <p className="text-[10px] text-[#A0AEC0]">
+              <div style={{
+                fontSize: '10px',
+                color: '#A0AEC0',
+                marginBottom: '12px',
+              }}>
                 {totalAppsCreated ?? 0}/30 applications used
-              </p>
+              </div>
+              <button 
+                onClick={() => navigate('/pricing')}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  backgroundColor: '#5B9FFF',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  boxShadow: '0 4px 12px rgba(91, 159, 255, 0.2)'
+                }}
+              >
+                UPGRADE →
+              </button>
             </div>
           )}
 
