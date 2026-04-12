@@ -141,20 +141,16 @@ export default function Sidebar() {
       </div>
 
       {/* User Profile Box */}
-      <div 
-        onClick={handleLogout}
-        style={{
-          display: 'flex',
-          gap: '10px',
-          alignItems: 'center',
-          padding: '10px',
-          backgroundColor: '#0A0E27',
-          border: '1px solid #1E293B',
-          borderRadius: '6px',
-          cursor: 'pointer',
-        }}
-        title="Click to Logout"
-      >
+      <div style={{
+        display: 'flex',
+        gap: '10px',
+        alignItems: 'center',
+        padding: '10px',
+        backgroundColor: '#0A0E27',
+        border: '1px solid #1E293B',
+        borderRadius: '6px',
+        marginTop: 'auto',
+      }}>
         {/* Avatar */}
         <div style={{
           width: '32px',
@@ -169,7 +165,7 @@ export default function Sidebar() {
           fontWeight: '600',
           fontSize: '12px',
         }}>
-          A
+          {userName.charAt(0).toUpperCase()}
         </div>
 
         {/* User Info */}
@@ -196,6 +192,28 @@ export default function Sidebar() {
             {plan}
           </div>
         </div>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          style={{
+            backgroundColor: 'transparent',
+            border: 'none',
+            color: '#718096',
+            cursor: 'pointer',
+            padding: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          title="Logout"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
       </div>
     </div>
   );
