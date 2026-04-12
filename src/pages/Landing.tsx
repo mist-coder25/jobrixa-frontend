@@ -352,41 +352,115 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* PRICING (SIMPLE) */}
-      <section className="section-spacing">
-        <div className="container-custom text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple pricing</h2>
-          <p className="text-[var(--text-secondary)] mb-12">Start free. Upgrade when you need more.</p>
+      {/* Pricing Section */}
+      <section id="pricing" style={{
+        padding: '80px 20px',
+        backgroundColor: '#0A0E27',
+        textAlign: 'center',
+        borderTop: '1px solid #1E293B',
+      }}>
+        <div className="container-custom">
+          <h2 style={{
+            fontSize: '32px',
+            fontWeight: 'bold',
+            marginBottom: '12px',
+            color: '#FFFFFF',
+          }}>
+            Simple pricing
+          </h2>
+          <p style={{
+            fontSize: '16px',
+            color: '#A0AEC0',
+            marginBottom: '48px',
+          }}>
+            Start free. Upgrade when you need more.
+          </p>
 
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: '24px',
             maxWidth: '900px',
-            margin: '0 auto'
+            margin: '0 auto',
           }}>
             {/* FREE PLAN */}
             <div style={{
               backgroundColor: '#0F1419',
               border: '1px solid #1E293B',
-              borderRadius: '8px',
-              padding: '32px',
+              borderRadius: '12px',
+              padding: '40px 32px',
               textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column'
             }}>
-              <h3 style={{ fontSize: '13px', textTransform: 'uppercase', margin: '0 0 8px 0', color: '#A0AEC0' }}>FREE</h3>
-              <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '4px' }}>₹0</div>
-              <p style={{ fontSize: '13px', color: '#A0AEC0', margin: '0 0 24px 0' }}>Forever</p>
-              <button onClick={() => navigate('/register')} style={{
-                width: '100%',
-                padding: '12px',
-                backgroundColor: 'transparent',
-                border: '1px solid #1E293B',
-                color: '#5B9FFF',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: '600',
+              <h3 style={{
+                fontSize: '14px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                color: '#A0AEC0',
+                marginBottom: '16px',
+                letterSpacing: '0.1em'
               }}>
+                FREE
+              </h3>
+              <div style={{
+                fontSize: '48px',
+                fontWeight: '800',
+                marginBottom: '8px',
+                color: '#FFFFFF',
+              }}>
+                ₹0
+              </div>
+              <p style={{
+                fontSize: '14px',
+                color: '#A0AEC0',
+                marginBottom: '32px',
+              }}>
+                Forever
+              </p>
+
+              <ul style={{
+                textAlign: 'left',
+                listStyle: 'none',
+                padding: 0,
+                marginBottom: '32px',
+                flex: 1
+              }}>
+                {[
+                  'Up to 30 applications',
+                  'Kanban pipeline',
+                  'Basic analytics',
+                  'Chrome extension'
+                ].map((f, i) => (
+                  <li key={i} style={{
+                    padding: '12px 0',
+                    fontSize: '13px',
+                    color: '#A0AEC0',
+                    borderBottom: i === 3 ? 'none' : '1px solid #1E293B',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    <span style={{ color: '#00D084' }}>✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+
+              <button 
+                onClick={() => navigate('/register')}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  backgroundColor: 'transparent',
+                  border: '1px solid #1E293B',
+                  color: '#5B9FFF',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  transition: 'all 0.2s'
+                }}
+              >
                 Get started free
               </button>
             </div>
@@ -394,41 +468,102 @@ export default function Landing() {
             {/* PRO PLAN */}
             <div style={{
               backgroundColor: '#5B9FFF',
-              borderRadius: '8px',
-              padding: '32px',
+              borderRadius: '12px',
+              padding: '40px 32px',
               textAlign: 'center',
               position: 'relative',
-              boxShadow: '0 20px 40px rgba(91, 159, 255, 0.2)'
+              boxShadow: '0 20px 40px rgba(91, 159, 255, 0.2)',
+              display: 'flex',
+              flexDirection: 'column'
             }}>
               <div style={{
                 position: 'absolute',
-                top: '-12px',
+                top: '-14px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 backgroundColor: '#FFFFFF',
                 color: '#5B9FFF',
-                padding: '4px 12px',
+                padding: '6px 16px',
                 borderRadius: '20px',
                 fontSize: '11px',
                 fontWeight: '800',
-                letterSpacing: '0.05em'
+                textTransform: 'uppercase',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
               }}>
                 MOST POPULAR
               </div>
-              <h3 style={{ fontSize: '13px', textTransform: 'uppercase', margin: '8px 0', color: 'rgba(255,255,255,0.8)' }}>PRO</h3>
-              <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '4px', color: '#FFFFFF' }}>₹149</div>
-              <p style={{ fontSize: '13px', margin: '0 0 24px 0', color: 'rgba(255,255,255,0.9)' }}>/month</p>
-              <button onClick={() => navigate('/pricing')} style={{
-                width: '100%',
-                padding: '12px',
-                backgroundColor: '#FFFFFF',
-                color: '#5B9FFF',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: '600',
+
+              <h3 style={{
+                fontSize: '14px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                color: '#FFFFFF',
+                marginBottom: '16px',
+                marginTop: '8px',
+                letterSpacing: '0.1em'
               }}>
+                PRO
+              </h3>
+              <div style={{
+                fontSize: '48px',
+                fontWeight: '800',
+                marginBottom: '8px',
+                color: '#FFFFFF',
+              }}>
+                ₹149
+              </div>
+              <p style={{
+                fontSize: '14px',
+                color: 'rgba(255,255,255,0.9)',
+                marginBottom: '32px',
+              }}>
+                /month
+              </p>
+
+              <ul style={{
+                textAlign: 'left',
+                listStyle: 'none',
+                padding: 0,
+                marginBottom: '32px',
+                color: '#FFFFFF',
+                flex: 1
+              }}>
+                {[
+                  'Unlimited applications',
+                  'Full analytics & insights',
+                  'Gmail auto-detection',
+                  'Ghosted tracker',
+                  'Priority support',
+                  'CSV export'
+                ].map((f, i) => (
+                  <li key={i} style={{
+                    padding: '12px 0',
+                    fontSize: '13px',
+                    borderBottom: i === 5 ? 'none' : '1px solid rgba(255, 255, 255, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    <span>✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+
+              <button 
+                onClick={() => navigate('/pricing')}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  backgroundColor: '#FFFFFF',
+                  color: '#5B9FFF',
+                  border: 'none',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+              >
                 Upgrade to Pro
               </button>
             </div>

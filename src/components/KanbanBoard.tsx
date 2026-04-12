@@ -1,173 +1,278 @@
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import type { DropResult } from "@hello-pangea/dnd";
-import { AnimatePresence } from "framer-motion";
-import ApplicationCard from "./ApplicationCard";
-import type { JobApplication } from "./ApplicationCard";
-import { Plus, Rocket, Clipboard, Laptop, Mic, Trophy, ThumbsDown, Ghost } from "lucide-react";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
-const COLUMN_SPECS: Record<string, { title: string; icon: React.ReactNode; desc: string; hint: string; color: string }> = {
+interface KanbanBoardProps {
+  applications: any[];
+  loading?: boolean;
+  onDragEnd?: (result: any) => void;
+  onCardClick?: (app: any) => void;
+  onAddClick?: (status: string) => void;
+}
+
+const COLUMN_CONFIG = {
   SAVED: {
-    title: "Saved",
-    icon: <Rocket size={16} />,
-    desc: "Jobs you're eyeing",
-    hint: "Paste a URL to quick add",
-    color: "var(--accent-gray)"
+    emoji: '🔖',
+    title: 'SAVED',
+    description: "Jobs you're eyeing",
+    placeholder: 'SAVED IS EMPTY',
+    placeholderText: 'Paste a URL to quick add',
   },
   APPLIED: {
-    title: "Applied",
-    icon: <Clipboard size={16} />,
-    desc: "Applied jobs show here",
-    hint: "Track every application you send",
-    color: "var(--primary)"
+    emoji: '📋',
+    title: 'APPLIED',
+    description: 'Applied jobs show here',
+    placeholder: 'APPLIED IS EMPTY',
+    placeholderText: 'Track every application you send',
   },
-  OA: {
-    title: "OA/Assessment",
-    icon: <Laptop size={16} />,
-    desc: "Got an OA? Add it here",
-    hint: "Online assessments & coding rounds",
-    color: "var(--accent-orange)"
+  'OA/ASSESSMENT': {
+    emoji: '💻',
+    title: 'OA/ASSESSMENT',
+    description: 'Got an OA? Add it here',
+    placeholder: 'OA/ASSESSMENT IS EMPTY',
+    placeholderText: 'Online assessments & coding rounds',
   },
   INTERVIEW: {
-    title: "Interview",
-    icon: <Mic size={16} />,
-    desc: "Interview stage",
-    hint: "You're close — prep hard!",
-    color: "var(--accent-purple)"
+    emoji: '🎤',
+    title: 'INTERVIEW',
+    description: 'Interview stage',
+    placeholder: 'INTERVIEW IS EMPTY',
+    placeholderText: "You're close — prep hard!",
   },
   OFFER: {
-    title: "Offer",
-    icon: <Trophy size={16} />,
-    desc: "Offers land here",
-    hint: "This is what we're working toward",
-    color: "var(--accent-green)"
+    emoji: '🎉',
+    title: 'OFFER',
+    description: 'Offers land here',
+    placeholder: 'OFFER IS EMPTY',
+    placeholderText: 'This is what we are working toward',
   },
   REJECTED: {
-    title: "Rejected",
-    icon: <ThumbsDown size={16} />,
-    desc: "Every no is closer to yes",
-    hint: "Track rejections to spot patterns",
-    color: "var(--accent-red)"
+    emoji: '👎',
+    title: 'REJECTED',
+    description: 'Every no is closer to yes',
+    placeholder: 'REJECTED IS EMPTY',
+    placeholderText: 'Track rejections to spot patterns',
   },
   GHOSTED: {
-    title: "Ghosted",
-    icon: <Ghost size={16} />,
-    desc: "Ghosted companies appear here",
-    hint: "No response after 14 days = ghosted",
-    color: "var(--accent-gray)"
+    emoji: '👻',
+    title: 'GHOSTED',
+    description: 'Ghosted companies appear here',
+    placeholder: 'GHOSTED IS EMPTY',
+    placeholderText: 'No response after 14 days = ghosted',
   },
 };
 
-const STATUS_COLUMNS = ["SAVED", "APPLIED", "OA", "INTERVIEW", "OFFER", "REJECTED", "GHOSTED"];
+const columns = Object.keys(COLUMN_CONFIG);
 
-interface KanbanBoardProps {
-  applications: JobApplication[];
-  onDragEnd: (result: DropResult) => void;
-  onCardClick: (app: JobApplication) => void;
-  onAddClick: (status: string) => void;
-  loading?: boolean;
-}
-
-export default function KanbanBoard({ applications, onDragEnd, onCardClick, onAddClick, loading }: KanbanBoardProps) {
-  const getAppsForStatus = (status: string) => applications.filter(app => app.status === status);
+export default function KanbanBoard({ applications, loading, onCardClick, onAddClick }: KanbanBoardProps) {
+  if (loading) {
+    return (
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '16px',
+        padding: '20px',
+        backgroundColor: '#0A0E27',
+      }}>
+        {columns.map(col => (
+          <div key={col} style={{ backgroundColor: '#0F1419', borderRadius: '12px', padding: '16px' }}>
+            <div style={{ marginBottom: '16px' }}>
+              <Skeleton height={32} baseColor="#1a1f35" highlightColor="#2d3748" />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Skeleton height={100} count={3} baseColor="#1a1f35" highlightColor="#2d3748" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="flex-1 overflow-x-auto overflow-y-hidden h-full pb-6 pt-6">
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex gap-6 px-6 h-full items-start min-w-max">
-          {STATUS_COLUMNS.map((colId) => {
-            const spec = COLUMN_SPECS[colId];
-            const columnApps = getAppsForStatus(colId);
-            
-            return (
-              <div
-                key={colId}
-                className="flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--bg-card)]/50 w-72 h-full max-h-[calc(100vh-220px)]"
-              >
-                {/* Column Header */}
-                <div className="px-4 py-4 border-b border-[var(--border)]">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ color: spec.color, backgroundColor: `${spec.color}15` }}>
-                            {spec.icon}
-                        </div>
-                        <span className="text-xs font-bold text-white uppercase tracking-wider">{spec.title}</span>
-                    </div>
-                    <span className="text-[10px] font-bold text-[var(--text-tertiary)] bg-[var(--bg-main)] px-2 py-0.5 rounded-full border border-[var(--border)]">
-                        {columnApps.length}
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-[var(--text-tertiary)] font-medium">{spec.desc}</p>
-                </div>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+      gap: '16px',
+      marginBottom: '32px',
+    }}>
+      {columns.map(colName => {
+        const config = COLUMN_CONFIG[colName as keyof typeof COLUMN_CONFIG];
+        const colApplications = applications.filter(app => app.status === colName) || [];
 
-                {/* Droppable Area */}
-                <Droppable droppableId={colId}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`flex-1 overflow-y-auto custom-scrollbar p-1 pb-4 transition-colors duration-200 ${
-                        snapshot.isDraggingOver ? "bg-[var(--primary)]/5" : ""
-                      }`}
-                    >
-                      {loading ? (
-                        <div className="p-3 space-y-3">
-                          {[1,2,3].map(i => <div key={i} className="h-24 bg-[var(--bg-main)]/50 rounded-xl animate-pulse border border-[var(--border)]" />)}
-                        </div>
-                      ) : columnApps.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-12 px-6 text-center opacity-40">
-                           <div className="mb-4 text-[var(--text-tertiary)]">
-                                {spec.icon}
-                           </div>
-                           <p className="text-[10px] text-white font-bold uppercase tracking-widest mb-1">{spec.title} IS EMPTY</p>
-                           <p className="text-[10px] text-[var(--text-tertiary)] leading-tight">{spec.hint}</p>
-                        </div>
-                      ) : (
-                        <div className="pt-3">
-                          <AnimatePresence mode="popLayout">
-                            {columnApps.map((app, index) => (
-                              <Draggable key={app.id} draggableId={app.id} index={index}>
-                                {(provided, snapshot) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={provided.draggableProps.style}
-                                  >
-                                    <ApplicationCard
-                                      app={app}
-                                      onClick={() => onCardClick(app)}
-                                      innerRef={() => {}} // Not needed here as dnd handles ref
-                                      draggableProps={{}}
-                                      dragHandleProps={{}}
-                                      isDragging={snapshot.isDragging}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                          </AnimatePresence>
-                        </div>
-                      )}
-                      {provided.placeholder}
-                      
-                      {/* Add Button */}
-                      {(colId === 'SAVED' || colId === 'APPLIED') && (
-                          <button
-                            onClick={() => onAddClick(colId)}
-                            className="mx-3 mt-1 py-3 w-[calc(100%-24px)] rounded-xl border border-dashed border-[var(--border)] text-[var(--text-tertiary)] text-[10px] font-bold uppercase tracking-widest hover:border-[var(--primary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 transition-all flex items-center justify-center gap-1.5 group"
-                          >
-                            <Plus size={12} className="group-hover:rotate-90 transition-transform" />
-                            Add Application
-                          </button>
-                      )}
-                    </div>
-                  )}
-                </Droppable>
+        return (
+          <div
+            key={colName}
+            style={{
+              backgroundColor: '#0F1419',
+              border: '1px solid #1E293B',
+              borderRadius: '12px',
+              padding: '16px',
+              minHeight: '500px',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            {/* Column Header */}
+            <div style={{
+              marginBottom: '16px',
+              paddingBottom: '12px',
+              borderBottom: '1px solid #1E293B',
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '8px',
+              }}>
+                <span style={{ fontSize: '24px' }}>{config.emoji}</span>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{
+                    margin: '0 0 2px 0',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    textTransform: 'uppercase',
+                    color: '#A0AEC0',
+                  }}>
+                    {config.title}
+                  </h3>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '11px',
+                    color: '#718096',
+                  }}>
+                    {colApplications.length || 0} applications
+                  </p>
+                </div>
+                <button 
+                  onClick={() => onAddClick?.(colName)}
+                  style={{
+                    padding: '4px 8px',
+                    backgroundColor: 'transparent',
+                    border: '1px solid #1E293B',
+                    color: '#5B9FFF',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                  }}
+                >
+                  +
+                </button>
               </div>
-            );
-          })}
-        </div>
-      </DragDropContext>
+              <p style={{
+                margin: 0,
+                fontSize: '12px',
+                color: '#718096',
+              }}>
+                {config.description}
+              </p>
+            </div>
+
+            {/* Cards Container */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              flex: 1,
+              minHeight: '300px',
+            }}>
+              {colApplications && colApplications.length > 0 ? (
+                colApplications.map((app: any, idx: number) => (
+                  <div
+                    key={app.id || idx}
+                    onClick={() => onCardClick?.(app)}
+                    style={{
+                      backgroundColor: '#0A0E27',
+                      border: '1px solid #1E293B',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      cursor: 'pointer',
+                      transition: 'border-color 0.2s'
+                    }}
+                    onMouseOver={(e) => (e.currentTarget.style.borderColor = '#5B9FFF')}
+                    onMouseOut={(e) => (e.currentTarget.style.borderColor = '#1E293B')}
+                  >
+                    <p style={{
+                      margin: '0 0 4px 0',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      color: '#FFFFFF',
+                    }}>
+                      {app.companyName}
+                    </p>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '11px',
+                      color: '#A0AEC0',
+                    }}>
+                      {app.role}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                /* Empty State */
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '300px',
+                  textAlign: 'center',
+                  color: '#718096',
+                }}>
+                  <div style={{
+                    fontSize: '32px',
+                    marginBottom: '12px',
+                    opacity: 0.5,
+                  }}>
+                    {config.emoji}
+                  </div>
+                  <p style={{
+                    margin: '0 0 4px 0',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    color: '#A0AEC0',
+                    textTransform: 'uppercase',
+                  }}>
+                    {config.placeholder}
+                  </p>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '11px',
+                    color: '#718096',
+                  }}>
+                    {config.placeholderText}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Add Card Button */}
+            <div style={{
+              marginTop: '12px',
+              paddingTop: '12px',
+              borderTop: '1px solid #1E293B',
+              textAlign: 'center',
+            }}>
+              <button 
+                onClick={() => onAddClick?.(colName)}
+                style={{
+                  padding: '8px 12px',
+                  backgroundColor: 'transparent',
+                  border: '1px dashed #1E293B',
+                  color: '#5B9FFF',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  width: '100%',
+                }}
+              >
+                + Add card
+              </button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
