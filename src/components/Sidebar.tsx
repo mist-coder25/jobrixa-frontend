@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const MENU_ITEMS = [
   { label: 'Dashboard', icon: '📊', path: '/dashboard' },
@@ -11,6 +11,14 @@ const MENU_ITEMS = [
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("jobrixa_token");
+    localStorage.removeItem("jobrixa_user");
+    localStorage.removeItem("jobrixa_plan");
+    navigate("/login");
+  };
 
   return (
     <div style={{
@@ -21,6 +29,10 @@ export default function Sidebar() {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
+      position: 'fixed',
+      left: 0,
+      top: 0,
+      zIndex: 50,
     }}>
       {/* Logo */}
       <div style={{
@@ -96,17 +108,20 @@ export default function Sidebar() {
         }}>
           0/30 applications
         </div>
-        <button style={{
-          width: '100%',
-          padding: '8px',
-          backgroundColor: '#5B9FFF',
-          color: '#FFFFFF',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '12px',
-          fontWeight: '600',
-        }}>
+        <button 
+          onClick={() => navigate('/pricing')}
+          style={{
+            width: '100%',
+            padding: '8px',
+            backgroundColor: '#5B9FFF',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '12px',
+            fontWeight: '600',
+          }}
+        >
           UPGRADE →
         </button>
       </div>
@@ -128,21 +143,25 @@ export default function Sidebar() {
       </div>
 
       {/* User Profile Box */}
-      <div style={{
-        display: 'flex',
-        gap: '10px',
-        alignItems: 'center',
-        padding: '10px',
-        backgroundColor: '#0A0E27',
-        border: '1px solid #1E293B',
-        borderRadius: '6px',
-        cursor: 'pointer',
-      }}>
+      <div 
+        onClick={handleLogout}
+        style={{
+          display: 'flex',
+          gap: '10px',
+          alignItems: 'center',
+          padding: '10px',
+          backgroundColor: '#0A0E27',
+          border: '1px solid #1E293B',
+          borderRadius: '6px',
+          cursor: 'pointer',
+        }}
+        title="Click to Logout"
+      >
         {/* Avatar */}
         <div style={{
-          width: '40px',
-          height: '40px',
-          minWidth: '40px',
+          width: '32px',
+          height: '32px',
+          minWidth: '32px',
           backgroundColor: '#5B9FFF',
           borderRadius: '999px',
           display: 'flex',
@@ -150,7 +169,7 @@ export default function Sidebar() {
           justifyContent: 'center',
           color: '#FFFFFF',
           fontWeight: '600',
-          fontSize: '14px',
+          fontSize: '12px',
         }}>
           A
         </div>

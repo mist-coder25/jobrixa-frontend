@@ -4,41 +4,31 @@ interface AddApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: any) => void;
-  initialStatus?: string;
-  prefill?: any;
 }
 
 export default function AddApplicationModal({
   isOpen,
   onClose,
   onSubmit,
-  initialStatus = 'SAVED',
-  prefill = {},
 }: AddApplicationModalProps) {
   const [formData, setFormData] = useState({
-    companyName: prefill.companyName || '',
-    jobRole: prefill.jobTitle || prefill.jobRole || '',
-    jobLink: prefill.jobUrl || prefill.jobLink || '',
-    status: initialStatus,
+    companyName: '',
+    jobRole: '',
+    jobLink: '',
+    status: 'SAVED',
     appliedDate: new Date().toISOString().split('T')[0],
   });
-
-  // Update form if prefill changes
-  React.useEffect(() => {
-    if (isOpen) {
-      setFormData({
-        companyName: prefill.companyName || '',
-        jobRole: prefill.jobTitle || prefill.jobRole || '',
-        jobLink: prefill.jobUrl || prefill.jobLink || '',
-        status: initialStatus,
-        appliedDate: new Date().toISOString().split('T')[0],
-      });
-    }
-  }, [isOpen, prefill, initialStatus]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
+    setFormData({
+      companyName: '',
+      jobRole: '',
+      jobLink: '',
+      status: 'SAVED',
+      appliedDate: new Date().toISOString().split('T')[0],
+    });
     onClose();
   };
 

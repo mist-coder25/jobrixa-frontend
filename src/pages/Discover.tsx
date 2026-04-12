@@ -109,33 +109,10 @@ export default function Discover() {
   const [_page, _setPage] = useState(1);
   const [jobs, _setJobs] = useState<NormalizedJob[]>(MOCK_JOBS);
   const [_loading, _setLoading] = useState(false);
-  const [trackerJob, setTrackerJob] = useState<NormalizedJob | null>(null);
+  const [_trackerJob, setTrackerJob] = useState<NormalizedJob | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
-
-  const handleAddApplication = async (formData: any) => {
-    try {
-      const backendData = {
-        companyName: formData.companyName,
-        jobTitle: formData.jobRole,
-        jobUrl: formData.jobLink,
-        status: formData.status,
-        appliedDate: formData.appliedDate,
-        source: "Discover"
-      };
-
-      const response = await api.post('/applications', backendData);
-      if (response.data) {
-        toast.success("✅ Added to your pipeline!");
-        setIsModalOpen(false);
-        setTrackerJob(null);
-      }
-    } catch (error) {
-      console.error('Failed to add application:', error);
-      toast.error("❌ Failed to add to tracker.");
-    }
-  };
 
   const [_hasAPIKey] = useState(!!(import.meta.env.VITE_ADZUNA_APP_ID && import.meta.env.VITE_ADZUNA_APP_KEY));
 
@@ -145,6 +122,19 @@ export default function Discover() {
     _setPage(1);
     trackEvent('job_searched', { query: newQuery });
     // In demo mode or if API fails, we just keep MOCK_JOBS or similar
+  };
+
+  const handleAddApplication = async (formData: any) => {
+    try {
+      const response = await api.post('/applications', formData);
+      if (response.data) {
+        toast.success("✅ Added to your pipeline!");
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.error('Failed to add application:', error);
+      toast.error("Failed to add application");
+    }
   };
 
   return (
@@ -226,14 +216,8 @@ export default function Discover() {
 
       <AddApplicationModal
         isOpen={isModalOpen}
-        onClose={() => { setIsModalOpen(false); setTrackerJob(null); }}
+        onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddApplication}
-        initialStatus="SAVED"
-        prefill={trackerJob ? {
-          companyName: trackerJob.company,
-          jobTitle: trackerJob.title,
-          jobUrl: trackerJob.url,
-        } : undefined}
       />
 
       <FilterPanel
