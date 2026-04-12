@@ -12,6 +12,8 @@ const MENU_ITEMS = [
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const userName = localStorage.getItem("jobrixa_user") || "admin";
+  const plan = localStorage.getItem("jobrixa_plan") || "Free Plan";
 
   const handleLogout = () => {
     localStorage.removeItem("jobrixa_token");
@@ -29,10 +31,6 @@ export default function Sidebar() {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      zIndex: 50,
     }}>
       {/* Logo */}
       <div style={{
@@ -185,7 +183,7 @@ export default function Sidebar() {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           }}>
-            admin
+            {userName}
           </div>
           <div style={{
             fontSize: '11px',
@@ -195,7 +193,7 @@ export default function Sidebar() {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           }}>
-            Free Plan
+            {plan}
           </div>
         </div>
       </div>

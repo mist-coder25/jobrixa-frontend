@@ -13,10 +13,10 @@ export default function AddApplicationModal({
 }: AddApplicationModalProps) {
   const [formData, setFormData] = useState({
     companyName: '',
-    jobRole: '',
-    jobLink: '',
+    jobTitle: '',
+    jobUrl: '',
     status: 'SAVED',
-    appliedDate: new Date().toISOString().split('T')[0],
+    appliedAt: new Date().toISOString().split('T')[0],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,10 +24,10 @@ export default function AddApplicationModal({
     onSubmit(formData);
     setFormData({
       companyName: '',
-      jobRole: '',
-      jobLink: '',
+      jobTitle: '',
+      jobUrl: '',
       status: 'SAVED',
-      appliedDate: new Date().toISOString().split('T')[0],
+      appliedAt: new Date().toISOString().split('T')[0],
     });
     onClose();
   };
@@ -110,7 +110,7 @@ export default function AddApplicationModal({
             />
           </div>
 
-          {/* Job Role */}
+          {/* Job Title */}
           <div style={{ marginBottom: '20px' }}>
             <label
               style={{
@@ -122,13 +122,13 @@ export default function AddApplicationModal({
                 textTransform: 'uppercase',
               }}
             >
-              Job Role
+              Job Title
             </label>
             <input
               type="text"
-              value={formData.jobRole}
+              value={formData.jobTitle}
               onChange={(e) =>
-                setFormData({ ...formData, jobRole: e.target.value })
+                setFormData({ ...formData, jobTitle: e.target.value })
               }
               placeholder="e.g., Software Engineer"
               style={{
@@ -145,7 +145,7 @@ export default function AddApplicationModal({
             />
           </div>
 
-          {/* Job Link */}
+          {/* Job URL */}
           <div style={{ marginBottom: '20px' }}>
             <label
               style={{
@@ -157,13 +157,13 @@ export default function AddApplicationModal({
                 textTransform: 'uppercase',
               }}
             >
-              Job Link
+              Job URL
             </label>
             <input
               type="url"
-              value={formData.jobLink}
+              value={formData.jobUrl}
               onChange={(e) =>
-                setFormData({ ...formData, jobLink: e.target.value })
+                setFormData({ ...formData, jobUrl: e.target.value })
               }
               placeholder="https://..."
               style={{
@@ -235,9 +235,9 @@ export default function AddApplicationModal({
             </label>
             <input
               type="date"
-              value={formData.appliedDate}
+              value={formData.appliedAt}
               onChange={(e) =>
-                setFormData({ ...formData, appliedDate: e.target.value })
+                setFormData({ ...formData, appliedAt: e.target.value })
               }
               style={{
                 width: '100%',
