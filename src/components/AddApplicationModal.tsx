@@ -1,241 +1,305 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import CompanyLogo from "./CompanyLogo";
-import { X, Building2, Link, Loader2 } from "lucide-react";
-import api from "../api/axios";
-import { toast } from "./Toast";
-import { trackEvent } from "../utils/analytics";
-
-interface PrefillData {
-  companyName?: string;
-  companyDomain?: string;
-  jobTitle?: string;
-  jobUrl?: string;
-  source?: string;
-}
+import React, { useState } from 'react';
 
 interface AddApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdded: () => void;
+  onSubmit: (data: any) => void;
   initialStatus?: string;
-  prefill?: PrefillData;
+  prefill?: any;
 }
 
-export default function AddApplicationModal({ isOpen, onClose, onAdded, initialStatus, prefill }: AddApplicationModalProps) {
-  const [loading, setLoading] = useState(false);
+export default function AddApplicationModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  initialStatus = 'SAVED',
+  prefill = {},
+}: AddApplicationModalProps) {
   const [formData, setFormData] = useState({
-    companyName: "",
-    companyDomain: "",
-    jobTitle: "",
-    jobUrl: "",
-    source: "LinkedIn",
-    status: "APPLIED",
-    appliedAt: new Date().toISOString().split('T')[0],
-    deadline: "",
-    location: "",
-    salaryMin: "",
-    salaryMax: "",
-    tags: "",
-    priority: "MEDIUM",
-    jobDescription: "",
-    isRemote: false
+    companyName: prefill.companyName || '',
+    jobRole: prefill.jobTitle || prefill.jobRole || '',
+    jobLink: prefill.jobUrl || prefill.jobLink || '',
+    status: initialStatus,
+    appliedDate: new Date().toISOString().split('T')[0],
   });
 
-  useEffect(() => {
+  // Update form if prefill changes
+  React.useEffect(() => {
     if (isOpen) {
-      setFormData(prev => ({
-        ...prev,
-        status: initialStatus || "APPLIED",
-        companyName: prefill?.companyName ?? "",
-        companyDomain: prefill?.companyDomain ?? "",
-        jobTitle: prefill?.jobTitle ?? "",
-        jobUrl: prefill?.jobUrl ?? "",
-        source: prefill?.source ?? "LinkedIn",
-      }));
+      setFormData({
+        companyName: prefill.companyName || '',
+        jobRole: prefill.jobTitle || prefill.jobRole || '',
+        jobLink: prefill.jobUrl || prefill.jobLink || '',
+        status: initialStatus,
+        appliedDate: new Date().toISOString().split('T')[0],
+      });
     }
-  }, [isOpen, initialStatus, prefill]);
+  }, [isOpen, prefill, initialStatus]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+    onClose();
+  };
 
   if (!isOpen) return null;
 
-  const handleChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const tagsArray = formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
-      const payload = {
-        ...formData,
-        salaryMin: formData.salaryMin ? parseInt(formData.salaryMin) : null,
-        salaryMax: formData.salaryMax ? parseInt(formData.salaryMax) : null,
-        deadline: formData.deadline || null,
-        tags: tagsArray
-      };
-      await api.post("/applications", payload);
-      toast.success(`Application saved!`);
-      onAdded();
-      trackEvent('application_added');
-      onClose();
-    } catch (err) {
-      toast.error("Failed to add application");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        {/* Backdrop */}
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-[var(--bg-main)]/80 backdrop-blur-md"
-        />
-
-        {/* Modal content */}
-        <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            className="relative w-full max-w-2xl bg-[var(--bg-card)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-2xl shadow-black/80"
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          backgroundColor: '#0F1419',
+          border: '1px solid #1E293B',
+          borderRadius: '12px',
+          padding: '32px',
+          maxWidth: '500px',
+          width: '90%',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2
+          style={{
+            margin: '0 0 24px 0',
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#FFFFFF',
+          }}
         >
-            <form onSubmit={handleSubmit} className="flex flex-col h-full max-h-[90vh]">
-                {/* Header */}
-                <div className="px-8 py-6 border-b border-[var(--border)] flex items-center justify-between bg-[var(--bg-card)]/50">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/20 text-white overflow-hidden">
-                            {formData.companyName ? (
-                                <CompanyLogo companyName={formData.companyName} domain={formData.companyDomain} size={48} containerPadding="p-0" />
-                            ) : (
-                                <Building2 size={24} />
-                            )}
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-bold">Add Application</h2>
-                            <p className="text-xs text-[var(--text-tertiary)] font-medium uppercase tracking-[0.1em]">Track a new journey</p>
-                        </div>
-                    </div>
-                    <button type="button" onClick={onClose} className="p-2 rounded-xl hover:bg-[var(--bg-main)] text-[var(--text-tertiary)] hover:text-white transition-colors">
-                        <X size={24} />
-                    </button>
-                </div>
+          Add Job Application
+        </h2>
 
-                {/* Body */}
-                <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
-                    {/* Basic Info */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Company Name</label>
-                            <input 
-                                required value={formData.companyName} onChange={e => handleChange("companyName", e.target.value)}
-                                className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none" 
-                                placeholder="Google, Amazon..."
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Job Title</label>
-                            <input 
-                                required value={formData.jobTitle} onChange={e => handleChange("jobTitle", e.target.value)}
-                                className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none" 
-                                placeholder="SDE-1, Product Intern..."
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Application Status</label>
-                            <select 
-                                value={formData.status} onChange={e => handleChange("status", e.target.value)}
-                                className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none appearance-none"
-                            >
-                                <option value="SAVED">Saved for later</option>
-                                <option value="APPLIED">Applied</option>
-                                <option value="OA">OA / Assessment</option>
-                                <option value="INTERVIEW">Interviewing</option>
-                                <option value="OFFER">Offer Received</option>
-                                <option value="REJECTED">Rejected</option>
-                            </select>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Application Date</label>
-                            <input 
-                                type="date" value={formData.appliedAt} onChange={e => handleChange("appliedAt", e.target.value)}
-                                className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none [color-scheme:dark]" 
-                            />
-                        </div>
-                    </div>
+        <form onSubmit={handleSubmit}>
+          {/* Company Name */}
+          <div style={{ marginBottom: '20px' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#A0AEC0',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Company Name
+            </label>
+            <input
+              type="text"
+              value={formData.companyName}
+              onChange={(e) =>
+                setFormData({ ...formData, companyName: e.target.value })
+              }
+              placeholder="e.g., Google"
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                backgroundColor: '#0A0E27',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+              required
+            />
+          </div>
 
-                    {/* Links & metadata */}
-                    <div className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Job URL</label>
-                            <div className="relative">
-                                <Link size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]" />
-                                <input 
-                                    value={formData.jobUrl} onChange={e => handleChange("jobUrl", e.target.value)}
-                                    className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl pl-10 pr-4 py-3 text-sm focus:border-[var(--primary)] outline-none" 
-                                    placeholder="https://linked.com/jobs/..."
-                                />
-                            </div>
-                        </div>
+          {/* Job Role */}
+          <div style={{ marginBottom: '20px' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#A0AEC0',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Job Role
+            </label>
+            <input
+              type="text"
+              value={formData.jobRole}
+              onChange={(e) =>
+                setFormData({ ...formData, jobRole: e.target.value })
+              }
+              placeholder="e.g., Software Engineer"
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                backgroundColor: '#0A0E27',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+              required
+            />
+          </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Location</label>
-                                <input 
-                                    value={formData.location} onChange={e => handleChange("location", e.target.value)}
-                                    className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none" 
-                                    placeholder="Bangalore, Hybrid..."
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Source</label>
-                                <select 
-                                    value={formData.source} onChange={e => handleChange("source", e.target.value)}
-                                    className="w-full bg-[var(--bg-main)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm focus:border-[var(--primary)] outline-none appearance-none"
-                                >
-                                    <option value="LinkedIn">LinkedIn</option>
-                                    <option value="Naukri">Naukri</option>
-                                    <option value="Wellfound">Wellfound</option>
-                                    <option value="Referral">Referral</option>
-                                    <option value="Direct">Direct</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+          {/* Job Link */}
+          <div style={{ marginBottom: '20px' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#A0AEC0',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Job Link
+            </label>
+            <input
+              type="url"
+              value={formData.jobLink}
+              onChange={(e) =>
+                setFormData({ ...formData, jobLink: e.target.value })
+              }
+              placeholder="https://..."
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                backgroundColor: '#0A0E27',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+            />
+          </div>
 
-                    {/* Complex details */}
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-[0.2em]">Job Description / Notes</label>
-                        <textarea 
-                            value={formData.jobDescription} onChange={e => handleChange("jobDescription", e.target.value)}
-                            className="w-full h-32 bg-[var(--bg-main)] border border-[var(--border)] rounded-2xl p-4 text-sm focus:border-[var(--primary)] outline-none resize-none" 
-                            placeholder="Key requirements, interview dates, thoughts..."
-                        />
-                    </div>
-                </div>
+          {/* Status */}
+          <div style={{ marginBottom: '20px' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#A0AEC0',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Status
+            </label>
+            <select
+              value={formData.status}
+              onChange={(e) =>
+                setFormData({ ...formData, status: e.target.value })
+              }
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                backgroundColor: '#0A0E27',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+            >
+              <option value="SAVED">Saved</option>
+              <option value="APPLIED">Applied</option>
+              <option value="OA/ASSESSMENT">OA/Assessment</option>
+              <option value="INTERVIEW">Interview</option>
+              <option value="OFFER">Offer</option>
+              <option value="REJECTED">Rejected</option>
+              <option value="GHOSTED">Ghosted</option>
+            </select>
+          </div>
 
-                {/* Footer */}
-                <div className="p-8 border-t border-[var(--border)] bg-[var(--bg-card)]/50 flex items-center justify-between">
-                    <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest hidden sm:block">All fields are auto-saved locally</p>
-                    <div className="flex items-center gap-4 w-full sm:w-auto">
-                        <button type="button" onClick={onClose} className="flex-1 sm:flex-none px-6 py-3 font-bold text-xs uppercase tracking-[0.1em] text-[var(--text-secondary)] hover:text-white transition-colors">Cancel</button>
-                        <button 
-                            type="submit" 
-                            disabled={loading}
-                            className="flex-1 sm:flex-none btn-primary px-8 py-3 shadow-xl shadow-[var(--primary)]/20"
-                        >
-                            {loading ? <Loader2 className="animate-spin w-4 h-4" /> : "Save Application"}
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </motion.div>
+          {/* Applied Date */}
+          <div style={{ marginBottom: '24px' }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#A0AEC0',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Applied Date
+            </label>
+            <input
+              type="date"
+              value={formData.appliedDate}
+              onChange={(e) =>
+                setFormData({ ...formData, appliedDate: e.target.value })
+              }
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                backgroundColor: '#0A0E27',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontSize: '14px',
+                boxSizing: 'border-box',
+              }}
+            />
+          </div>
+
+          {/* Buttons */}
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button
+              type="submit"
+              style={{
+                flex: 1,
+                padding: '12px',
+                backgroundColor: '#5B9FFF',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+              }}
+            >
+              Add Application
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                flex: 1,
+                padding: '12px',
+                backgroundColor: 'transparent',
+                color: '#5B9FFF',
+                border: '1px solid #1E293B',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
-    </AnimatePresence>
+    </div>
   );
 }

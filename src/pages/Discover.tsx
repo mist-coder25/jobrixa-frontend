@@ -9,6 +9,7 @@ import { toast } from "../components/Toast";
 import { MOCK_JOBS } from "../api/jobSearch";
 import type { NormalizedJob } from "../api/jobSearch";
 import { trackEvent } from "../utils/analytics";
+import api from "../api/axios";
 
 function TrustBadge({ score }: { score: number }) {
   const trustColor = score > 80 ? 'var(--primary)' : score > 60 ? 'var(--accent-orange)' : 'var(--accent-red)';
@@ -113,6 +114,29 @@ export default function Discover() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
+  const handleAddApplication = async (formData: any) => {
+    try {
+      const backendData = {
+        companyName: formData.companyName,
+        jobTitle: formData.jobRole,
+        jobUrl: formData.jobLink,
+        status: formData.status,
+        appliedDate: formData.appliedDate,
+        source: "Discover"
+      };
+
+      const response = await api.post('/applications', backendData);
+      if (response.data) {
+        toast.success("✅ Added to your pipeline!");
+        setIsModalOpen(false);
+        setTrackerJob(null);
+      }
+    } catch (error) {
+      console.error('Failed to add application:', error);
+      toast.error("❌ Failed to add to tracker.");
+    }
+  };
+
   const [_hasAPIKey] = useState(!!(import.meta.env.VITE_ADZUNA_APP_ID && import.meta.env.VITE_ADZUNA_APP_KEY));
 
   const handleSearch = (q?: string) => {
@@ -203,13 +227,12 @@ export default function Discover() {
       <AddApplicationModal
         isOpen={isModalOpen}
         onClose={() => { setIsModalOpen(false); setTrackerJob(null); }}
-        onAdded={() => toast.success("✅ Added to your pipeline!")}
+        onSubmit={handleAddApplication}
         initialStatus="SAVED"
         prefill={trackerJob ? {
           companyName: trackerJob.company,
           jobTitle: trackerJob.title,
           jobUrl: trackerJob.url,
-          source: "Discover",
         } : undefined}
       />
 
